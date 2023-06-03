@@ -1,7 +1,7 @@
 package eu.estilolibre.tfgunir.backend.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -35,7 +35,7 @@ public class Usuario {
     @JoinTable(name="usuarios_cursos",
     joinColumns = @JoinColumn(name="usuario_id"),
     inverseJoinColumns = @JoinColumn(name="curso_id"))
-    private List<Curso> misCursos = new ArrayList<Curso>();
+    private Set<Curso> misCursos = new HashSet<Curso>();
 
     /**
      * 

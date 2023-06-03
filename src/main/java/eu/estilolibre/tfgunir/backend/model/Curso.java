@@ -2,7 +2,7 @@ package eu.estilolibre.tfgunir.backend.model;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,6 +39,6 @@ public class Curso {
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private Categoria categoria;
     @ManyToMany(mappedBy = "misCursos")
-    private List<Usuario> alumnos;
+    private Set<Usuario> alumnos;
 
 }
