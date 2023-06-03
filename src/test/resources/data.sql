@@ -5,13 +5,13 @@ INSERT INTO categorias (nombre, descripcion) VALUES
 ('Desarrollo',''),
 ('Informática y software','');
 
-INSERT INTO cursos (titulo,valoracion_media,categoria_id) VALUES
-('Angular',4.6,5),
-('React',4.7,5),
-('Vue.js',4.8,5),
-('Principios de Acústica para el Home Studio',4.5,1),
-('Home Studio intermedio',4.5,1),
-('Masterizacion de Audio: La guía completa de cómo masterizar',4.6,1);
+INSERT INTO cursos (titulo,valoracion_media,fecha_creacion,categoria_id) VALUES
+('Angular',4.6,'2023-01-01',5),
+('React',4.7,'2023-01-01',5),
+('Vue.js',4.8,'2023-01-01',5),
+('Principios de Acústica para el Home Studio',4.5,'2023-03-01',1),
+('Home Studio intermedio',4.5,'2023-03-01',1),
+('Masterizacion de Audio: La guía completa de cómo masterizar',4.6,'2023-03-01',1);
 
 INSERT INTO usuarios (nombre,apellidos,email) VALUES
 ('María','García Sánchez','maria@localhost'),
