@@ -2,8 +2,7 @@ package eu.estilolibre.tfgunir.backend.model;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
 
@@ -38,5 +38,7 @@ public class Curso {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private Categoria categoria;
+    @ManyToMany(mappedBy = "misCursos")
+    private List<Usuario> alumnos;
 
 }
