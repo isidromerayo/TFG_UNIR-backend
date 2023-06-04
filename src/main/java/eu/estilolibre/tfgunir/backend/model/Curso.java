@@ -1,9 +1,12 @@
 package eu.estilolibre.tfgunir.backend.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -51,6 +55,12 @@ public class Curso {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id", referencedColumnName = "id")
     private Instructor instructor;
+    @OneToMany(
+        mappedBy = "curso",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<Contenido> contenidos = new ArrayList<Contenido>();
 
     @PrePersist
     protected void onCreate() {
