@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Data
@@ -36,7 +37,8 @@ public class Usuario {
     joinColumns = @JoinColumn(name="usuario_id"),
     inverseJoinColumns = @JoinColumn(name="curso_id"))
     private Set<Curso> misCursosComprados = new HashSet<Curso>();
-
+    @OneToMany(mappedBy = "estudiante")
+    Set<Avance> avances;
     /**
      * 
      * @param curso

@@ -53,3 +53,6 @@ INSERT INTO contenidos (titulo,documento,orden,curso_id) VALUES
 ('c.2 título 2','To sueltecico ahí va qué chorrazo churretoso es de traca, ayy qué gustico pero qué pelazo labore ex minim monguer Guaper con las rodillas in the guanter, tempor tontaco zanguango. ',2,4),
 ('c.3 título 3',' Soooy crossoverr mamellas cacahué dolore muchachada enjuto mojamuto te viste de torero melifluo enim asquerosito nuiiiii droja pataliebre consectetur bocachoti.',3,4)
 ;
+
+INSERT INTO avances (usuario_id,curso_id,tema) VALUES
+(1,4,1);
