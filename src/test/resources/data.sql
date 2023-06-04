@@ -56,3 +56,6 @@ INSERT INTO contenidos (titulo,documento,orden,curso_id) VALUES
 
 INSERT INTO avances (usuario_id,curso_id,tema) VALUES
 (1,4,1);
+
+INSERT INTO valoraciones (usuario_id,curso_id,puntuacion,comentario,fecha) VALUES
+(1,4,4,'comentario de prueba de 02-05-2023','2023-05-02');
