@@ -46,8 +46,11 @@ public class Curso {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private Categoria categoria;
-    @ManyToMany(mappedBy = "misCursos")
+    @ManyToMany(mappedBy = "misCursosComprados")
     private Set<Usuario> alumnos;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "instructor_id", referencedColumnName = "id")
+    private Instructor instructor;
 
     @PrePersist
     protected void onCreate() {

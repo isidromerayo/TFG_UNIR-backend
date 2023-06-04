@@ -35,14 +35,14 @@ public class Usuario {
     @JoinTable(name="usuarios_cursos",
     joinColumns = @JoinColumn(name="usuario_id"),
     inverseJoinColumns = @JoinColumn(name="curso_id"))
-    private Set<Curso> misCursos = new HashSet<Curso>();
+    private Set<Curso> misCursosComprados = new HashSet<Curso>();
 
     /**
      * 
      * @param curso
      */
     public void addCurso(Curso curso) {
-        misCursos.add(curso);
+        misCursosComprados.add(curso);
         curso.getAlumnos().add(this);
     }
 }
