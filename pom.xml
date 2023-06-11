@@ -15,6 +15,7 @@
 	<description>Backend para TFG en UNIR usand Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
+		<maven.failsafe>3.1.2</maven.failsafe>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -69,6 +70,7 @@
 	</dependencies>
 	
 	<build>
+		<finalName>backend</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -84,5 +86,26 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>failsafe</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>${maven.failsafe}</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	
 </project>
