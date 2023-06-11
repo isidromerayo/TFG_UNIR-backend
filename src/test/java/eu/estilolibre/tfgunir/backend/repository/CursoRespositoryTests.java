@@ -22,4 +22,17 @@ public class CursoRespositoryTests {
         List<Curso> result = (List<Curso>)repository.findAll();
         assertThat(result.size(),is(equalTo(6)));
     }
+    @Test
+    void buscarCursosDestacadosLimitados3() {
+        int result = repository.selectMorePoints().size();
+        assertThat(result,is(equalTo(3)));
+    }
+    @Test
+    void buscarCursosUltimasActualizacionesLimitados3() {
+        int result = repository.selectLastUpdates().size();
+        assertThat(result,is(equalTo(3)));
+        List<Curso> registers = repository.selectLastUpdates();
+        assertThat(registers.get(0).getFechaActualizacion(),is(equalTo("2023-03-01")));
+    }
+    
 }
