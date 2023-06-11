@@ -1,9 +1,8 @@
 package eu.estilolibre.tfgunir.backend.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -24,6 +23,9 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.Data;
 
+/**
+ * 
+ */
 @Data
 @Entity
 @Table(name = "cursos")
@@ -58,10 +60,10 @@ public class Curso {
     @OneToMany(
         mappedBy = "curso",
         cascade = CascadeType.ALL,
-        orphanRemoval = true
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
     )
-    private List<Contenido> contenidos = new ArrayList<Contenido>();
-
+    private Set<Contenido> contenidos = new HashSet<Contenido>();
     @OneToMany(mappedBy = "curso")
     Set<Avance> avances;
 

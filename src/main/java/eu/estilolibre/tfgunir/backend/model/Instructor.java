@@ -1,8 +1,8 @@
 package eu.estilolibre.tfgunir.backend.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 import jakarta.persistence.Column;
@@ -17,6 +17,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import lombok.Data;
 
+/**
+ * 
+ */
 @Data
 @Entity
 @Table(name = "instructores")
@@ -31,7 +34,7 @@ public class Instructor {
     @Temporal(TemporalType.DATE)
     private Date fechaAlta;
     @OneToMany(mappedBy = "instructor")
-    private List<Curso> misCursos = new ArrayList<Curso>();
+    private Set<Curso> misCursos = new HashSet<Curso>();
     
     @PrePersist
     protected void onCreate() {

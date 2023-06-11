@@ -24,7 +24,7 @@ public class Contenido {
     @Column(columnDefinition = "TEXT")
     private String documento;
     private int orden;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "curso_id")
     private Curso curso;
 }
