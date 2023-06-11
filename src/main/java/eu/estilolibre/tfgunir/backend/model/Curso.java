@@ -61,6 +61,7 @@ public class Curso {
         orphanRemoval = true
     )
     private List<Contenido> contenidos = new ArrayList<Contenido>();
+
     @OneToMany(mappedBy = "curso")
     Set<Avance> avances;
 

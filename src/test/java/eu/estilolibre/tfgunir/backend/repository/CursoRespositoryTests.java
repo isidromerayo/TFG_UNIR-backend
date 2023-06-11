@@ -32,7 +32,7 @@ public class CursoRespositoryTests {
         int result = repository.selectLastUpdates().size();
         assertThat(result,is(equalTo(3)));
         List<Curso> registers = repository.selectLastUpdates();
-        assertThat(registers.get(0).getFechaActualizacion(),is(equalTo("2023-03-01")));
+        assertThat(registers.get(0).getTitulo(),is(equalTo("Masterizacion de Audio: La gu\u00EDa completa de c\u00F3mo masterizar")));
     }
     
 }

@@ -12,6 +12,9 @@ import eu.estilolibre.tfgunir.backend.model.Curso;
 @RepositoryRestResource(collectionResourceRel = "cursos", path = "cursos")
 public interface CursoRepository extends PagingAndSortingRepository<Curso, Long> , CrudRepository<Curso, Long> {
     
+    /**
+     * @return
+     */
     @Query("select c from Curso c order by c.valoracionMedia desc limit 3")
     List<Curso> selectMorePoints();
 

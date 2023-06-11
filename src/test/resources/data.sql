@@ -15,8 +15,8 @@ INSERT INTO cursos (titulo,valoracion_media,fecha_creacion,fecha_actualizacion,c
 ('React',4.7,'2023-01-01','2023-02-02',5,1),
 ('Vue.js',4.8,'2023-01-01','2023-02-03',5,1),
 ('Principios de Acústica para el Home Studio',4.5,'2023-03-01','2023-03-01',1,2),
-('Home Studio intermedio',4.5,'2023-03-01','2023-03-01',1,2),
-('Masterizacion de Audio: La guía completa de cómo masterizar',4.6,'2023-03-01','2023-03-01',1,2);
+('Home Studio intermedio',4.5,'2023-03-01','2023-03-02',1,2),
+('Masterizacion de Audio: La guía completa de cómo masterizar',4.6,'2023-03-01','2023-05-01',1,2);
 
 INSERT INTO usuarios (nombre,apellidos,email) VALUES
 ('María','García Sánchez','maria@localhost'),
