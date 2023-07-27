@@ -26,8 +26,9 @@ public class Usuario {
     private long id;
     private String nombre;
     private String apellidos;
+    @Column(unique = true)
     private String email;
-    @Column()
+    @Column(nullable = false)
     private String password;
     @Column(name = "estado", length = 1, columnDefinition = "char(1) default 'P'")
     private String estado;
