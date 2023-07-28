@@ -30,6 +30,13 @@ public interface CursoRepository extends PagingAndSortingRepository<Curso, Long>
     @Query("select c from Curso c order by c.fechaActualizacion desc limit 3")
     List<Curso> selectLastUpdates();
     
+
+    /**
+     * 
+     * @return
+     */
+    List<Curso> findByTituloContaining(String titulo);
+    
     @Configuration
     static class RepositoryConfig implements RepositoryRestConfigurer {
         @Override
