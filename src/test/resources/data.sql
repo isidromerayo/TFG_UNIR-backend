@@ -18,17 +18,17 @@ INSERT INTO cursos (titulo,valoracion_media,fecha_creacion,fecha_actualizacion,c
 ('Home Studio intermedio',4.5,'2023-03-01','2023-03-02',1,2),
 ('Masterizacion de Audio: La guía completa de cómo masterizar',4.6,'2023-03-01','2023-05-01',1,2);
 
-INSERT INTO usuarios (nombre,apellidos,email) VALUES
-('María','García Sánchez','maria@localhost'),
-('Juan Antonio','Ponferrada Dominguez','juanantonio@localhost'),
-('Marta','Toral Alonso','marta@localhost'),
-('Pedro','Villa Ledesma','pedro@localhost');
+INSERT INTO usuarios (nombre,apellidos,email,password) VALUES
+('María','García Sánchez','maria@localhost','1234'),
+('Juan Antonio','Ponferrada Dominguez','juanantonio@localhost','1234'),
+('Marta','Toral Alonso','marta@localhost','1234'),
+('Pedro','Villa Ledesma','pedro@localhost','1234');
 
-INSERT INTO usuarios (nombre,apellidos,email,estado) VALUES
-('Helena','García Sánchez','helena@localhost','A'),
-('Carlos','Toreno Sil','carlos@localhost','A'),
-('Ines','Boeza Alonso','ines@localhost','A'),
-('Isabel','Fresnedo Noceda','isable@localhost','A');
+INSERT INTO usuarios (nombre,apellidos,email,estado,password) VALUES
+('Helena','García Sánchez','helena@localhost','A','1234'),
+('Carlos','Toreno Sil','carlos@localhost','A','1234'),
+('Ines','Boeza Alonso','ines@localhost','A','1234'),
+('Isabel','Fresnedo Noceda','isable@localhost','A','1234');
 
 INSERT INTO usuarios_cursos (usuario_id, curso_id) VALUES
 (1,4),
