@@ -24,7 +24,7 @@ public interface ValoracionRepository extends  JpaRepository<Valoracion, Long> {
      * 
      * @return
      */
-    @Query("select v from Valoracion v inner join v.estudiante e  order by v.fecha desc limit 3")
+    @Query("select v from Valoracion v order by v.fecha desc limit 3")
     List<Valoracion> selectLastOpinions();
 
     @Configuration
