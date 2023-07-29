@@ -16,6 +16,8 @@ import eu.estilolibre.tfgunir.backend.model.Usuario;
 public interface UsuarioRepository
         extends PagingAndSortingRepository<Usuario, Long>, CrudRepository<Usuario, Long> {
 
+
+                
     @Configuration
     static class RepositoryConfig implements RepositoryRestConfigurer {
         @Override
