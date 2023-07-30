@@ -39,7 +39,7 @@ public class LoginController {
             return new ResponseEntity<String>("{'message':'no autorizado'}", HttpStatus.UNAUTHORIZED);
         } else {
             String result_pass = result.get(0).getPassword();
-            if (login.getPassword().equals(result_pass)) {
+            if (login.getPassword().equals(result_pass) && result.get(0).getEstado().equals("A")) {
                 String token = getJWTToken(login.getEmail());
                 User user = new User();
                 user.setUser(login.getEmail());
