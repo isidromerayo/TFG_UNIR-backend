@@ -1,6 +1,5 @@
 package eu.estilolibre.tfgunir.backend.security;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.Date;
