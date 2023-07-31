@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import eu.estilolibre.tfgunir.backend.model.Usuario;
 import eu.estilolibre.tfgunir.backend.repository.UsuarioRepository;
 import eu.estilolibre.tfgunir.backend.security.TokenService;
-import io.jsonwebtoken.Jwts;
 
 @CrossOrigin(origins = { "http://localhost:4200", "http://localhost:3000", "http://localhost:5173" })
 @RestController
@@ -30,6 +29,10 @@ public class LoginController {
     @Autowired
     private UsuarioRepository repository;
 
+    /**
+     * @param login
+     * @return
+     */
     @PostMapping("")
     public ResponseEntity auth(@RequestBody FormUser login) {
         // buscar usuario en BBDD
@@ -42,8 +45,11 @@ public class LoginController {
             if (login.getPassword().equals(result_pass) && result.get(0).getEstado().equals("A")) {
                 String token = getJWTToken(login.getEmail());
                 User user = new User();
-                user.setUser(login.getEmail());
+                // bearer 
+                String bearer = prefijoToken + " " + token;
+                user.setUsername(login.getEmail());
                 user.setFullname(result.get(0).getNombre() + " " + result.get(0).getApellidos());
+                user.setId(result.get(0).getId());
                 user.setToken(token);
                 return ResponseEntity.ok(user);
             }
@@ -59,6 +65,6 @@ public class LoginController {
         String JWT = new TokenService().crearToken(username, secretKey,
                 new Date(System.currentTimeMillis() + expiracion));
 
-        return prefijoToken + " " + JWT;
+        return JWT;
     }
 }

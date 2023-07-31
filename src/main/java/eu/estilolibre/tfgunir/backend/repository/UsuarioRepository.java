@@ -23,6 +23,10 @@ public interface UsuarioRepository
             config.exposeIdsFor(Usuario.class);
         }
     }
-
+    /**
+     * 
+     * @param email
+     * @return List<Usuario>
+     */
     public List<Usuario> findByEmail(String email);
 }
