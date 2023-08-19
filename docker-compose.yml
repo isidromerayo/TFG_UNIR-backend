@@ -1,0 +1,27 @@
+version: "3.7"
+volumes:
+  data:
+services:
+  api_service:
+    image: "isidromerayo/spring-backend-tfg"
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - maria_db
+    links:
+      - maria_db:app_db
+  maria_db:
+    image: "isidromerayo/mariadb-tfg"
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/var/lib/mysql
+      - ../recursos/db:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: tfg_unir
+      MYSQL_USER: user_tfg
+      MYSQL_PASSWORD: tfg_un1r_PWD
+      MYSQL_ROOT_PASSWORD: mypass
