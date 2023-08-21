@@ -21,8 +21,3 @@ services:
       - data:/var/lib/mysql
       - ../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql
       - ../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql
-    environment:
-      MYSQL_DATABASE: tfg_unir
-      MYSQL_USER: user_tfg
-      MYSQL_PASSWORD: tfg_un1r_PWD
-      MYSQL_ROOT_PASSWORD: mypass
