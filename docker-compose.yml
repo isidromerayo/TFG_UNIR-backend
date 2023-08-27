@@ -13,7 +13,7 @@ services:
     links:
       - maria_db:app_db
   maria_db:
-    image: "isidromerayo/mariadb-tfg:0.0.2"
+    image: "isidromerayo/mariadb-tfg:0.0.3"
     restart: always
     ports:
       - 3306:3306
