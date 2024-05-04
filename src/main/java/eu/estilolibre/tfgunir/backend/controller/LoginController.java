@@ -3,8 +3,6 @@ package eu.estilolibre.tfgunir.backend.controller;
 import java.util.Date;
 import java.util.List;
 
-import javax.crypto.SecretKey;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +22,6 @@ import eu.estilolibre.tfgunir.backend.security.TokenService;
 public class LoginController {
 
     private long expiracion = 3600000;
-    private String prefijoToken = "Bearer";
-    private String cabeceraHttp = "Authorization";
     @Autowired
     private UsuarioRepository repository;
 
@@ -33,6 +29,7 @@ public class LoginController {
      * @param login
      * @return
      */
+    @SuppressWarnings("rawtypes")
     @PostMapping("")
     public ResponseEntity auth(@RequestBody FormUser login) {
         // buscar usuario en BBDD
@@ -45,8 +42,6 @@ public class LoginController {
             if (login.getPassword().equals(result_pass) && result.get(0).getEstado().equals("A")) {
                 String token = getJWTToken(login.getEmail());
                 User user = new User();
-                // bearer 
-                String bearer = prefijoToken + " " + token;
                 user.setUsername(login.getEmail());
                 user.setFullname(result.get(0).getNombre() + " " + result.get(0).getApellidos());
                 user.setId(result.get(0).getId());
@@ -60,6 +55,7 @@ public class LoginController {
     }
 
     private String getJWTToken(String username) {
+        // TODO llevar a configuración
         String secretKey = "813cef5f-3459-4618-87a6-a69e2a1296d4_mySecretKey_mySecretKey";
 
         String JWT = new TokenService().crearToken(username, secretKey,

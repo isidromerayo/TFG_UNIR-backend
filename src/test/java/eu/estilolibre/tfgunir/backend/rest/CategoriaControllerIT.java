@@ -3,7 +3,6 @@ package eu.estilolibre.tfgunir.backend.rest;
 
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
