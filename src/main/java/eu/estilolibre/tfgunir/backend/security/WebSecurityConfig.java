@@ -40,8 +40,6 @@ public class WebSecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:4200",
             "http://localhost:3000",
-            "http://localhost:3001",
-            "http://localhost:3002",
             "http://localhost:5173"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
