@@ -19,14 +19,26 @@ public interface CursoRepository extends PagingAndSortingRepository<Curso, Long>
     /**
      * @return
      */
-    @Query("select c from Curso c order by c.valoracionMedia desc limit 3")
+    @Query(value = "SELECT c FROM Curso c ORDER BY c.valoracionMedia DESC")
     List<Curso> selectMorePoints();
+
+    /**
+     * @return Top 3 courses by rating
+     */
+    @Query(nativeQuery = true, value = "SELECT * FROM cursos ORDER BY valoracion_media DESC LIMIT 3")
+    List<Curso> selectMorePointsTop3();
 
     /**
      * @return
      */
-    @Query("select c from Curso c order by c.fechaActualizacion desc limit 3")
+    @Query(value = "SELECT c FROM Curso c ORDER BY c.fechaActualizacion DESC")
     List<Curso> selectLastUpdates();
+
+    /**
+     * @return Top 3 most recently updated courses
+     */
+    @Query(nativeQuery = true, value = "SELECT * FROM cursos ORDER BY fecha_actualizacion DESC LIMIT 3")
+    List<Curso> selectLastUpdatesTop3();
     
 
     /**

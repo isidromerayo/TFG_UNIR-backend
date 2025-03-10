@@ -38,8 +38,8 @@ public class LoginController {
         if (result.isEmpty()) {
             return new ResponseEntity<String>("{'message':'no autorizado'}", HttpStatus.UNAUTHORIZED);
         } else {
-            String result_pass = result.get(0).getPassword();
-            if (login.getPassword().equals(result_pass) && result.get(0).getEstado().equals("A")) {
+            String resultPass = result.get(0).getPassword();
+            if (login.getPassword().equals(resultPass) && result.get(0).getEstado().equals("A")) {
                 String token = getJWTToken(login.getEmail());
                 User user = new User();
                 user.setUsername(login.getEmail());
@@ -58,9 +58,8 @@ public class LoginController {
         // TODO llevar a configuración
         String secretKey = "813cef5f-3459-4618-87a6-a69e2a1296d4_mySecretKey_mySecretKey";
 
-        String JWT = new TokenService().crearToken(username, secretKey,
+        return new TokenService().crearToken(username, secretKey,
                 new Date(System.currentTimeMillis() + expiracion));
 
-        return JWT;
     }
 }

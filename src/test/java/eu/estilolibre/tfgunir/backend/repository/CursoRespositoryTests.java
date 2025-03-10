@@ -2,7 +2,9 @@ package eu.estilolibre.tfgunir.backend.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.test.context.ActiveProfiles;
 
 import eu.estilolibre.tfgunir.backend.model.Curso;
 
@@ -11,7 +13,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@SpringBootTest
+@DataJpaTest
+@ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CursoRespositoryTests {
     
     @Autowired
@@ -24,15 +28,16 @@ public class CursoRespositoryTests {
     }
     @Test
     void buscarCursosDestacadosLimitados3() {
-        int result = repository.selectMorePoints().size();
-        assertThat(result,is(equalTo(3)));
+        List<Curso> result = repository.selectMorePointsTop3();
+        assertThat(result.size(), is(equalTo(3)));
+        assertThat(result.get(0).getTitulo(), is(equalTo("Vue.js")));
     }
+
     @Test
     void buscarCursosUltimasActualizacionesLimitados3() {
-        int result = repository.selectLastUpdates().size();
-        assertThat(result,is(equalTo(3)));
-        List<Curso> registers = repository.selectLastUpdates();
-        assertThat(registers.get(0).getTitulo(),is(equalTo("Home Studio intermedio")));
+        List<Curso> result = repository.selectLastUpdatesTop3();
+        assertThat(result.size(), is(equalTo(3)));
+        assertThat(result.get(0).getTitulo(), is(equalTo("Home Studio intermedio")));
     }
     
 }

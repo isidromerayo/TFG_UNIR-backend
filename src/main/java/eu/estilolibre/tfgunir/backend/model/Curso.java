@@ -18,7 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.Data;
@@ -38,7 +38,7 @@ public class Curso {
     private String descripcion;
     @Column(name = "estado", length = 1)
     private String estado = "A";
-    @Column(name = "valoracion_media", length = 1)
+    @Column(name = "valoracion_media")
     private double valoracionMedia;
     @Column(precision = 8, scale = 2)
     private BigDecimal precio;
@@ -49,12 +49,12 @@ public class Curso {
     @Column(name="fecha_actualizacion")
     @Temporal(TemporalType.DATE)
     private Date fechaActualizacion;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private Categoria categoria;
     @ManyToMany(mappedBy = "misCursosComprados")
     private Set<Usuario> alumnos;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id", referencedColumnName = "id")
     private Instructor instructor;
     @OneToMany(
