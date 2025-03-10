@@ -1,9 +1,9 @@
-version: "3.7"
+version: "3.3"
 volumes:
   data:
 services:
   api_service:
-    image: "isidromerayo/spring-backend-tfg:0.0.3"
+    image: "isidromerayo/spring-backend-tfg:0.0.4"
     build: .
     restart: always
     ports:
@@ -13,7 +13,7 @@ services:
     links:
       - maria_db:app_db
   maria_db:
-    image: "isidromerayo/mariadb-tfg:0.0.3"
+    image: "isidromerayo/mariadb-tfg:0.0.4"
     restart: always
     ports:
       - 3306:3306
