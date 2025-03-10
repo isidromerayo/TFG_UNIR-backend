@@ -3,7 +3,7 @@ volumes:
   data:
 services:
   api_service:
-    image: "isidromerayo/spring-backend-tfg:0.0.4"
+    image: "isidromerayo/spring-backend-tfg:0.0.5"
     build: .
     restart: always
     ports:
