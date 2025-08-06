@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.8</version>
-		<relativePath />
+		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>eu.estilolibre.tfgunir</groupId>
 	<artifactId>backend</artifactId>
-	<version>0.2.1-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<name>backend</name>
 	<description>Backend para TFG en UNIR usando Spring Boot</description>
 	<properties>
@@ -22,8 +23,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/isidromerayo/TFG_UNIR-backend.git</connection>
 		<url>https://github.com/isidromerayo/TFG_UNIR-backend</url>
-	  <tag>HEAD</tag>
-  </scm>
+	</scm>
 	<distributionManagement>
 		<repository>
 			<id>local-central</id>
