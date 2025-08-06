@@ -19,47 +19,37 @@
 		<maven.failsafe>3.5.3</maven.failsafe>
 		<JJWT_RELEASE_VERSION>0.12.6</JJWT_RELEASE_VERSION>
 		<dependency-check-maven.version>12.1.1</dependency-check-maven.version>
-
 	</properties>
+	<scm>
+		<connection>scm:git:https://github.com/isidromerayo/TFG_UNIR-backend.git</connection>
+		<url>https://github.com/isidromerayo/TFG_UNIR-backend</url>
+	</scm>
 	<dependencies>
-		<!--~~(org.springframework.boot:spring-boot-starter-data-jpa failed. Unable to download metadata. Tried repositories:
-https://repo.maven.apache.org/maven2: Connect timed out)~~>--><dependency>
+	<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!--~~(org.springframework.boot:spring-boot-starter-data-rest failed. Unable to download metadata. Tried repositories:
-https://repo.maven.apache.org/maven2: Connect timed out)~~>--><dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>
-		<!--~~(org.springframework.boot:spring-boot-starter-hateoas failed. Unable to download metadata. Tried repositories:
-https://repo.maven.apache.org/maven2: Connect timed out)~~>--><dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
-		<!--~~(org.springframework.boot:spring-boot-starter-web failed. Unable to download metadata. Tried repositories:
-https://repo.maven.apache.org/maven2: Connect timed out)~~>--><dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!--~~(org.springframework.boot:spring-boot-starter-validation failed. Unable to download metadata. Tried repositories:
-https://repo.maven.apache.org/maven2: Connect timed out)~~>--><dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-
-		<!--~~(org.springframework.boot:spring-boot-starter-security failed. Unable to download metadata. Tried repositories:
-https://repo.maven.apache.org/maven2: Connect timed out)~~>--><dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>6.5.1</version>
-		</dependency>
-		<!--~~(org.springframework.boot:spring-boot-devtools failed. Unable to download metadata. Tried repositories:
-https://repo.maven.apache.org/maven2: Connect timed out)~~>--><dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
@@ -81,8 +71,7 @@ https://repo.maven.apache.org/maven2: Connect timed out)~~>--><dependency>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!--~~(org.springframework.boot:spring-boot-starter-test failed. Unable to download metadata. Tried repositories:
-https://repo.maven.apache.org/maven2: Connect timed out)~~>--><dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
