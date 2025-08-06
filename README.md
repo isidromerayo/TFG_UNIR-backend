@@ -135,3 +135,26 @@ Deberemos estar logeados en nuestra cuenta de docker
 Si tenemos un API KEY del servicio
  
 `mvn org.owasp:dependency-check-maven:check -Dnvd.api.key=XXXX`
+
+#### Maven release
+
+Preparar el release
+
+`mvn release:prepare`
+
+Este comando realiza varias acciones:
+
+* Verifica que no haya cambios sin commitear.
+* Actualiza la versión en el pom.xml (por ejemplo, de 1.0-SNAPSHOT a 1.0).
+* Hace commit de los cambios.
+* Crea un tag en el sistema de control de versiones (Git, SVN, etc.).
+* Actualiza el pom.xml a la siguiente versión de desarrollo (por ejemplo, 1.1-SNAPSHOT).
+
+Hacer el release (deploy)
+
+`mvn release:perform -Dmaven.javadoc.skip=true`
+
+Este comando:
+
+* Clona el proyecto desde el tag creado.
+* Compila y despliega el artefacto al repositorio definido en <distributionManagement>.
