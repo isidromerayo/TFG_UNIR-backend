@@ -24,6 +24,17 @@
 		<connection>scm:git:https://github.com/isidromerayo/TFG_UNIR-backend.git</connection>
 		<url>https://github.com/isidromerayo/TFG_UNIR-backend</url>
 	</scm>
+	<distributionManagement>
+		<repository>
+			<id>local-central</id>
+			<name>Repositorio Local en .m2</name>
+			<url>file://${user.home}/.m2/repository-local</url>
+		</repository>
+		<snapshotRepository>
+			<name>Repositorio Local en .m2</name>
+			<url>file://${user.home}/.m2/repository-local</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<dependencies>
 	<dependency>
 			<groupId>org.springframework.boot</groupId>
