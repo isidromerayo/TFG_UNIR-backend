@@ -4,8 +4,8 @@
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 version: 2
 updates:
-  # Maven (Java) configuration
   - package-ecosystem: "maven"
+    directory: "/" # raíz del proyecto donde está el pom.xml
     schedule:
       interval: "weekly"
 
