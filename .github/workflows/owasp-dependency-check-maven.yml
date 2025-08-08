@@ -36,5 +36,3 @@ jobs:
       with:
         name: dependency-check-report
         path: target/dependency-check-report.html
-    - name: debug files.
-      run: ls -R target/
