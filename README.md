@@ -142,6 +142,10 @@ Preparar el release
 
 `mvn release:prepare`
 
+modo batch (no pregunta)
+
+`mvn release:prepare -B`
+
 Este comando realiza varias acciones:
 
 * Verifica que no haya cambios sin commitear.
