@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>eu.estilolibre.tfgunir</groupId>
 	<artifactId>backend</artifactId>
-	<version>0.2.1-SNAPSHOT</version>
+	<version>0.2.1</version>
 	<name>backend</name>
 	<description>Backend para TFG en UNIR usando Spring Boot</description>
 	<properties>
@@ -22,7 +22,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/isidromerayo/TFG_UNIR-backend.git</connection>
 		<url>https://github.com/isidromerayo/TFG_UNIR-backend</url>
-	  <tag>v0.2.0</tag>
+	  <tag>v0.2.1</tag>
   </scm>
 	<distributionManagement>
 		<repository>
