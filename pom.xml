@@ -175,7 +175,7 @@
 					</dependency>
 				</dependencies>
 				<configuration>
-					<excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+					<excludeFilterFile>src/main/resources/spotbugs-exclude.xml</excludeFilterFile>
 					<plugins>
 						<plugin>
 							<groupId>com.h3xstream.findsecbugs</groupId>
