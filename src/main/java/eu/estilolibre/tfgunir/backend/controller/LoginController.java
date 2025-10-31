@@ -21,7 +21,7 @@ import eu.estilolibre.tfgunir.backend.security.TokenService;
 @RequestMapping("/api/auth")
 public class LoginController {
 
-    private long expiracion = 3600000;
+    private static final long EXPIRACION = 3600000;
     @Autowired
     private UsuarioRepository repository;
 
@@ -39,7 +39,7 @@ public class LoginController {
             return new ResponseEntity<String>("{'message':'no autorizado'}", HttpStatus.UNAUTHORIZED);
         } else {
             String resultPass = result.get(0).getPassword();
-            if (login.getPassword().equals(resultPass) && result.get(0).getEstado().equals("A")) {
+            if (login.getPassword().equals(resultPass) && "A".equals(result.get(0).getEstado())) {
                 String token = getJWTToken(login.getEmail());
                 User user = new User();
                 user.setUsername(login.getEmail());
@@ -59,7 +59,7 @@ public class LoginController {
         String secretKey = "813cef5f-3459-4618-87a6-a69e2a1296d4_mySecretKey_mySecretKey";
 
         return new TokenService().crearToken(username, secretKey,
-                new Date(System.currentTimeMillis() + expiracion));
+                new Date(System.currentTimeMillis() + EXPIRACION));
 
     }
 }

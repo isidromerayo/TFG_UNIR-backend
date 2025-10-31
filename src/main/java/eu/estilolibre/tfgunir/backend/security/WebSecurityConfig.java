@@ -57,7 +57,7 @@ public class WebSecurityConfig {
             "Access-Control-Allow-Credentials",
             "Authorization"
         ));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(Boolean.TRUE);
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

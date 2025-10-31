@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Excluir warnings de USBR_UNNECESSARY_STORE_BEFORE_RETURN en entidades del modelo -->
+    <!-- Estos son generados automáticamente por Lombok @Data -->
+    <Match>
+        <Class name="~.*\.model\..*"/>
+        <Bug pattern="USBR_UNNECESSARY_STORE_BEFORE_RETURN"/>
+    </Match>
+</FindBugsFilter>

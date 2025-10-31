@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -15,7 +16,7 @@ public class TokenService {
     private static final Logger logger = Logger.getLogger(TokenService.class.getName());
 
     public String crearToken(String usuario, String claveEncriptar, Date expiracion) {
-        SecretKey clave = Keys.hmacShaKeyFor(claveEncriptar.getBytes());
+        SecretKey clave = Keys.hmacShaKeyFor(claveEncriptar.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
                 .claim("sub", usuario)
@@ -25,7 +26,7 @@ public class TokenService {
     }
 
     public String leerToken(String tokenReal, String claveEncriptar) {
-        SecretKey clave = Keys.hmacShaKeyFor(claveEncriptar.getBytes());
+        SecretKey clave = Keys.hmacShaKeyFor(claveEncriptar.getBytes(StandardCharsets.UTF_8));
 
         JwtParser parser = Jwts.parser().verifyWith(clave).build();
 
