@@ -1,5 +1,8 @@
 # TFG_UNIR Backend
 
+[![Java CI with Maven](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/maven.yml/badge.svg)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/maven.yml)
+[![Pull Request CI](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/pull-request.yml/badge.svg)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/pull-request.yml)
+
 ### Universidad Internacional de La Rioja
 
 ### Escuela Superior de Ingeniería y Tecnología 
@@ -9,6 +12,45 @@
 ## Frameworks frontend JavaScript: Análisis y estudio práctico
 
 ### Backend
+
+## 🚀 Desarrollo y Contribución
+
+Este proyecto sigue un flujo de trabajo basado en Pull Requests para mantener la calidad del código.
+
+### 📋 Flujo de trabajo recomendado
+
+```bash
+# 1. Crear nueva rama para tu feature/fix
+git checkout main
+git pull origin main
+git checkout -b feature/nombre-descriptivo
+
+# 2. Realizar cambios y commits
+git add .
+git commit -m "feat: descripción del cambio"
+
+# 3. Push y crear Pull Request
+git push -u origin feature/nombre-descriptivo
+# Crear PR desde GitHub web
+
+# 4. Después del merge, limpiar
+git checkout main
+git pull origin main
+git branch -d feature/nombre-descriptivo
+```
+
+### 🧪 Tests
+
+```bash
+# Tests unitarios
+mvn test
+
+# Tests de integración
+mvn -DskipUTs -Pfailsafe verify
+
+# Todos los tests
+mvn verify -Pfailsafe
+```
 
 Es necesaria una versión de Java 17, para utilizar Spring Boot 3.0.x
 
