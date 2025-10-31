@@ -9,11 +9,12 @@ import org.springframework.test.context.ActiveProfiles;
 import io.restassured.RestAssured;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class CategoriaControllerIT {
+public class CursoControllerIT {
 
     private final static String BASE_URI = "http://localhost";
  
@@ -27,14 +28,14 @@ public class CategoriaControllerIT {
     }
 
     @Test
-    public void categoriasAPIStatus() {
+    public void cursosAPIStatus() {
         given().
                 when().
-                get("/api/categorias").
+                get("/api/cursos").
                 then().
                 log().all().
                 assertThat().
                 statusCode(200).
-                body("_embedded.categorias.size()", greaterThan(0));
+                body("_embedded.cursos.size()", equalTo(6));
     }
 }

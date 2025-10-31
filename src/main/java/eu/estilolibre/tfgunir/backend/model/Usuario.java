@@ -20,6 +20,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "usuarios")
+@lombok.EqualsAndHashCode(exclude = {"misCursosComprados", "avances"})
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

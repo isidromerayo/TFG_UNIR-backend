@@ -29,6 +29,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "cursos")
+@lombok.EqualsAndHashCode(exclude = {"alumnos", "contenidos", "avances"})
 public class Curso {
 
     @Id

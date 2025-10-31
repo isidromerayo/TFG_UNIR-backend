@@ -21,6 +21,7 @@ import lombok.Data;
  * 
  */
 @Data
+@lombok.EqualsAndHashCode(exclude = {"misCursos"})
 @Entity
 @Table(name = "instructores")
 public class Instructor {
