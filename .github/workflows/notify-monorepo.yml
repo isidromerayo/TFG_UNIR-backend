@@ -1,0 +1,17 @@
+name: Notify Monorepo
+
+on:
+  push:
+    branches:
+      - main # O la rama principal que uses, ej. master
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify TFG_UNIR-monorepo of the update
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT_FOR_DISPATCH }}
+          repository: isidromerayo/TFG_UNIR-monorepo
+          event-type: submodule-updated
