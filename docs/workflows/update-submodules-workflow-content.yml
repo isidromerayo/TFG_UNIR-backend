@@ -1,0 +1,66 @@
+# CONTENIDO PARA EL MONOREPO: .github/workflows/update-submodules.yml
+# Este archivo debe ir en el repositorio TFG_UNIR-monorepo
+
+name: Update Submodules
+
+on:
+  repository_dispatch:
+    types: [submodule-update]
+  workflow_dispatch:  # Permite ejecución manual
+
+jobs:
+  update-submodules:
+    name: Update Submodules
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout monorepo
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        submodules: true
+        
+    - name: Configure Git
+      run: |
+        git config --global user.name "GitHub Actions Bot"
+        git config --global user.email "actions@github.com"
+        
+    - name: Update specific submodule
+      run: |
+        echo "Updating submodule: ${{ github.event.client_payload.repository }}"
+        echo "New commit: ${{ github.event.client_payload.sha }}"
+        echo "Commit message: ${{ github.event.client_payload.commit_message }}"
+        
+        # Actualizar el submódulo específico
+        SUBMODULE_PATH="${{ github.event.client_payload.repository }}"
+        
+        if [ -d "$SUBMODULE_PATH" ]; then
+          cd "$SUBMODULE_PATH"
+          git fetch origin
+          git checkout ${{ github.event.client_payload.sha }}
+          cd ..
+          
+          # Verificar si hay cambios
+          if git diff --quiet --cached; then
+            echo "No changes to commit"
+          else
+            # Commit y push de la actualización
+            git add "$SUBMODULE_PATH"
+            git commit -m "chore: update $SUBMODULE_PATH submodule to ${{ github.event.client_payload.sha }}
+
+            Latest commit: ${{ github.event.client_payload.commit_message }}
+            Pushed by: ${{ github.event.client_payload.pusher }}
+            Timestamp: ${{ github.event.client_payload.timestamp }}"
+            
+            git push origin main
+            echo "Submodule $SUBMODULE_PATH updated successfully"
+          fi
+        else
+          echo "Submodule path $SUBMODULE_PATH not found"
+          exit 1
+        fi
+        
+    - name: Verify submodule update
+      run: |
+        echo "Current submodule status:"
+        git submodule status
