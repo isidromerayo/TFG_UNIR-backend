@@ -39,6 +39,20 @@ git pull origin main
 git branch -d feature/nombre-descriptivo
 ```
 
+### 🛠️ Stack tecnológico
+
+- **Java 17**
+- **Spring Boot 3.4.9**
+- **Spring Data JPA** - Persistencia
+- **Spring Security** - Autenticación y autorización
+- **MariaDB** - Base de datos producción
+- **H2** - Base de datos testing
+- **JWT** - Tokens de autenticación
+- **Swagger/OpenAPI** - Documentación API
+- **Lombok** - Reducción de boilerplate
+- **JaCoCo** - Cobertura de código
+- **SpotBugs** - Análisis estático
+
 ### 🧪 Tests
 
 ```bash
@@ -51,6 +65,38 @@ mvn -DskipUTs -Pfailsafe verify
 # Todos los tests
 mvn verify -Pfailsafe
 ```
+
+### 📦 Perfiles de Maven
+
+```bash
+# Perfil para tests de integración
+mvn verify -Pfailsafe
+
+# Perfil para análisis de dependencias
+mvn verify -Pdependency-check
+```
+
+### 🔍 Análisis de código
+
+```bash
+# Cobertura de código con JaCoCo
+mvn jacoco:report
+
+# Análisis estático con SpotBugs
+mvn spotbugs:check
+
+# SpotBugs con plugins de seguridad
+mvn spotbugs:spotbugs
+
+# OWASP Dependency Check (perfil activado)
+mvn -Pdependency-check verify
+```
+
+### 🔐 Autenticación
+
+El backend utiliza JWT (JSON Web Tokens) para la autenticación.
+- Librería: `jjwt` v0.13.0
+- Configuración de seguridad con Spring Security
 
 Es necesaria una versión de Java 17, para utilizar Spring Boot 3.0.x
 
@@ -177,6 +223,12 @@ Deberemos estar logeados en nuestra cuenta de docker
 Si tenemos un API KEY del servicio
  
 `mvn org.owasp:dependency-check-maven:check -Dnvd.api.key=XXXX`
+
+### 📦 Distribución
+
+El proyecto está configurado para desplegar en un repositorio local Maven:
+- Ubicación: `~/.m2/repository-local`
+- Para cambiar el repositorio, modificar `<distributionManagement>` en el pom.xml
 
 #### Maven release
 
