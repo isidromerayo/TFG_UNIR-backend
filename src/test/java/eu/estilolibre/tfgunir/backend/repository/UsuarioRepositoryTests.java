@@ -22,7 +22,7 @@ public class UsuarioRepositoryTests {
     @Test
     void buscarTodosLasUsuarios() {
         List<Usuario> result = (List<Usuario>)repository.findAll();
-        assertThat(result.size(),is(equalTo(8)));
+        assertThat(result.size(),is(equalTo(9)));
     }
 
 }

@@ -30,6 +30,9 @@ INSERT INTO usuarios (nombre,apellidos,email,estado,password) VALUES
 ('Ines','Boeza Alonso','ines@localhost','A','1234'),
 ('Isabel','Fresnedo Noceda','isable@localhost','A','1234');
 
+INSERT INTO usuarios (nombre,apellidos,email,estado,password) VALUES
+('admin','admin','admin@gmail.com','A','admin');
+
 INSERT INTO usuarios_cursos (usuario_id, curso_id) VALUES
 (1,4),
 (1,5),
