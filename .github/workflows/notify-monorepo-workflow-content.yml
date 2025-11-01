@@ -1,5 +1,5 @@
-# CONTENIDO PARA: .github/workflows/notify-monorepo.yml
-# Copiar este contenido manualmente al archivo de workflow
+# VERSIÓN CORREGIDA PARA: .github/workflows/notify-monorepo.yml
+# Reemplazar el archivo existente con este contenido
 
 name: Notify Monorepo on Main Update
 
@@ -14,6 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - name: Prepare commit message
+      id: prepare
+      run: |
+        # Escapar caracteres especiales en el mensaje del commit
+        COMMIT_MSG="${{ github.event.head_commit.message }}"
+        # Reemplazar saltos de línea con \n y escapar comillas
+        ESCAPED_MSG=$(echo "$COMMIT_MSG" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+        echo "commit_message=$ESCAPED_MSG" >> $GITHUB_OUTPUT
+        
     - name: Notify monorepo repository
       uses: peter-evans/repository-dispatch@v3
       with:
@@ -25,7 +34,7 @@ jobs:
             "repository": "TFG_UNIR-backend",
             "ref": "${{ github.ref }}",
             "sha": "${{ github.sha }}",
-            "commit_message": "${{ github.event.head_commit.message }}",
+            "commit_message": "${{ steps.prepare.outputs.commit_message }}",
             "pusher": "${{ github.event.pusher.name }}",
             "timestamp": "${{ github.event.head_commit.timestamp }}"
           }
