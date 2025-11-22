@@ -7,7 +7,7 @@ This is the backend service for the TFG UNIR project, built with Spring Boot. It
 - **Language**: Java 17
 - **Framework**: Spring Boot 3.x
 - **Build Tool**: Maven
-- **Database**: PostgreSQL
+- **Database**: MariaDB / MySQL
 - **Containerization**: Docker
 
 ## Quick Start
@@ -42,3 +42,5 @@ The project follows a standard layered architecture:
 - **Code Style**: Standard Java conventions.
 - **Git**: Commit messages should follow Conventional Commits (e.g., `feat:`, `fix:`, `chore:`).
 - **Testing**: Unit tests for services, integration tests for controllers.
+
+
