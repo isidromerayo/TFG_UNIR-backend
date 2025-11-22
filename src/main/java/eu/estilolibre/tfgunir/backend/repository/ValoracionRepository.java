@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -13,16 +14,22 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import eu.estilolibre.tfgunir.backend.model.Valoracion;
 
 @RepositoryRestResource(collectionResourceRel = "valoraciones", path = "valoraciones")
-public interface ValoracionRepository extends  JpaRepository<Valoracion, Long> {
-    
+public interface ValoracionRepository extends JpaRepository<Valoracion, Long> {
+
     /**
      * 
      * API: valoraciones/search/selectLastOpinions
      * 
      * @return
      */
-    @Query("select v from Valoracion v order by v.fecha desc limit 3")
-    List<Valoracion> selectLastOpinions();
+    /**
+     * 
+     * API: valoraciones/search/selectLastOpinions
+     * 
+     * @return
+     */
+    @RestResource(path = "selectLastOpinions", rel = "selectLastOpinions")
+    List<Valoracion> findTop3ByOrderByFechaDesc();
 
     @Configuration
     static class RepositoryConfig implements RepositoryRestConfigurer {

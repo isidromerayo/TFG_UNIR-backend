@@ -19,7 +19,6 @@ import lombok.Data;
 @Entity
 @Table(name = "valoraciones")
 public class Valoracion {
-   
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +37,9 @@ public class Valoracion {
 
     @PrePersist
     protected void onCreate() {
-        fecha = new Date();
+        if (fecha == null) {
+            fecha = new Date();
+        }
     }
-    
+
 }

@@ -90,7 +90,7 @@ public class ValoracionRepositoryTests {
         valoracionAntigua.setFecha(sdf.parse("2022-01-01"));
         repository.save(valoracionAntigua);
 
-        List<Valoracion> result = repository.selectLastOpinions();
+        List<Valoracion> result = repository.findTop3ByOrderByFechaDesc();
 
         assertThat(result.size(), is(equalTo(3)));
         assertEquals("La más reciente de todas", result.get(0).getComentario());
