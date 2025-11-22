@@ -14,7 +14,7 @@
 	<name>backend</name>
 	<description>Backend para TFG en UNIR usando Spring Boot</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 		<maven.failsafe>3.5.3</maven.failsafe>
 		<JJWT_RELEASE_VERSION>0.12.6</JJWT_RELEASE_VERSION>
 		<dependency-check-maven.version>12.1.8</dependency-check-maven.version>
