@@ -47,5 +47,8 @@ The project follows a standard layered architecture:
 - **Branching**: Use feature branches for new features, bug fixes, and refactoring.
 - **Pull Requests**: Use pull requests for code reviews and approvals.  
 - **CI/CD**: Use GitHub Actions for continuous integration and delivery.
-- **Before commit**: Run `mvn clean test` to ensure the code is up to date.
-- 
+- **Before commit**: 
+  - Run `mvn clean test` to ensure the code is up to date.
+  - Run `mvn spotbugs:check` to ensure the code is free of security vulnerabilities.
+  - Run `mvn jacoco:report` to ensure the code coverage is up to date.
+ 
