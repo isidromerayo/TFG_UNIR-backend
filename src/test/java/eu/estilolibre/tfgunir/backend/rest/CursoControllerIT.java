@@ -21,13 +21,13 @@ class CursoControllerIT {
     private int port;
  
     @BeforeEach
-    public void configureRestAssured() {
+    void configureRestAssured() {
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
     }
 
     @Test
-    public void cursosAPIStatus() {
+    void cursosAPIStatus() {
         given().
                 when().
                 get("/api/cursos").
