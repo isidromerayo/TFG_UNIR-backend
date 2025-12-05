@@ -21,8 +21,7 @@ public interface ValoracionRepository extends  JpaRepository<Valoracion, Long> {
      * 
      * @return
      */
-    @Query("select v from Valoracion v order by v.fecha desc limit 3")
-    List<Valoracion> selectLastOpinions();
+    List<Valoracion> findFirst3ByOrderByFechaDescIdDesc();
 
     @Configuration
     static class RepositoryConfig implements RepositoryRestConfigurer {
