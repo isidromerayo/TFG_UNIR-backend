@@ -42,4 +42,11 @@ Para asegurar la calidad y estabilidad del código, sigue estos pasos al realiza
     *   Asegúrate de que todos los tests se ejecutan correctamente y que el análisis de SpotBugs no reporta problemas críticos.
     *   Escribe un mensaje de commit claro y descriptivo.
 
+5.  **Subir cambios al repositorio remoto (git push):**
+    *   Asegúrate de que todos los tests se ejecutan correctamente con el comando:
+        ```bash
+        ./mvnw clean verify
+        ```
+    *   Para mantener la calidad, revisar que se siguen las guías de SonarQube
+
 El cumplimiento de estos pasos es fundamental para mantener la integridad del proyecto.

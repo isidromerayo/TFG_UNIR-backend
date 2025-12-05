@@ -10,13 +10,12 @@ import io.restassured.RestAssured;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class CursoControllerIT {
+class CursoControllerIT {
 
-    private final static String BASE_URI = "http://localhost";
+    private static final String BASE_URI = "http://localhost";
  
     @LocalServerPort
     private int port;
