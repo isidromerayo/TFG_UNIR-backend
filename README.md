@@ -139,13 +139,101 @@ mysqldump -u user_tfg -ptfg_un1r_PWD tfg_unir > recursos/db/dump.mariadb.sql
 
 > **Nota**: Este proyecto soporta tanto Docker como Podman. Todos los comandos `docker` pueden reemplazarse por `podman`. Ver la [sección de Podman](#-soporte-para-podman) para más detalles.
 
-#### Docker MariaDB
+#### 🗄️ Docker MariaDB
 
-Carga inicial para utilizar por el backend con Spring Boot con datos de pruebas del directorio recursos/db
+##### Usar imagen publicada
 
-`docker run --name mariadb-tfg -p 3306:3306 -d isidromerayo/mariadb-tfg`
+Para usar la imagen de MariaDB ya publicada con datos de prueba precargados:
 
-Para publicar en docker hub `docker push isidromerayo/mariadb-tfg:X.Y.Z`
+```bash
+docker run --name mariadb-tfg -p 3306:3306 -d isidromerayo/mariadb-tfg
+```
+
+Esta imagen incluye:
+- Base de datos `tfg_unir` creada
+- Usuario `user_tfg` con contraseña `tfg_un1r_PWD`
+- Datos de prueba precargados
+
+##### Construir imagen de MariaDB
+
+El proyecto incluye un `Dockerfile-db` para crear la imagen de MariaDB:
+
+**1. Verificar prerequisitos**
+
+Asegúrate de que existen los scripts SQL en `../recursos/db/`:
+- `create.mariadb.sql` - Script de creación de esquema
+- `dump.mariadb.sql` - Datos iniciales
+
+**2. Construir la imagen**
+
+```bash
+cd backend
+
+# Construir con versión específica
+docker build -f Dockerfile-db -t isidromerayo/mariadb-tfg:0.0.4 .
+
+# Crear tag latest
+docker tag isidromerayo/mariadb-tfg:0.0.4 isidromerayo/mariadb-tfg:latest
+```
+
+**3. Probar la imagen localmente**
+
+```bash
+# Ejecutar contenedor
+docker run --name mariadb-test -p 3306:3306 -d isidromerayo/mariadb-tfg:0.0.4
+
+# Verificar que funciona
+docker logs mariadb-test
+
+# Conectar a la base de datos
+mariadb -h 127.0.0.1 -u user_tfg -ptfg_un1r_PWD tfg_unir
+
+# Limpiar después de probar
+docker stop mariadb-test
+docker rm mariadb-test
+```
+
+**4. Publicar en Docker Hub**
+
+```bash
+# Login (si no lo has hecho)
+docker login
+
+# Push de la versión específica
+docker push isidromerayo/mariadb-tfg:0.0.4
+
+# Push del tag latest
+docker push isidromerayo/mariadb-tfg:latest
+```
+
+##### Configuración del Dockerfile-db
+
+El `Dockerfile-db` configura:
+
+```dockerfile
+FROM mariadb:latest
+
+ENV MARIADB_ROOT_PASSWORD=mypass
+ENV MYSQL_DATABASE=tfg_unir
+ENV MYSQL_USER=user_tfg
+ENV MYSQL_PASSWORD=tfg_un1r_PWD
+
+EXPOSE 3306
+```
+
+> **⚠️ Nota de seguridad**: Las credenciales están hardcodeadas para desarrollo. En producción, usa variables de entorno o secrets.
+
+##### Carga de datos inicial
+
+Cuando usas `docker-compose`, los scripts SQL se montan automáticamente:
+
+```yaml
+volumes:
+  - ../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql
+  - ../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql
+```
+
+MariaDB ejecuta automáticamente los scripts en `/docker-entrypoint-initdb.d/` al iniciar por primera vez.
 
 #### BBDD: H2 para test
 
@@ -184,22 +272,42 @@ docker build -t isidromerayo/spring-backend-tfg:VERSION-X.Y.Z .
 https://spring.io/guides/topicals/spring-boot-docker/
 https://javatodev.com/docker-compose-for-spring-boot-with-mariadb/
 
-#### docker compose
+#### 🐳 docker compose
 
-Con docker compose se montará un contendor con MariaDB (datos precargados) y otro con la aplicación de Spring Boot 3 con el API 
+Con docker compose se montará un contenedor con MariaDB (datos precargados) y otro con la aplicación de Spring Boot 3 con el API.
 
-> **⚠️ Prerequisitos**:
-> 1. Los archivos SQL deben existir en `../recursos/db/`:
->    - `create.mariadb.sql` - Script de creación de esquema
->    - `dump.mariadb.sql` - Datos iniciales
-> 2. El `application.properties` debe apuntar al alias de docker 'app_db':
->    ```properties
->    spring.datasource.url=jdbc:mariadb://app_db:3306/tfg_unir
->    ```
+##### Prerequisitos
 
-```
+1. **Archivos SQL**: Deben existir en `../recursos/db/`:
+   - `create.mariadb.sql` - Script de creación de esquema
+   - `dump.mariadb.sql` - Datos iniciales
+
+2. **Configuración del backend**: El `application.properties` debe soportar variables de entorno:
+   ```properties
+   spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:mariadb://localhost:3306/tfg_unir}
+   ```
+
+3. **Imagen del backend actualizada**: Si modificas el código, necesitas:
+   ```bash
+   # Compilar (requiere Java 21)
+   ./mvnw clean package -DskipTests
+   
+   # Reconstruir imagen
+   docker build -t isidromerayo/spring-backend-tfg:VERSION .
+   
+   # Actualizar versión en docker-compose.yml
+   ```
+
+##### Levantar los servicios
+
+```bash
 cd backend
+
+# Levantar en primer plano (ver logs)
 docker compose up
+
+# O en segundo plano
+docker compose up -d
 ```
 
 MariaDB correra en el puerto por defecto *3306* y Spring Boot 3 en el *8080*, así no tendremos montado lo necesario para tener el backend y probar la aplicación con los diferentes frameworks.
@@ -221,11 +329,193 @@ Para detener las instancias de los contenedores `docker compose stop`.
  ✔ Container backend-maria_db-1     Stopped     0.5s 
 ```
 
-##### Publicar imagen en docker
+#### 📤 Publicar imágenes en Docker Hub
 
-Deberemos estar logeados en nuestra cuenta de docker
+Esta sección documenta el proceso completo para publicar imágenes del backend en Docker Hub.
 
-`docker push isidromerayo/spring-backend-tfg:X.Y.Z`
+##### Flujo completo con Docker
+
+**1. Construir la imagen**
+
+Primero, asegúrate de tener el JAR actualizado:
+
+```bash
+cd backend
+./mvnw clean install
+```
+
+**2. Crear la imagen Docker**
+
+```bash
+# Construir con versión específica
+docker build -t isidromerayo/spring-backend-tfg:1.0.0 .
+
+# También crear tag 'latest' para la versión más reciente
+docker tag isidromerayo/spring-backend-tfg:1.0.0 isidromerayo/spring-backend-tfg:latest
+```
+
+**3. Login en Docker Hub**
+
+```bash
+docker login
+
+# Introducir credenciales cuando se soliciten
+# Username: isidromerayo
+# Password: [tu token de acceso]
+```
+
+> **💡 Tip**: Se recomienda usar un Personal Access Token en lugar de la contraseña. Créalo en: https://hub.docker.com/settings/security
+
+**4. Publicar la imagen**
+
+```bash
+# Push de la versión específica
+docker push isidromerayo/spring-backend-tfg:1.0.0
+
+# Push del tag latest
+docker push isidromerayo/spring-backend-tfg:latest
+```
+
+**5. Verificar la publicación**
+
+Visita: https://hub.docker.com/r/isidromerayo/spring-backend-tfg/tags
+
+##### Flujo completo con Podman
+
+**1. Construir la imagen**
+
+```bash
+cd backend
+./mvnw clean install
+```
+
+**2. Crear la imagen Podman**
+
+```bash
+# Construir con versión específica
+podman build -t isidromerayo/spring-backend-tfg:1.0.0 .
+
+# También crear tag 'latest'
+podman tag isidromerayo/spring-backend-tfg:1.0.0 isidromerayo/spring-backend-tfg:latest
+```
+
+**3. Login en Docker Hub**
+
+```bash
+podman login docker.io
+
+# Introducir credenciales cuando se soliciten
+# Username: isidromerayo
+# Password: [tu token de acceso]
+```
+
+**4. Publicar la imagen**
+
+```bash
+# Push de la versión específica
+podman push isidromerayo/spring-backend-tfg:1.0.0
+
+# Push del tag latest
+podman push isidromerayo/spring-backend-tfg:latest
+```
+
+**5. Verificar la publicación**
+
+```bash
+# Listar imágenes locales
+podman images | grep spring-backend-tfg
+
+# Verificar en Docker Hub
+# https://hub.docker.com/r/isidromerayo/spring-backend-tfg/tags
+```
+
+##### Guía de versionado
+
+Seguimos [Semantic Versioning](https://semver.org/):
+
+- **MAJOR.MINOR.PATCH** (ejemplo: 1.2.3)
+  - **MAJOR**: Cambios incompatibles en la API
+  - **MINOR**: Nueva funcionalidad compatible con versiones anteriores
+  - **PATCH**: Correcciones de bugs compatibles
+
+**Ejemplos:**
+```bash
+# Primera versión estable
+docker build -t isidromerayo/spring-backend-tfg:1.0.0 .
+
+# Corrección de bug
+docker build -t isidromerayo/spring-backend-tfg:1.0.1 .
+
+# Nueva funcionalidad
+docker build -t isidromerayo/spring-backend-tfg:1.1.0 .
+
+# Cambio breaking
+docker build -t isidromerayo/spring-backend-tfg:2.0.0 .
+```
+
+##### Script de publicación automatizado
+
+Puedes crear un script `publish-image.sh` para automatizar el proceso:
+
+```bash
+#!/bin/bash
+set -e
+
+VERSION=$1
+if [ -z "$VERSION" ]; then
+    echo "Uso: ./publish-image.sh <version>"
+    echo "Ejemplo: ./publish-image.sh 1.0.0"
+    exit 1
+fi
+
+IMAGE_NAME="isidromerayo/spring-backend-tfg"
+
+echo "🔨 Compilando aplicación..."
+./mvnw clean install
+
+echo "🐳 Construyendo imagen Docker..."
+docker build -t ${IMAGE_NAME}:${VERSION} .
+docker tag ${IMAGE_NAME}:${VERSION} ${IMAGE_NAME}:latest
+
+echo "📤 Publicando en Docker Hub..."
+docker push ${IMAGE_NAME}:${VERSION}
+docker push ${IMAGE_NAME}:latest
+
+echo "✅ Imagen publicada correctamente:"
+echo "   - ${IMAGE_NAME}:${VERSION}"
+echo "   - ${IMAGE_NAME}:latest"
+```
+
+Uso:
+```bash
+chmod +x publish-image.sh
+./publish-image.sh 1.0.0
+```
+
+##### Troubleshooting
+
+**Error: "denied: requested access to the resource is denied"**
+```bash
+# Asegúrate de estar logeado
+docker login
+# o
+podman login docker.io
+```
+
+**Error: "unauthorized: authentication required"**
+```bash
+# Tu sesión expiró, vuelve a hacer login
+docker logout
+docker login
+```
+
+**Error: "tag does not exist"**
+```bash
+# Verifica que la imagen existe localmente
+docker images | grep spring-backend-tfg
+# Si no existe, construye la imagen primero
+docker build -t isidromerayo/spring-backend-tfg:VERSION .
+```
 
 ---
 

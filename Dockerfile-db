@@ -1,4 +1,4 @@
-FROM mariadb:latest
+FROM docker.io/mariadb:latest
 
 ENV MARIADB_ROOT_PASSWORD=mypass
 ENV MYSQL_DATABASE=tfg_unir

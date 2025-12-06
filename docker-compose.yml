@@ -3,15 +3,15 @@ volumes:
   data:
 services:
   api_service:
-    image: "isidromerayo/spring-backend-tfg:0.0.7"
+    image: "isidromerayo/spring-backend-tfg:0.2.1"
     build: .
     restart: always
     ports:
       - 8080:8080
     depends_on:
       - maria_db
-    links:
-      - maria_db:app_db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://maria_db:3306/tfg_unir
   maria_db:
     image: "isidromerayo/mariadb-tfg:0.0.4"
     restart: always
