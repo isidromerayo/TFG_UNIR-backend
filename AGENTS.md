@@ -23,7 +23,8 @@ Para asegurar la calidad y estabilidad del código, sigue estos pasos al realiza
     *   Aplica los cambios siguiendo las convenciones de código y patrones de diseño ya establecidos en el proyecto.
 
 2.  **Ejecución de Tests:**
-    *   Después de realizar cualquier modificación, es **mandatorio** ejecutar la suite completa de tests (unitarios e integración). Esto asegura que tus cambios no han roto ninguna funcionalidad existente (regresiones).
+    *   **EXCEPCIÓN**: Si ÚNICAMENTE se modifican archivos de documentación (*.md, *.txt, comentarios, archivos en `/docs/`, steering files), se puede omitir la ejecución de tests.
+    *   Para **cambios de código**, es **mandatorio** ejecutar la suite completa de tests (unitarios e integración). Esto asegura que tus cambios no han roto ninguna funcionalidad existente (regresiones).
     *   **Tests completos (unitarios + integración):**
         ```bash
         ./mvnw -Pfailsafe verify
@@ -43,6 +44,7 @@ Para asegurar la calidad y estabilidad del código, sigue estos pasos al realiza
     *   Preferiblemente preparar los datos como carga inicial en BBDD en lugar de crear en los test
 
 3.  **Verificación de Calidad del Código con SpotBugs:**
+    *   **Solo para cambios de código** (omitir si solo se modifica documentación).
     *   Antes de considerar tu trabajo finalizado y listo para un commit, ejecuta un análisis estático de código con SpotBugs para detectar bugs potenciales y malas prácticas.
     *   Utiliza el siguiente comando para lanzar el análisis:
         ```bash
@@ -54,10 +56,11 @@ Para asegurar la calidad y estabilidad del código, sigue estos pasos al realiza
     *   Escribe un mensaje de commit claro y descriptivo.
 
 5.  **Subir cambios al repositorio remoto (git push):**
-    *   Asegúrate de que todos los tests se ejecutan correctamente con el comando:
+    *   **Para cambios de código**: Asegúrate de que todos los tests se ejecutan correctamente con el comando:
         ```bash
         ./mvnw clean verify -Pfailsafe
         ```
+    *   **Para cambios solo de documentación**: Se puede hacer push directamente después del commit.
     *   Para mantener la calidad, revisar que se siguen las guías de SonarQube
 
 El cumplimiento de estos pasos es fundamental para mantener la integridad del proyecto.

@@ -31,12 +31,19 @@ Este proyecto tiene documentación específica para agentes AI en:
 ## Flujo de Desarrollo
 
 Siempre seguir el flujo definido en AGENTS.md:
+
+**Para cambios de código:**
 1. Verificar Java 21 activo (`java -version`)
 2. Análisis y desarrollo
 3. Tests completos (`./mvnw -Pfailsafe verify`) - incluye unitarios + integración
 4. Análisis estático (`./mvnw compile spotbugs:check`)
 5. Commit con mensaje descriptivo (Conventional Commits)
 6. Verificación final (`./mvnw clean verify -Pfailsafe`) antes de push
+
+**Para cambios solo de documentación (*.md, *.txt, comentarios):**
+1. Análisis y desarrollo
+2. Commit con mensaje descriptivo (Conventional Commits)
+3. Push directo (sin tests ni SpotBugs)
 
 ## 📊 Archivos de Steering Disponibles
 

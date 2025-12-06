@@ -67,10 +67,13 @@ private String apiKey;
 ### Antes de cada commit:
 - [ ] No hay secrets hardcodeados
 - [ ] Validación de input implementada
-- [ ] Tests completos pasan (`./mvnw -Pfailsafe verify`)
-- [ ] Tests de seguridad incluidos
-- [ ] SpotBugs security checks pasan
+- [ ] **Solo para cambios de código**: Tests completos pasan (`./mvnw -Pfailsafe verify`)
+- [ ] **Solo para cambios de código**: Tests de seguridad incluidos
+- [ ] **Solo para cambios de código**: SpotBugs security checks pasan
 - [ ] Logs no exponen datos sensibles
+
+### Excepción para documentación:
+Si ÚNICAMENTE se modifican archivos de documentación (*.md, *.txt, comentarios), se puede omitir la ejecución de tests y análisis de código.
 
 ### Antes de cada release:
 - [ ] OWASP Dependency Check ejecutado

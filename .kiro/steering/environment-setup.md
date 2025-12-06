@@ -24,6 +24,24 @@ inclusion: always
 
 ## 🚀 Comandos de Desarrollo Frecuentes
 
+### 📋 Flujo según tipo de cambios
+
+**🔧 Cambios de código (Java, configuración, etc.):**
+```bash
+# Flujo completo obligatorio
+./mvnw -Pfailsafe verify
+./mvnw compile spotbugs:check
+# commit
+./mvnw clean verify -Pfailsafe  # antes de push
+```
+
+**📝 Solo documentación (*.md, *.txt, comentarios):**
+```bash
+# No requiere tests ni SpotBugs
+# commit directo
+# push directo
+```
+
 ### Desarrollo Local
 ```bash
 # Lanzar aplicación

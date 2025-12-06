@@ -9,6 +9,18 @@ Este documento establece las reglas **OBLIGATORIAS** que deben seguir todos los 
 ## ⚠️ REGLAS CRÍTICAS - NUNCA OMITIR
 
 ### 1. ANTES de cualquier commit:
+
+**⚠️ EXCEPCIÓN - Solo cambios en documentación:**
+Si ÚNICAMENTE se modifican archivos de documentación (*.md, *.txt, comentarios), se puede omitir la ejecución de tests.
+
+**Archivos considerados "solo documentación":**
+- `*.md` (README.md, AGENTS.md, etc.)
+- `*.txt`
+- Comentarios en código (sin cambios funcionales)
+- Archivos en `/docs/`
+- Steering files (`.kiro/steering/*.md`)
+
+**Para cambios de código (OBLIGATORIO):**
 ```bash
 # OBLIGATORIO: Ejecutar tests completos (unitarios + integración)
 ./mvnw -Pfailsafe verify
@@ -23,11 +35,14 @@ Este documento establece las reglas **OBLIGATORIAS** que deben seguir todos los 
 ### 2. Flujo de trabajo MANDATORIO:
 
 1. **Análisis y Desarrollo**: Entender el código antes de modificar
-2. **Verificar Java 21**: `java -version` - Si no es 21, ejecutar `vfox use java@21`
-3. **Ejecutar Tests Completos**: `./mvnw -Pfailsafe verify` - Incluye unitarios + integración
-4. **SpotBugs**: `./mvnw compile spotbugs:check` - Resolver problemas críticos
-5. **Commit**: Solo después de que todo pase
-6. **Verificación final**: `./mvnw clean verify -Pfailsafe` antes de push
+2. **Evaluar tipo de cambios**:
+   - **Solo documentación** (*.md, *.txt, comentarios): Saltar al paso 5
+   - **Cambios de código**: Continuar con paso 3
+3. **Verificar Java 21**: `java -version` - Si no es 21, ejecutar `vfox use java@21`
+4. **Ejecutar Tests Completos**: `./mvnw -Pfailsafe verify` - Incluye unitarios + integración
+5. **SpotBugs** (solo para cambios de código): `./mvnw compile spotbugs:check`
+6. **Commit**: Solo después de que todo pase
+7. **Verificación final** (solo para cambios de código): `./mvnw clean verify -Pfailsafe` antes de push
 
 ### 2.1. Si hay fallos en tests:
 - **Tests unitarios específicos**: `./mvnw test -Dtest=NombreDelTest`
