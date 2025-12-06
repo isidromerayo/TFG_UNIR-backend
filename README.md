@@ -188,8 +188,14 @@ https://javatodev.com/docker-compose-for-spring-boot-with-mariadb/
 
 Con docker compose se montará un contendor con MariaDB (datos precargados) y otro con la aplicación de Spring Boot 3 con el API 
 
-Nota: application.properties debe apuntar al alias de docker 'app_db' y no a localhost en `spring.datasource.url=jdbc:mariadb://app_db:3306/tfg_unir`
-
+> **⚠️ Prerequisitos**:
+> 1. Los archivos SQL deben existir en `../recursos/db/`:
+>    - `create.mariadb.sql` - Script de creación de esquema
+>    - `dump.mariadb.sql` - Datos iniciales
+> 2. El `application.properties` debe apuntar al alias de docker 'app_db':
+>    ```properties
+>    spring.datasource.url=jdbc:mariadb://app_db:3306/tfg_unir
+>    ```
 
 ```
 cd backend
@@ -273,6 +279,8 @@ podman run --name mariadb-tfg -p 3306:3306 -d isidromerayo/mariadb-tfg
 
 ##### Construir imagen del backend con Podman
 
+> **⚠️ Importante**: El `Dockerfile` usa `docker.io/eclipse-temurin:21-jdk` (registry completo) para asegurar compatibilidad con Podman y Docker. Podman requiere especificar el registry explícitamente.
+
 ```bash
 cd backend
 ./mvnw clean install
@@ -280,6 +288,8 @@ podman build -t isidromerayo/spring-backend-tfg:VERSION-X.Y.Z .
 ```
 
 ##### Usar Podman Compose
+
+> **⚠️ Prerequisito**: Asegúrate de que los archivos SQL existen en `../recursos/db/` (ver sección [docker compose](#docker-compose) para detalles).
 
 **Opción 1: Podman Compose (requiere instalación)**
 ```bash
