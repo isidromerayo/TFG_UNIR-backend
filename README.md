@@ -581,6 +581,40 @@ podman build -t isidromerayo/spring-backend-tfg:VERSION-X.Y.Z .
 
 > **✅ Solución recomendada**: Podman Pod es la forma nativa de Podman para agrupar contenedores (similar a un pod de Kubernetes). Los contenedores en un pod comparten el mismo namespace de red, por lo que pueden comunicarse usando `localhost`.
 
+**Opción 1: Usar el script de ayuda (Recomendado)**
+
+El proyecto incluye un script `scripts/podman-pod.sh` que simplifica la gestión del backend:
+
+```bash
+cd backend
+
+# Iniciar el backend
+./scripts/podman-pod.sh start
+
+# Ver el estado
+./scripts/podman-pod.sh status
+
+# Ver logs del API
+./scripts/podman-pod.sh logs
+
+# Ver logs de MariaDB
+./scripts/podman-pod.sh logs db
+
+# Detener el backend
+./scripts/podman-pod.sh stop
+
+# Reiniciar el backend
+./scripts/podman-pod.sh restart
+```
+
+El script automáticamente:
+- Crea el pod con los puertos necesarios
+- Inicia MariaDB con los datos precargados
+- Inicia el backend API
+- Verifica que los archivos SQL existen
+
+**Opción 2: Comandos manuales**
+
 **1. Crear el pod**
 ```bash
 cd backend
