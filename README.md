@@ -52,6 +52,7 @@ git branch -d feature/nombre-descriptivo
 - **Lombok** - Reducción de boilerplate
 - **JaCoCo** - Cobertura de código
 - **SpotBugs** - Análisis estático
+- **Docker/Podman** - Containerización
 
 ### 🧪 Tests
 
@@ -133,6 +134,10 @@ Backup con mysql de datos
 ```
 mysqldump -u user_tfg -ptfg_un1r_PWD tfg_unir > recursos/db/dump.mariadb.sql 
 ```
+
+#### 🐳 Containerización con Docker/Podman
+
+> **Nota**: Este proyecto soporta tanto Docker como Podman. Todos los comandos `docker` pueden reemplazarse por `podman`. Ver la [sección de Podman](#-soporte-para-podman) para más detalles.
 
 #### Docker MariaDB
 
@@ -216,8 +221,185 @@ Deberemos estar logeados en nuestra cuenta de docker
 
 `docker push isidromerayo/spring-backend-tfg:X.Y.Z`
 
-#### OWASP Dependency Check
+---
 
+### 🐙 Soporte para Podman
+
+Este proyecto es **totalmente compatible con Podman** como alternativa a Docker. Podman es una herramienta de contenedores sin daemon, más segura y que puede ejecutarse sin privilegios de root.
+
+#### ¿Por qué Podman?
+
+- 🔒 **Más seguro**: Sin daemon, ejecución rootless por defecto
+- 🚀 **Compatible con Docker**: Misma sintaxis de comandos
+- 📦 **Incluido en RHEL/Fedora**: No requiere instalación adicional
+- 🎯 **Mejor aislamiento**: Cada contenedor es un proceso independiente
+- ✅ **Compatible con Kubernetes**: Genera YAML de Kubernetes directamente
+
+#### Instalación de Podman
+
+**Linux (Debian/Ubuntu):**
+```bash
+sudo apt-get update
+sudo apt-get install podman
+```
+
+**Linux (Fedora/RHEL):**
+```bash
+sudo dnf install podman
+```
+
+**macOS:**
+```bash
+brew install podman
+podman machine init
+podman machine start
+```
+
+**Verificar instalación:**
+```bash
+podman --version
+```
+
+#### Uso con Podman
+
+Todos los comandos Docker funcionan con Podman reemplazando `docker` por `podman`:
+
+##### Ejecutar MariaDB con Podman
+
+```bash
+# Equivalente a: docker run --name mariadb-tfg -p 3306:3306 -d isidromerayo/mariadb-tfg
+podman run --name mariadb-tfg -p 3306:3306 -d isidromerayo/mariadb-tfg
+```
+
+##### Construir imagen del backend con Podman
+
+```bash
+cd backend
+./mvnw clean install
+podman build -t isidromerayo/spring-backend-tfg:VERSION-X.Y.Z .
+```
+
+##### Usar Podman Compose
+
+**Opción 1: Podman Compose (requiere instalación)**
+```bash
+# Instalar podman-compose
+pip3 install podman-compose
+
+# Usar igual que docker-compose
+cd backend
+podman-compose up
+podman-compose up -d  # En segundo plano
+podman-compose stop
+```
+
+**Opción 2: Podman 4.0+ (soporte nativo)**
+```bash
+# Podman 4.0+ incluye soporte nativo para compose
+cd backend
+podman compose up
+podman compose up -d
+podman compose stop
+```
+
+##### Publicar imagen con Podman
+
+```bash
+# Login en Docker Hub
+podman login docker.io
+
+# Push de la imagen
+podman push isidromerayo/spring-backend-tfg:X.Y.Z
+```
+
+#### Alias para Compatibilidad
+
+Si prefieres usar los comandos de Docker pero con Podman:
+
+```bash
+# Añadir a ~/.bashrc o ~/.zshrc
+alias docker=podman
+alias docker-compose=podman-compose
+
+# Recargar configuración
+source ~/.bashrc  # o source ~/.zshrc
+```
+
+Después de esto, todos los comandos `docker` usarán Podman automáticamente.
+
+#### Diferencias Importantes
+
+| Aspecto | Docker | Podman |
+|---------|--------|--------|
+| **Daemon** | Requiere daemon corriendo | Sin daemon (daemonless) |
+| **Root** | Requiere root o grupo docker | Puede ejecutarse sin root |
+| **Arquitectura** | Cliente-servidor | Proceso directo |
+| **Compatibilidad** | Estándar de facto | Compatible con Docker |
+| **Seguridad** | Buena | Mejor (rootless) |
+| **Kubernetes** | Requiere conversión | Genera YAML nativamente |
+
+#### Comandos Útiles de Podman
+
+```bash
+# Listar contenedores
+podman ps
+podman ps -a  # Incluir detenidos
+
+# Ver logs
+podman logs mariadb-tfg
+podman logs -f api_service  # Seguir logs en tiempo real
+
+# Detener y eliminar contenedores
+podman stop mariadb-tfg
+podman rm mariadb-tfg
+
+# Listar imágenes
+podman images
+
+# Eliminar imagen
+podman rmi isidromerayo/spring-backend-tfg:X.Y.Z
+
+# Limpiar recursos no usados
+podman system prune -a
+
+# Generar YAML de Kubernetes desde contenedor
+podman generate kube mariadb-tfg > mariadb-k8s.yaml
+```
+
+#### Troubleshooting Podman
+
+**Problema: "permission denied" al acceder a puertos < 1024**
+```bash
+# Solución: Usar puertos > 1024 o configurar
+echo "net.ipv4.ip_unprivileged_port_start=80" | sudo tee /etc/sysctl.d/podman-ports.conf
+sudo sysctl --system
+```
+
+**Problema: "cannot find image locally"**
+```bash
+# Especificar el registry completo
+podman pull docker.io/isidromerayo/mariadb-tfg:latest
+```
+
+**Problema: Podman compose no funciona**
+```bash
+# Verificar versión de Podman
+podman --version  # Debe ser 4.0+ para soporte nativo
+
+# O instalar podman-compose
+pip3 install podman-compose
+```
+
+#### Recursos Adicionales
+
+- 📚 [Documentación oficial de Podman](https://docs.podman.io/)
+- 🔄 [Guía de migración Docker → Podman](https://podman.io/getting-started/migration)
+- 🎓 [Tutorial de Podman](https://github.com/containers/podman/blob/main/docs/tutorials/podman_tutorial.md)
+- 🐙 [Podman Desktop](https://podman-desktop.io/) - GUI para Podman
+
+---
+
+#### OWASP Dependency Check
 `mvn org.owasp:dependency-check-maven:check`
 
 Si tenemos un API KEY del servicio
@@ -256,3 +438,9 @@ Este comando:
 
 * Clona el proyecto desde el tag creado.
 * Compila y despliega el artefacto al repositorio definido en <distributionManagement>.
+
+# Badges
+
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=isidromerayo_TFG_UNIR-backend)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
+
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/381fca2f4da04e269a7dbd6a983519e3)](https://app.codacy.com/gh/isidromerayo/TFG_UNIR-backend/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
