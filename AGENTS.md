@@ -7,11 +7,12 @@ Este documento proporciona directrices para agentes de inteligencia artificial q
 Este es un proyecto backend desarrollado en Java con el framework Spring Boot. Utiliza Maven para la gestión de dependencias y el ciclo de vida de la compilación.
 
 ### Tecnologías Clave
-- **Lenguaje:** Java
-- **Framework:** Spring Boot
+- **Lenguaje:** Java 21
+- **Framework:** Spring Boot 3.4.12
 - **Gestor de dependencias:** Maven
-- **Base de datos:** (Especificar si se conoce, ej. H2, PostgreSQL)
-- **Testing:** JUnit, Mockito
+- **Base de datos:** H2 (tests), MariaDB (producción)
+- **Testing:** JUnit 5, Mockito, REST Assured (integración)
+- **Herramientas:** vfox (gestión versiones Java), SpotBugs, JaCoCo
 
 ## Flujo de Trabajo para Contribuciones
 
@@ -21,14 +22,24 @@ Para asegurar la calidad y estabilidad del código, sigue estos pasos al realiza
     *   Comprende la tarea y el código existente antes de modificarlo.
     *   Aplica los cambios siguiendo las convenciones de código y patrones de diseño ya establecidos en el proyecto.
 
-2.  **Ejecución de Tests Unitarios:**
-    *   Después de realizar cualquier modificación, es **mandatorio** ejecutar la suite completa de tests unitarios. Esto asegura que tus cambios no han roto ninguna funcionalidad existente (regresiones).
-    *   Utiliza el Maven Wrapper (`mvnw`) para ejecutar los tests:
+2.  **Ejecución de Tests:**
+    *   Después de realizar cualquier modificación, es **mandatorio** ejecutar la suite completa de tests (unitarios e integración). Esto asegura que tus cambios no han roto ninguna funcionalidad existente (regresiones).
+    *   **Tests completos (unitarios + integración):**
+        ```bash
+        ./mvnw -Pfailsafe verify
+        ```
+    *   **Solo tests unitarios (para desarrollo rápido):**
         ```bash
         ./mvnw test
         ```
-    *   Cuando fallen los test y se este arreglando, centrarse primero en lanzar solo los que fallan en lugar de lanzar todos siempre
-    *   Aplicar TDD a la hora de implentar
+    *   **Solo tests de integración:**
+        ```bash
+        ./mvnw -DskipUTs -Pfailsafe verify
+        ```
+    *   Cuando fallen los test y se este arreglando, centrarse primero en lanzar solo los que fallan en lugar de lanzar todos siempre:
+        - Tests unitarios específicos: `./mvnw test -Dtest=NombreDelTest`
+        - Tests de integración específicos: `./mvnw -Pfailsafe verify -Dit.test=NombreDelTestIT`
+    *   Aplicar TDD a la hora de implementar
     *   Preferiblemente preparar los datos como carga inicial en BBDD en lugar de crear en los test
 
 3.  **Verificación de Calidad del Código con SpotBugs:**
@@ -45,7 +56,7 @@ Para asegurar la calidad y estabilidad del código, sigue estos pasos al realiza
 5.  **Subir cambios al repositorio remoto (git push):**
     *   Asegúrate de que todos los tests se ejecutan correctamente con el comando:
         ```bash
-        ./mvnw clean verify
+        ./mvnw clean verify -Pfailsafe
         ```
     *   Para mantener la calidad, revisar que se siguen las guías de SonarQube
 

@@ -10,10 +10,7 @@ Este documento establece las reglas **OBLIGATORIAS** que deben seguir todos los 
 
 ### 1. ANTES de cualquier commit:
 ```bash
-# OBLIGATORIO: Ejecutar tests unitarios
-./mvnw test
-
-# OBLIGATORIO: Ejecutar tests de integración
+# OBLIGATORIO: Ejecutar tests completos (unitarios + integración)
 ./mvnw -Pfailsafe verify
 
 # OBLIGATORIO: Análisis de código
@@ -27,15 +24,16 @@ Este documento establece las reglas **OBLIGATORIAS** que deben seguir todos los 
 
 1. **Análisis y Desarrollo**: Entender el código antes de modificar
 2. **Verificar Java 21**: `java -version` - Si no es 21, ejecutar `vfox use java@21`
-3. **Ejecutar Tests Unitarios**: `./mvnw test` - Si fallan, arreglar ANTES de continuar
-4. **Ejecutar Tests de Integración**: `./mvnw -Pfailsafe verify` - Validar integración completa
-5. **SpotBugs**: `./mvnw compile spotbugs:check` - Resolver problemas críticos
-6. **Commit**: Solo después de que todo pase
-7. **Verificación final**: `./mvnw clean verify -Pfailsafe` antes de push
+3. **Ejecutar Tests Completos**: `./mvnw -Pfailsafe verify` - Incluye unitarios + integración
+4. **SpotBugs**: `./mvnw compile spotbugs:check` - Resolver problemas críticos
+5. **Commit**: Solo después de que todo pase
+6. **Verificación final**: `./mvnw clean verify -Pfailsafe` antes de push
 
 ### 2.1. Si hay fallos en tests:
-- **Tests unitarios**: Ejecutar solo los que fallan: `./mvnw test -Dtest=NombreDelTest`
-- **Tests de integración**: Ejecutar solo los que fallan: `./mvnw -Pfailsafe verify -Dit.test=NombreDelTestIT`
+- **Tests unitarios específicos**: `./mvnw test -Dtest=NombreDelTest`
+- **Tests de integración específicos**: `./mvnw -Pfailsafe verify -Dit.test=NombreDelTestIT`
+- **Solo tests unitarios (desarrollo rápido)**: `./mvnw test`
+- **Solo tests de integración**: `./mvnw -DskipUTs -Pfailsafe verify`
 - NO ejecutar toda la suite hasta que los fallos estén resueltos
 - Aplicar TDD: escribir test → hacer que pase → refactorizar
 - **CRÍTICO**: Si fallan tests de integración, revisar endpoints y configuración de seguridad

@@ -33,11 +33,10 @@ Este proyecto tiene documentación específica para agentes AI en:
 Siempre seguir el flujo definido en AGENTS.md:
 1. Verificar Java 21 activo (`java -version`)
 2. Análisis y desarrollo
-3. Tests unitarios (`./mvnw test`)
-4. Tests de integración (`./mvnw -Pfailsafe verify`)
-5. Análisis estático (`./mvnw compile spotbugs:check`)
-6. Commit con mensaje descriptivo (Conventional Commits)
-7. Verificación final (`./mvnw clean verify -Pfailsafe`) antes de push
+3. Tests completos (`./mvnw -Pfailsafe verify`) - incluye unitarios + integración
+4. Análisis estático (`./mvnw compile spotbugs:check`)
+5. Commit con mensaje descriptivo (Conventional Commits)
+6. Verificación final (`./mvnw clean verify -Pfailsafe`) antes de push
 
 ## 📊 Archivos de Steering Disponibles
 
