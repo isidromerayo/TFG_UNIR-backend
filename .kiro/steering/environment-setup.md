@@ -41,7 +41,10 @@ inclusion: always
 # Tests unitarios solamente
 ./mvnw test
 
-# Tests de integración
+# Tests de integración (con perfil failsafe)
+./mvnw -Pfailsafe verify
+
+# Tests de integración solamente (sin unitarios)
 ./mvnw -DskipUTs -Pfailsafe verify
 
 # Test específico
@@ -61,6 +64,9 @@ inclusion: always
 
 # Build completo con todos los checks
 ./mvnw clean verify -Pfailsafe -Pdependency-check
+
+# Verificación completa (recomendado antes de push)
+./mvnw clean verify -Pfailsafe
 ```
 
 ## 📊 URLs de Desarrollo

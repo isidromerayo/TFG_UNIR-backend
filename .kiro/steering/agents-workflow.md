@@ -10,29 +10,35 @@ Este documento establece las reglas **OBLIGATORIAS** que deben seguir todos los 
 
 ### 1. ANTES de cualquier commit:
 ```bash
-# OBLIGATORIO: Ejecutar tests
+# OBLIGATORIO: Ejecutar tests unitarios
 ./mvnw test
+
+# OBLIGATORIO: Ejecutar tests de integración
+./mvnw -Pfailsafe verify
 
 # OBLIGATORIO: Análisis de código
 ./mvnw compile spotbugs:check
 
 # OBLIGATORIO: Verificación completa antes de push
-./mvnw clean verify
+./mvnw clean verify -Pfailsafe
 ```
 
 ### 2. Flujo de trabajo MANDATORIO:
 
 1. **Análisis y Desarrollo**: Entender el código antes de modificar
 2. **Verificar Java 21**: `java -version` - Si no es 21, ejecutar `vfox use java@21`
-3. **Ejecutar Tests**: `./mvnw test` - Si fallan, arreglar ANTES de continuar
-4. **SpotBugs**: `./mvnw compile spotbugs:check` - Resolver problemas críticos
-5. **Commit**: Solo después de que todo pase
-6. **Verificación final**: `./mvnw clean verify` antes de push
+3. **Ejecutar Tests Unitarios**: `./mvnw test` - Si fallan, arreglar ANTES de continuar
+4. **Ejecutar Tests de Integración**: `./mvnw -Pfailsafe verify` - Validar integración completa
+5. **SpotBugs**: `./mvnw compile spotbugs:check` - Resolver problemas críticos
+6. **Commit**: Solo después de que todo pase
+7. **Verificación final**: `./mvnw clean verify -Pfailsafe` antes de push
 
 ### 2.1. Si hay fallos en tests:
-- Ejecutar solo los tests que fallan: `./mvnw test -Dtest=NombreDelTest`
+- **Tests unitarios**: Ejecutar solo los que fallan: `./mvnw test -Dtest=NombreDelTest`
+- **Tests de integración**: Ejecutar solo los que fallan: `./mvnw -Pfailsafe verify -Dit.test=NombreDelTestIT`
 - NO ejecutar toda la suite hasta que los fallos estén resueltos
 - Aplicar TDD: escribir test → hacer que pase → refactorizar
+- **CRÍTICO**: Si fallan tests de integración, revisar endpoints y configuración de seguridad
 
 ### 3. Principios de Testing:
 - Aplicar TDD cuando sea posible
