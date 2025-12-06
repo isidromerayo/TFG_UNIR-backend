@@ -103,15 +103,14 @@ El backend utiliza JWT (JSON Web Tokens) para la autenticación.
 
 La base de datos incluye usuarios de prueba precargados. Ejemplos:
 
-**Profesores** (pueden crear cursos):
+**Usuarios Activos** (pueden iniciar sesión):
+- `c@example.com` / `1234`
+- `ines@localhost` / `1234`
+
+**Usuarios Pendientes** (para testing de estados):
 - `maria@localhost` / `1234`
-- `juanantonio@localhost` / `1234`
 
-**Alumnos** (pueden inscribirse en cursos):
-- `helena@localhost` / `1234`
-- `carlos@localhost` / `1234`
-
-> 📋 **Lista completa de usuarios**: Ver el [README del monorepo](https://github.com/isidromerayo/TFG_UNIR-monorepo#-usuarios-de-prueba) para la lista completa de usuarios de prueba disponibles.
+> 📋 **Lista completa de usuarios**: Ver el [README del monorepo](https://github.com/isidromerayo/TFG_UNIR-monorepo#-usuarios-de-prueba) para la lista completa de usuarios activos y pendientes.
 
 Es necesaria una versión de Java 21, para utilizar Spring Boot 3.4.x
 
