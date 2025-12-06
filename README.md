@@ -1,5 +1,6 @@
 # TFG_UNIR Backend
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f1ac7a53d1ec48c6819d8c1418c14767)](https://app.codacy.com/gh/isidromerayo/TFG_UNIR-backend?utm_source=github.com&utm_medium=referral&utm_content=isidromerayo/TFG_UNIR-backend&utm_campaign=Badge_Grade)
 [![Java CI with Maven](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/maven.yml/badge.svg)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/maven.yml)
 [![Pull Request CI](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/pull-request.yml/badge.svg)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/pull-request.yml)
 
