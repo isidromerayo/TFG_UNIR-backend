@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -17,19 +16,12 @@ import eu.estilolibre.tfgunir.backend.model.Valoracion;
 public interface ValoracionRepository extends JpaRepository<Valoracion, Long> {
 
     /**
-     * 
      * API: valoraciones/search/selectLastOpinions
      * 
-     * @return
-     */
-    /**
-     * 
-     * API: valoraciones/search/selectLastOpinions
-     * 
-     * @return
+     * @return List of the last 3 valoraciones ordered by fecha descending
      */
     @RestResource(path = "selectLastOpinions", rel = "selectLastOpinions")
-    List<Valoracion> findTop3ByOrderByFechaDesc();
+    List<Valoracion> findFirst3ByOrderByFechaDescIdDesc();
 
     @Configuration
     static class RepositoryConfig implements RepositoryRestConfigurer {

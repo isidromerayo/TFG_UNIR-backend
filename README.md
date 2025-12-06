@@ -41,8 +41,8 @@ git branch -d feature/nombre-descriptivo
 
 ### 🛠️ Stack tecnológico
 
-- **Java 17**
-- **Spring Boot 3.4.9**
+- **Java 21**
+- **Spring Boot 3.4.12**
 - **Spring Data JPA** - Persistencia
 - **Spring Security** - Autenticación y autorización
 - **MariaDB** - Base de datos producción
@@ -98,7 +98,7 @@ El backend utiliza JWT (JSON Web Tokens) para la autenticación.
 - Librería: `jjwt` v0.13.0
 - Configuración de seguridad con Spring Security
 
-Es necesaria una versión de Java 17, para utilizar Spring Boot 3.0.x
+Es necesaria una versión de Java 21, para utilizar Spring Boot 3.4.x
 
 ```
 cd backend

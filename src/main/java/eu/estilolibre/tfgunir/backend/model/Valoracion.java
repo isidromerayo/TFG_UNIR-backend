@@ -32,7 +32,7 @@ public class Valoracion {
     private int puntuacion;
     @Column(columnDefinition = "TEXT")
     private String comentario;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
 
     @PrePersist

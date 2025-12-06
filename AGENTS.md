@@ -1,54 +1,66 @@
-# TFG_UNIR-backend Agent Guide
+# Guía para Agentes AI
 
-## Project Overview
-This is the backend service for the TFG UNIR project, built with Spring Boot. It provides REST APIs for the application.
+Este documento proporciona directrices para agentes de inteligencia artificial que trabajen en este repositorio.
 
-## Tech Stack
-- **Language**: Java 17
-- **Framework**: Spring Boot 3.x
-- **Build Tool**: Maven
-- **Database**: MariaDB / MySQL
-- **Containerization**: Docker
+## Descripción del Proyecto
 
-## Quick Start
-### Prerequisites
-- Java 17
-- Maven
-- Docker (for database)
+Este es un proyecto backend desarrollado en Java con el framework Spring Boot. Utiliza Maven para la gestión de dependencias y el ciclo de vida de la compilación.
 
-### Build
-```bash
-mvn clean install
-```
+### Tecnologías Clave
+- **Lenguaje:** Java 21
+- **Framework:** Spring Boot 3.4.12
+- **Gestor de dependencias:** Maven
+- **Base de datos:** H2 (tests), MariaDB (producción)
+- **Testing:** JUnit 5, Mockito, REST Assured (integración)
+- **Herramientas:** vfox (gestión versiones Java), SpotBugs, JaCoCo
 
-### Run
-```bash
-mvn spring-boot:run
-```
+## Flujo de Trabajo para Contribuciones
 
-### Tests
-```bash
-mvn test
-```
+Para asegurar la calidad y estabilidad del código, sigue estos pasos al realizar cambios:
 
-## Architecture
-The project follows a standard layered architecture:
-- **Controller**: REST endpoints (`src/main/java/.../controller`)
-- **Service**: Business logic (`src/main/java/.../service`)
-- **Repository**: Data access (`src/main/java/.../repository`)
-- **Model**: JPA entities (`src/main/java/.../model`)
+1.  **Análisis y Desarrollo:**
+    *   Comprende la tarea y el código existente antes de modificarlo.
+    *   Aplica los cambios siguiendo las convenciones de código y patrones de diseño ya establecidos en el proyecto.
 
-## Conventions
-- **Code Style**: Standard Java conventions.
-- **Git**: Commit messages should follow Conventional Commits (e.g., `feat:`, `fix:`, `chore:`).
-- **Testing**: Unit tests for services, integration tests for controllers.
+2.  **Ejecución de Tests:**
+    *   **EXCEPCIÓN**: Si ÚNICAMENTE se modifican archivos de documentación (*.md, *.txt, comentarios, archivos en `/docs/`, steering files), se puede omitir la ejecución de tests.
+    *   Para **cambios de código**, es **mandatorio** ejecutar la suite completa de tests (unitarios e integración). Esto asegura que tus cambios no han roto ninguna funcionalidad existente (regresiones).
+    *   **Tests completos (unitarios + integración):**
+        ```bash
+        ./mvnw -Pfailsafe verify
+        ```
+    *   **Solo tests unitarios (para desarrollo rápido):**
+        ```bash
+        ./mvnw test
+        ```
+    *   **Solo tests de integración:**
+        ```bash
+        ./mvnw -DskipUTs -Pfailsafe verify
+        ```
+    *   Cuando fallen los test y se este arreglando, centrarse primero en lanzar solo los que fallan en lugar de lanzar todos siempre:
+        - Tests unitarios específicos: `./mvnw test -Dtest=NombreDelTest`
+        - Tests de integración específicos: `./mvnw -Pfailsafe verify -Dit.test=NombreDelTestIT`
+    *   Aplicar TDD a la hora de implementar
+    *   Preferiblemente preparar los datos como carga inicial en BBDD en lugar de crear en los test
 
-## Workflow
-- **Branching**: Use feature branches for new features, bug fixes, and refactoring.
-- **Pull Requests**: Use pull requests for code reviews and approvals.  
-- **CI/CD**: Use GitHub Actions for continuous integration and delivery.
-- **Before commit**: 
-  - Run `mvn clean test` to ensure the code is up to date.
-  - Run `mvn spotbugs:check` to ensure the code is free of security vulnerabilities.
-  - Run `mvn jacoco:report` to ensure the code coverage is up to date.
- 
+3.  **Verificación de Calidad del Código con SpotBugs:**
+    *   **Solo para cambios de código** (omitir si solo se modifica documentación).
+    *   Antes de considerar tu trabajo finalizado y listo para un commit, ejecuta un análisis estático de código con SpotBugs para detectar bugs potenciales y malas prácticas.
+    *   Utiliza el siguiente comando para lanzar el análisis:
+        ```bash
+        ./mvnw compile spotbugs:check
+        ```
+
+4.  **Creación de Commits:**
+    *   Asegúrate de que todos los tests se ejecutan correctamente y que el análisis de SpotBugs no reporta problemas críticos.
+    *   Escribe un mensaje de commit claro y descriptivo.
+
+5.  **Subir cambios al repositorio remoto (git push):**
+    *   **Para cambios de código**: Asegúrate de que todos los tests se ejecutan correctamente con el comando:
+        ```bash
+        ./mvnw clean verify -Pfailsafe
+        ```
+    *   **Para cambios solo de documentación**: Se puede hacer push directamente después del commit.
+    *   Para mantener la calidad, revisar que se siguen las guías de SonarQube
+
+El cumplimiento de estos pasos es fundamental para mantener la integridad del proyecto.
