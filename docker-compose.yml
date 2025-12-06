@@ -16,7 +16,7 @@ services:
   api_service:
     container_name: api_service
     hostname: api_service
-    image: "isidromerayo/spring-backend-tfg:0.2.1"
+    image: "isidromerayo/spring-backend-tfg:0.2.2"
     build: .
     restart: always
     ports:
