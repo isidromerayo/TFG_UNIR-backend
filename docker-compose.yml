@@ -1,27 +1,57 @@
-version: "3.3"
-volumes:
-  data:
+# Docker Compose configuration for TFG UNIR Backend
+# 
+# IMPORTANT: This file is optimized for Docker Compose.
+# For Podman users, we recommend using Podman Pod instead (see scripts/podman-pod.sh)
+# due to DNS resolution issues with podman-compose.
+#
+# Usage with Docker:
+#   docker compose up -d
+#   docker compose down
+#
+# Usage with Podman (recommended):
+#   ./scripts/podman-pod.sh start
+#   ./scripts/podman-pod.sh stop
+
 services:
   maria_db:
     container_name: maria_db
     hostname: maria_db
     image: "isidromerayo/mariadb-tfg:0.0.4"
-    restart: always
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
-      - data:/var/lib/mysql
+      - maria-db-data:/var/lib/mysql
       - ../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql
       - ../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
   api_service:
     container_name: api_service
     hostname: api_service
     image: "isidromerayo/spring-backend-tfg:0.2.2"
     build: .
-    restart: always
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
-      - maria_db
+      maria_db:
+        condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mariadb://maria_db:3306/tfg_unir
+      SPRING_DATASOURCE_URL: "jdbc:mariadb://maria_db:3306/tfg_unir"
+      SPRING_DATASOURCE_USERNAME: "user_tfg"
+      SPRING_DATASOURCE_PASSWORD: "tfg_un1r_PWD"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/api || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+volumes:
+  maria-db-data:
