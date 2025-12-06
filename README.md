@@ -99,6 +99,20 @@ El backend utiliza JWT (JSON Web Tokens) para la autenticación.
 - Librería: `jjwt` v0.13.0
 - Configuración de seguridad con Spring Security
 
+#### 👥 Usuarios de Prueba
+
+La base de datos incluye usuarios de prueba precargados. Ejemplos:
+
+**Profesores** (pueden crear cursos):
+- `maria@localhost` / `1234`
+- `juanantonio@localhost` / `1234`
+
+**Alumnos** (pueden inscribirse en cursos):
+- `helena@localhost` / `1234`
+- `carlos@localhost` / `1234`
+
+> 📋 **Lista completa de usuarios**: Ver el [README del monorepo](https://github.com/isidromerayo/TFG_UNIR-monorepo#-usuarios-de-prueba) para la lista completa de usuarios de prueba disponibles.
+
 Es necesaria una versión de Java 21, para utilizar Spring Boot 3.4.x
 
 ```
