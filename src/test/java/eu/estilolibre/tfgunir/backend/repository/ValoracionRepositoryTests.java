@@ -124,9 +124,6 @@ public class ValoracionRepositoryTests {
 
         List<Valoracion> result = repository.findFirst3ByOrderByFechaDescIdDesc();
 
-
-
-
         assertThat(result.size(), is(equalTo(3)));
         assertEquals("La más reciente de todas", result.get(0).getComentario());
         assertEquals("Más reciente", result.get(1).getComentario());

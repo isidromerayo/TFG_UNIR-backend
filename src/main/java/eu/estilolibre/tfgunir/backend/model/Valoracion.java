@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -18,7 +19,6 @@ import lombok.Data;
 @Entity
 @Table(name = "valoraciones")
 public class Valoracion {
-   
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,5 +34,12 @@ public class Valoracion {
     private String comentario;
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
-    
+
+    @PrePersist
+    protected void onCreate() {
+        if (fecha == null) {
+            fecha = new Date();
+        }
+    }
+
 }
