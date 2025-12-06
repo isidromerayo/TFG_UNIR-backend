@@ -2,7 +2,20 @@ version: "3.3"
 volumes:
   data:
 services:
+  maria_db:
+    container_name: maria_db
+    hostname: maria_db
+    image: "isidromerayo/mariadb-tfg:0.0.4"
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/var/lib/mysql
+      - ../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql
+      - ../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql
   api_service:
+    container_name: api_service
+    hostname: api_service
     image: "isidromerayo/spring-backend-tfg:0.2.1"
     build: .
     restart: always
@@ -12,12 +25,3 @@ services:
       - maria_db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mariadb://maria_db:3306/tfg_unir
-  maria_db:
-    image: "isidromerayo/mariadb-tfg:0.0.4"
-    restart: always
-    ports:
-      - 3306:3306
-    volumes:
-      - data:/var/lib/mysql
-      - ../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql
-      - ../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql

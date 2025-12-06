@@ -577,7 +577,59 @@ cd backend
 podman build -t isidromerayo/spring-backend-tfg:VERSION-X.Y.Z .
 ```
 
+##### Usar Podman Pod (Recomendado)
+
+> **✅ Solución recomendada**: Podman Pod es la forma nativa de Podman para agrupar contenedores (similar a un pod de Kubernetes). Los contenedores en un pod comparten el mismo namespace de red, por lo que pueden comunicarse usando `localhost`.
+
+**1. Crear el pod**
+```bash
+cd backend
+podman pod create --name backend-pod -p 8080:8080 -p 3306:3306
+```
+
+**2. Ejecutar MariaDB en el pod**
+```bash
+podman run -d --pod backend-pod --name maria_db \
+  -v tfg_unir-backend_data:/var/lib/mysql \
+  -v $(pwd)/../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql \
+  -v $(pwd)/../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql \
+  isidromerayo/mariadb-tfg:0.0.4
+```
+
+**3. Ejecutar el backend en el pod**
+```bash
+# Nota: Usamos localhost porque están en el mismo pod
+podman run -d --pod backend-pod --name api_service \
+  -e SPRING_DATASOURCE_URL=jdbc:mariadb://localhost:3306/tfg_unir \
+  isidromerayo/spring-backend-tfg:0.2.1
+```
+
+**4. Verificar el estado**
+```bash
+# Ver el pod y sus contenedores
+podman pod ps
+podman ps --pod
+
+# Ver logs
+podman logs api_service
+podman logs maria_db
+
+# Probar el API
+curl http://localhost:8080/api
+```
+
+**5. Detener y eliminar**
+```bash
+# Detener el pod (detiene todos los contenedores)
+podman pod stop backend-pod
+
+# Eliminar el pod (elimina todos los contenedores)
+podman pod rm backend-pod
+```
+
 ##### Usar Podman Compose
+
+> **⚠️ Limitación conocida**: Podman con docker-compose tiene problemas con la resolución DNS entre contenedores. Se recomienda usar Podman Pod (ver arriba) o Docker para docker-compose.
 
 > **⚠️ Prerequisito**: Asegúrate de que los archivos SQL existen en `../recursos/db/` (ver sección [docker compose](#docker-compose) para detalles).
 
@@ -601,6 +653,8 @@ podman compose up
 podman compose up -d
 podman compose stop
 ```
+
+> **💡 Nota**: Si encuentras problemas de resolución DNS con docker-compose, usa Podman Pod en su lugar.
 
 ##### Publicar imagen con Podman
 
