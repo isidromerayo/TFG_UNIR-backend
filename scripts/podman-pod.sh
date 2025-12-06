@@ -8,7 +8,7 @@ POD_NAME="backend-pod"
 MARIA_DB_CONTAINER="maria_db"
 API_SERVICE_CONTAINER="api_service"
 MARIA_DB_IMAGE="isidromerayo/mariadb-tfg:0.0.4"
-API_SERVICE_IMAGE="isidromerayo/spring-backend-tfg:0.2.1"
+API_SERVICE_IMAGE="isidromerayo/spring-backend-tfg:0.2.2"
 VOLUME_NAME="tfg_unir-backend_data"
 
 # Colores para output
