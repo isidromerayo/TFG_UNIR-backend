@@ -78,7 +78,7 @@ public class ValoracionRepositoryTests {
         Valoracion valoracionGuardada = repository.save(nuevaValoracion);
 
         assertNotNull(valoracionGuardada);
-        assertNotNull(valoracionGuardada.getId());
+        assertThat(valoracionGuardada.getId(), is(equalTo(1L)));
         assertEquals("¡Excelente curso!", valoracionGuardada.getComentario());
     }
 

@@ -22,8 +22,12 @@ import eu.estilolibre.tfgunir.backend.security.TokenService;
 public class LoginController {
 
     private static final long EXPIRACION = 3600000;
+    private final UsuarioRepository repository;
+
     @Autowired
-    private UsuarioRepository repository;
+    public LoginController(UsuarioRepository repository) {
+        this.repository = repository;
+    }
 
     /**
      * @param login

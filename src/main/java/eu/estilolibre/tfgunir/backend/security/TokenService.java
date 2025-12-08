@@ -31,9 +31,13 @@ public class TokenService {
         JwtParser parser = Jwts.parser().verifyWith(clave).build();
 
         Jws<Claims> token = parser.parseSignedClaims(tokenReal);
-        String[] parts = tokenReal.split("\\.");
-        String signature = (parts.length == 3) ? parts[2] : "";
-        logger.info(token.getHeader() + "/" + token.getPayload().toString() + "/" + signature);
+        
+        if (logger.isLoggable(java.util.logging.Level.INFO)) {
+            String[] parts = tokenReal.split("\\.");
+            String signature = (parts.length == 3) ? parts[2] : "";
+            logger.info(token.getHeader() + "/" + token.getPayload().toString() + "/" + signature);
+        }
+        
         return token.getPayload().getSubject();
     }
 }
