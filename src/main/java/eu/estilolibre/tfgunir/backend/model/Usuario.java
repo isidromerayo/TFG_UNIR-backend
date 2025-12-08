@@ -38,7 +38,7 @@ public class Usuario {
             CascadeType.MERGE
     })
     @JoinTable(name = "usuarios_cursos", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "curso_id"))
-    private Set<Curso> misCursosComprados = new HashSet<Curso>();
+    private Set<Curso> misCursosComprados = new HashSet<>();
     @OneToMany(mappedBy = "estudiante")
     Set<Avance> avances;
 

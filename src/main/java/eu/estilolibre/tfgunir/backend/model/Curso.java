@@ -64,7 +64,7 @@ public class Curso {
         orphanRemoval = true,
         fetch = FetchType.LAZY
     )
-    private Set<Contenido> contenidos = new HashSet<Contenido>();
+    private Set<Contenido> contenidos = new HashSet<>();
     @OneToMany(mappedBy = "curso")
     Set<Avance> avances;
 
