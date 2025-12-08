@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * 
@@ -24,6 +25,7 @@ import lombok.Data;
 @lombok.EqualsAndHashCode(exclude = {"misCursos"})
 @Entity
 @Table(name = "instructores")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Instructor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
