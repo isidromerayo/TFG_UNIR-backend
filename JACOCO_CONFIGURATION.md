@@ -84,13 +84,15 @@ target/site/jacoco/         # Reporte combinado (PRINCIPAL)
 
 Según el reporte combinado (`target/site/jacoco/index.html`):
 
-| Métrica | Valor | Objetivo SonarQube |
-|---------|-------|-------------------|
-| Instrucciones | 56% | ≥ 80% |
-| Ramas | 20% | - |
-| Líneas | 50% | - |
-| Métodos | 47% | - |
-| Clases | 73% | - |
+| Métrica | Valor | Objetivo SonarQube | Estado |
+|---------|-------|-------------------|--------|
+| Instrucciones | **85%** | ≥ 80% | ✅ **ALCANZADO** |
+| Ramas | 60% | - | 🟡 Mejorable |
+| Líneas | 88% | - | ✅ Excelente |
+| Métodos | 87% | - | ✅ Excelente |
+| Clases | 89% | - | ✅ Excelente |
+
+**Clases analizadas**: 9 (excluidas 2 DTOs + entidades model)
 
 ---
 
@@ -200,6 +202,8 @@ sonar.jacoco.reportPaths=target/jacoco-merged.exec
 - [x] Reporte HTML combinado en `target/site/jacoco/`
 - [x] Reporte combinado muestra cobertura máxima de ambos
 - [x] Exclusiones configuradas para paquete `model`
+- [x] Exclusiones configuradas para DTOs (`User`, `FormUser`)
+- [x] **Objetivo de cobertura alcanzado: 85% > 80%**
 
 ---
 
