@@ -18,6 +18,7 @@
 		<maven.failsafe>3.5.4</maven.failsafe>
 		<JJWT_RELEASE_VERSION>0.12.6</JJWT_RELEASE_VERSION>
 		<dependency-check-maven.version>12.1.8</dependency-check-maven.version>
+		<sonar.organization>isidromerayo</sonar.organization>
 	</properties>
 	<scm>
 		<connection>scm:git:https://github.com/isidromerayo/TFG_UNIR-backend.git</connection>
