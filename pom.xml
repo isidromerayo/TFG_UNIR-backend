@@ -18,7 +18,28 @@
 		<maven.failsafe>3.5.4</maven.failsafe>
 		<JJWT_RELEASE_VERSION>0.12.6</JJWT_RELEASE_VERSION>
 		<dependency-check-maven.version>12.1.8</dependency-check-maven.version>
+		
+		<!-- SonarQube Configuration -->
+		<sonar.projectKey>isidromerayo_TFG_UNIR-backend</sonar.projectKey>
 		<sonar.organization>isidromerayo</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		
+		<!-- Coverage Configuration -->
+		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+		
+		<!-- Exclusions from Coverage Analysis -->
+		<sonar.coverage.exclusions>
+			**/model/**,
+			**/controller/User.java,
+			**/controller/FormUser.java
+		</sonar.coverage.exclusions>
+		
+		<!-- Source and Test Directories -->
+		<sonar.sources>src/main/java</sonar.sources>
+		<sonar.tests>src/test/java</sonar.tests>
+		<sonar.java.source>21</sonar.java.source>
+		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
 	</properties>
 	<scm>
 		<connection>scm:git:https://github.com/isidromerayo/TFG_UNIR-backend.git</connection>
