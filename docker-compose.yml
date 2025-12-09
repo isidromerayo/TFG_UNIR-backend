@@ -16,7 +16,7 @@ services:
   maria_db:
     container_name: maria_db
     hostname: maria_db
-    image: "isidromerayo/mariadb-tfg:0.0.4"
+    image: "isidromerayo/mariadb-tfg:0.1.0"
     ports:
       - "3306:3306"
     volumes:
@@ -34,7 +34,7 @@ services:
   api_service:
     container_name: api_service
     hostname: api_service
-    image: "isidromerayo/spring-backend-tfg:0.2.2"
+    image: "isidromerayo/spring-backend-tfg:0.3.0"
     build: .
     ports:
       - "8080:8080"
