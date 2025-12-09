@@ -358,6 +358,32 @@
             return date.toLocaleString('es-ES', options);
         }
         
+        // Función helper para crear elementos de forma segura
+        function createInfoItem(label, value) {
+            const item = document.createElement('div');
+            item.className = 'info-item';
+            
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'info-label';
+            labelDiv.textContent = label;
+            
+            const valueDiv = document.createElement('div');
+            valueDiv.className = 'info-value';
+            valueDiv.textContent = value || 'N/A';
+            
+            item.appendChild(labelDiv);
+            item.appendChild(valueDiv);
+            
+            return item;
+        }
+        
+        function createErrorMessage(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            return errorDiv;
+        }
+        
         async function loadInfo() {
             try {
                 const response = await fetch('/actuator/info');
@@ -365,70 +391,61 @@
                 
                 // Información de la aplicación
                 const appInfo = document.getElementById('app-info');
+                appInfo.innerHTML = ''; // Limpiar contenido
+                
                 if (data.app) {
-                    appInfo.innerHTML = `
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <div class="info-label">Nombre</div>
-                                <div class="info-value">${data.app.name || 'N/A'}</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Versión</div>
-                                <div class="info-value">${data.app.version || 'N/A'}</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Java</div>
-                                <div class="info-value">${data.app['java.version'] || 'N/A'}</div>
-                            </div>
-                        </div>
-                        ${data.app.description ? `
-                            <div class="info-item" style="margin-top: 15px;">
-                                <div class="info-label">Descripción</div>
-                                <div class="info-value">${data.app.description}</div>
-                            </div>
-                        ` : ''}
-                    `;
+                    const grid = document.createElement('div');
+                    grid.className = 'info-grid';
+                    
+                    grid.appendChild(createInfoItem('Nombre', data.app.name));
+                    grid.appendChild(createInfoItem('Versión', data.app.version));
+                    grid.appendChild(createInfoItem('Java', data.app['java.version']));
+                    
+                    appInfo.appendChild(grid);
+                    
+                    if (data.app.description) {
+                        const descItem = createInfoItem('Descripción', data.app.description);
+                        descItem.style.marginTop = '15px';
+                        appInfo.appendChild(descItem);
+                    }
                 } else {
-                    appInfo.innerHTML = '<div class="error">No se pudo cargar la información de la aplicación</div>';
+                    appInfo.appendChild(createErrorMessage('No se pudo cargar la información de la aplicación'));
                 }
                 
                 // Información de Git
                 const gitInfo = document.getElementById('git-info');
+                gitInfo.innerHTML = ''; // Limpiar contenido
+                
                 if (data.git) {
                     const commit = data.git.commit || {};
                     const build = data.git.build || {};
                     
-                    gitInfo.innerHTML = `
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <div class="info-label">Branch</div>
-                                <div class="info-value">${data.git.branch || 'N/A'}</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Commit</div>
-                                <div class="info-value">${commit.id?.abbrev || commit.id || 'N/A'}</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Build Time</div>
-                                <div class="info-value">${build.time ? formatDate(build.time) : 'N/A'}</div>
-                            </div>
-                        </div>
-                        ${commit.message?.short ? `
-                            <div class="info-item" style="margin-top: 15px;">
-                                <div class="info-label">Último Commit</div>
-                                <div class="info-value">${commit.message.short}</div>
-                            </div>
-                        ` : ''}
-                    `;
+                    const grid = document.createElement('div');
+                    grid.className = 'info-grid';
+                    
+                    grid.appendChild(createInfoItem('Branch', data.git.branch));
+                    grid.appendChild(createInfoItem('Commit', commit.id?.abbrev || commit.id));
+                    grid.appendChild(createInfoItem('Build Time', build.time ? formatDate(build.time) : null));
+                    
+                    gitInfo.appendChild(grid);
+                    
+                    if (commit.message?.short) {
+                        const commitItem = createInfoItem('Último Commit', commit.message.short);
+                        commitItem.style.marginTop = '15px';
+                        gitInfo.appendChild(commitItem);
+                    }
                 } else {
-                    gitInfo.innerHTML = '<div class="error">No se pudo cargar la información de Git</div>';
+                    gitInfo.appendChild(createErrorMessage('No se pudo cargar la información de Git'));
                 }
                 
             } catch (error) {
-                document.getElementById('app-info').innerHTML = 
-                    `<div class="error">Error al cargar la información: ${error.message}</div>`;
-                document.getElementById('git-info').innerHTML = 
-                    `<div class="error">Error al cargar la información de Git</div>`;
+                const appInfo = document.getElementById('app-info');
+                appInfo.innerHTML = '';
+                appInfo.appendChild(createErrorMessage('Error al cargar la información: ' + error.message));
+                
+                const gitInfo = document.getElementById('git-info');
+                gitInfo.innerHTML = '';
+                gitInfo.appendChild(createErrorMessage('Error al cargar la información de Git'));
             }
         }
         
