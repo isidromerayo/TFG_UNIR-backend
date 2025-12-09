@@ -18,20 +18,23 @@ INSERT INTO cursos (titulo,valoracion_media,fecha_creacion,fecha_actualizacion,c
 ('Home Studio intermedio',4.5,'2023-03-01','2023-05-02',1,2),
 ('Masterizacion de Audio: La guía completa de cómo masterizar',4.6,'2023-03-01','2023-05-01',1,2);
 
+-- Passwords hasheadas con BCrypt (work factor: 10)
+-- Password original: '1234' -> BCrypt hash
+-- Password original: 'admin' -> BCrypt hash
 INSERT INTO usuarios (nombre,apellidos,email,password) VALUES
-('María','García Sánchez','maria@localhost','1234'),
-('Juan Antonio','Ponferrada Dominguez','juanantonio@localhost','1234'),
-('Marta','Toral Alonso','marta@localhost','1234'),
-('Pedro','Villa Ledesma','pedro@localhost','1234');
+('María','García Sánchez','maria@localhost','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
+('Juan Antonio','Ponferrada Dominguez','juanantonio@localhost','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
+('Marta','Toral Alonso','marta@localhost','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
+('Pedro','Villa Ledesma','pedro@localhost','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S');
 
 INSERT INTO usuarios (nombre,apellidos,email,estado,password) VALUES
-('Helena','García Sánchez','helena@localhost','A','1234'),
-('Carlos','Toreno Sil','carlos@localhost','A','1234'),
-('Ines','Boeza Alonso','ines@localhost','A','1234'),
-('Isabel','Fresnedo Noceda','isable@localhost','A','1234');
+('Helena','García Sánchez','helena@localhost','A','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
+('Carlos','Toreno Sil','carlos@localhost','A','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
+('Ines','Boeza Alonso','ines@localhost','A','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
+('Isabel','Fresnedo Noceda','isable@localhost','A','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S');
 
 INSERT INTO usuarios (nombre,apellidos,email,estado,password) VALUES
-('admin','admin','admin@gmail.com','A','admin');
+('admin','admin','admin@gmail.com','A','$2a$10$hpXelttdTih5zpMEEUXNCejhCD4dyTfpq7HJSlNYuWBTtnzObQZBa');
 
 INSERT INTO usuarios_cursos (usuario_id, curso_id) VALUES
 (1,4),

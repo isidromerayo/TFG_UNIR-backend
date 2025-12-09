@@ -25,6 +25,53 @@ Documentación principal del proyecto con información general, stack tecnológi
 
 ---
 
+## 🔐 Seguridad
+
+### [SECURITY_BCRYPT.md](SECURITY_BCRYPT.md)
+**Guía rápida de migración a BCrypt**
+- Inicio rápido con scripts automatizados
+- Usuarios de prueba
+- Enlaces a documentación completa
+- Estructura de archivos
+
+**Cuándo usar**: Para implementar o probar la autenticación con BCrypt.
+
+### [docs/security/README.md](docs/security/README.md)
+**Índice completo de documentación de seguridad**
+- Quick Start, guías completas, issues y PRs
+- Conceptos de seguridad (BCrypt, timing attacks)
+- Referencias y archivos relacionados
+
+**Cuándo usar**: Para explorar toda la documentación de seguridad.
+
+### [docs/security/LESSONS_LEARNED.md](docs/security/LESSONS_LEARNED.md)
+**Lecciones aprendidas durante la migración a BCrypt**
+- Problemas encontrados y sus soluciones
+- Checklist completo de migración
+- Comandos útiles aprendidos
+- Recomendaciones para futuros proyectos
+
+**Cuándo usar**: Para entender los problemas que surgieron y cómo se resolvieron.
+
+### [scripts/README.md](scripts/README.md)
+**Documentación de scripts disponibles**
+- Scripts de seguridad y BCrypt
+- Scripts de gestión de contenedores
+- Guías de uso y troubleshooting
+
+**Cuándo usar**: Para ejecutar scripts de testing o gestión.
+
+### [docs/PODMAN_GUIDE.md](docs/PODMAN_GUIDE.md)
+**Guía completa de uso con Podman**
+- Problema con podman-compose y su solución
+- Uso del script podman-pod.sh
+- Arquitectura de Pods
+- Comandos útiles y troubleshooting
+
+**Cuándo usar**: Si usas Podman en lugar de Docker.
+
+---
+
 ## 📊 Calidad de Código
 
 ### [COVERAGE_ANALYSIS.md](COVERAGE_ANALYSIS.md)
@@ -99,6 +146,16 @@ Documentación principal del proyecto con información general, stack tecnológi
 ---
 
 ## 🚀 Guías Rápidas
+
+### Migración BCrypt
+
+```bash
+# Build y test automatizado
+./scripts/build-and-test-bcrypt.sh
+
+# Probar login
+./scripts/test-login.sh
+```
 
 ### Ejecutar Tests
 

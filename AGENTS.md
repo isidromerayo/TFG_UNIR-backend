@@ -132,6 +132,140 @@ Ejecutar análisis de vulnerabilidades en dependencias:
 
 Si encuentras vulnerabilidades de seguridad, sigue la [Security Policy](SECURITY.md).
 
+## Gestión de Versiones con Maven Release Plugin
+
+El proyecto utiliza el **Maven Release Plugin** para gestionar versiones de forma estándar y automatizada.
+
+### Proceso de Release
+
+El proceso de release consta de dos comandos principales:
+
+#### 1. `mvn release:prepare`
+
+Prepara la release automáticamente:
+- Verifica que no hay cambios sin commitear
+- Cambia la versión de `X.Y.Z-SNAPSHOT` a `X.Y.Z`
+- Crea un commit con la versión de release
+- Crea un tag Git `vX.Y.Z`
+- Cambia la versión a `X.Y.(Z+1)-SNAPSHOT` para el siguiente desarrollo
+- Hace push de commits y tags a GitHub
+
+```bash
+./mvnw release:prepare -DskipTests -Darguments="-DskipTests"
+```
+
+**Interactivo:** El comando preguntará:
+- Versión de release (ej: `0.3.1`)
+- Tag de SCM (ej: `v0.3.1`)
+- Nueva versión de desarrollo (ej: `0.3.2-SNAPSHOT`)
+
+#### 2. `mvn release:perform`
+
+Ejecuta la release:
+- Hace checkout del tag creado
+- Compila el proyecto desde el tag
+- Ejecuta tests (si no se especifica `-DskipTests`)
+- Despliega el artefacto al repositorio configurado
+
+```bash
+./mvnw release:perform -DskipTests -Darguments="-DskipTests"
+```
+
+### Ejemplo Completo
+
+```bash
+# 1. Asegurarse de que todo está commiteado
+git status
+
+# 2. Preparar la release
+./mvnw release:prepare -DskipTests -Darguments="-DskipTests"
+# Responder a las preguntas interactivas
+
+# 3. Ejecutar la release
+./mvnw release:perform -DskipTests -Darguments="-DskipTests"
+
+# 4. Verificar el artefacto desplegado
+ls -lh ~/.m2/repository-local/eu/estilolibre/tfgunir/backend/0.3.1/
+
+# 5. Verificar tags en GitHub
+git tag
+git ls-remote --tags origin
+```
+
+### Versionado Semántico
+
+El proyecto sigue [Semantic Versioning 2.0.0](https://semver.org/):
+
+- **MAJOR** (X.0.0): Cambios incompatibles en la API
+- **MINOR** (0.X.0): Nueva funcionalidad compatible hacia atrás
+- **PATCH** (0.0.X): Correcciones de bugs compatibles hacia atrás
+
+**Ejemplos:**
+- `0.3.0` → `0.3.1`: Página de inicio agregada (patch)
+- `0.3.0` → `0.4.0`: Nueva API REST endpoint (minor)
+- `1.0.0` → `2.0.0`: Cambio en estructura de respuestas API (major)
+
+### Construcción de Imágenes Docker
+
+Después de la release, construir y publicar imágenes Docker:
+
+```bash
+# 1. Checkout del tag de release
+git checkout v0.3.1
+
+# 2. Construir imagen con Podman/Docker
+podman build -f Dockerfile \
+  -t isidromerayo/spring-backend-tfg:0.3.1 \
+  -t isidromerayo/spring-backend-tfg:latest .
+
+# 3. Publicar a Docker Hub (requiere login)
+podman login docker.io
+podman push isidromerayo/spring-backend-tfg:0.3.1
+podman push isidromerayo/spring-backend-tfg:latest
+
+# 4. Volver a la rama de desarrollo
+git checkout fix/snyk-timing-attack-password
+```
+
+### Configuración del Plugin
+
+El plugin está configurado en `pom.xml`:
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-release-plugin</artifactId>
+    <version>3.1.1</version>
+    <configuration>
+        <tagNameFormat>v@{project.version}</tagNameFormat>
+    </configuration>
+</plugin>
+```
+
+### Troubleshooting
+
+**Problema:** Error "No SCM URL was provided"
+```bash
+# Solución: Verificar que existe release.properties
+ls -la release.properties
+# Si no existe, ejecutar release:prepare primero
+```
+
+**Problema:** Cambios sin commitear
+```bash
+# Solución: Commitear o descartar cambios
+git status
+git add .
+git commit -m "chore: prepare for release"
+```
+
+**Problema:** Tag ya existe
+```bash
+# Solución: Eliminar tag local y remoto
+git tag -d v0.3.1
+git push origin :refs/tags/v0.3.1
+```
+
 ## Recursos Adicionales
 
 - **[README.md](README.md)** - Documentación principal del proyecto
@@ -139,6 +273,7 @@ Si encuentras vulnerabilidades de seguridad, sigue la [Security Policy](SECURITY
 - **[COVERAGE_ANALYSIS.md](COVERAGE_ANALYSIS.md)** - Análisis de cobertura detallado
 - **[SONARQUBE_POM_CONFIG.md](SONARQUBE_POM_CONFIG.md)** - Configuración de SonarQube
 - **[SECURITY.md](SECURITY.md)** - Política de seguridad
+- **[CHANGELOG_IMAGES.md](CHANGELOG_IMAGES.md)** - Historial de versiones de imágenes Docker
 
 ---
 

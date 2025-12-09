@@ -5,12 +5,12 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.12</version>
-		<relativePath/>
+		<relativePath />
 		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>eu.estilolibre.tfgunir</groupId>
 	<artifactId>backend</artifactId>
-	<version>0.2.2-SNAPSHOT</version>
+	<version>0.3.2-SNAPSHOT</version>
 	<name>backend</name>
 	<description>Backend para TFG en UNIR usando Spring Boot</description>
 	<properties>
@@ -45,7 +45,7 @@
 		<connection>scm:git:https://github.com/isidromerayo/TFG_UNIR-backend.git</connection>
 		<url>https://github.com/isidromerayo/TFG_UNIR-backend</url>
 	  <tag>v0.2.0</tag>
-  </scm>
+  	</scm>
 	<distributionManagement>
 		<repository>
 			<id>local-central</id>
@@ -81,6 +81,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -148,6 +152,33 @@
 	<build>
 		<finalName>backend</finalName>
 		<plugins>
+			<plugin>
+				<groupId>io.github.git-commit-id</groupId>
+				<artifactId>git-commit-id-maven-plugin</artifactId>
+				<version>9.0.1</version>
+				<executions>
+					<execution>
+						<id>get-the-git-infos</id>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+						<phase>initialize</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<generateGitPropertiesFile>true</generateGitPropertiesFile>
+					<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+					<includeOnlyProperties>
+						<includeOnlyProperty>^git.build.*</includeOnlyProperty>
+						<includeOnlyProperty>^git.commit.id.*</includeOnlyProperty>
+						<includeOnlyProperty>^git.commit.message.*</includeOnlyProperty>
+						<includeOnlyProperty>^git.commit.time.*</includeOnlyProperty>
+						<includeOnlyProperty>^git.branch</includeOnlyProperty>
+						<includeOnlyProperty>^git.tags</includeOnlyProperty>
+					</includeOnlyProperties>
+					<commitIdGenerationMode>full</commitIdGenerationMode>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

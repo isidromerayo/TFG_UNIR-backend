@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Backend para TFG en UNIR usando Spring Boot con BCrypt - Información del proyecto y estado del sistema">
+    <title>TFG UNIR Backend - Información del Proyecto</title>
+    <style>
+        :root {
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --container-bg: white;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --heading-color: #667eea;
+            --heading-secondary: #764ba2;
+            --section-bg: #f8f9fa;
+            --item-bg: white;
+            --border-color: #ddd;
+            --button-bg: #667eea;
+            --button-hover: #764ba2;
+            --error-bg: #fee;
+            --error-border: #f44;
+            --error-text: #c33;
+            --shadow: rgba(0,0,0,0.3);
+        }
+        
+        [data-theme="dark"] {
+            --bg-gradient-start: #1a1a2e;
+            --bg-gradient-end: #16213e;
+            --container-bg: #1e2a3a;
+            --text-primary: #f0f0f0;
+            --text-secondary: #c5c5c5;
+            --heading-color: #8fa9ff;
+            --heading-secondary: #a98fff;
+            --section-bg: #2a3a4a;
+            --item-bg: #1e2a3a;
+            --border-color: #3d4f63;
+            --button-bg: #5865f2;
+            --button-hover: #8fa9ff;
+            --error-bg: #4a2020;
+            --error-border: #ff7b7b;
+            --error-text: #ffb3b3;
+            --shadow: rgba(0,0,0,0.6);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
+        
+        .container {
+            background: var(--container-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--button-bg);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .theme-toggle:hover,
+        .theme-toggle:focus {
+            background: var(--button-hover);
+            transform: rotate(180deg) scale(1.1);
+            outline: 2px solid var(--heading-color);
+            outline-offset: 2px;
+        }
+        
+        .theme-toggle:focus {
+            outline: 3px solid var(--heading-color);
+        }
+        
+        .link-button:focus {
+            outline: 3px solid var(--heading-color);
+            outline-offset: 2px;
+        }
+        
+        header {
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--heading-color);
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            transition: color 0.3s ease;
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+        
+        .info-section {
+            background: var(--section-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: background 0.3s ease;
+        }
+        
+        .info-section h2 {
+            color: var(--heading-secondary);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid var(--heading-color);
+            padding-bottom: 10px;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            background: var(--item-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--heading-color);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: var(--heading-secondary);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+        
+        .info-value {
+            color: var(--text-primary);
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            transition: color 0.3s ease;
+        }
+        
+        .loading {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 20px;
+            transition: color 0.3s ease;
+        }
+        
+        .error {
+            background: var(--error-bg);
+            border-left: 4px solid var(--error-border);
+            padding: 15px;
+            border-radius: 8px;
+            color: var(--error-text);
+            transition: all 0.3s ease;
+        }
+        
+        .links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .link-button {
+            background: var(--button-bg);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .link-button:hover {
+            background: var(--button-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        /* Clase para elementos solo visibles para lectores de pantalla */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        
+        /* Mejora de contraste para modo claro */
+        :root .info-value {
+            color: #1a1a1a;
+        }
+        
+        /* Skip to main content link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--button-bg);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 100;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    <div class="container" role="main" id="main-content"></div>
+        <button 
+            class="theme-toggle" 
+            onclick="toggleTheme()" 
+            aria-label="Cambiar entre modo claro y oscuro"
+            title="Cambiar tema">
+            <span aria-hidden="true">🌓</span>
+        </button>
+        
+        <header>
+            <h1>🎓 TFG UNIR Backend</h1>
+            <p class="subtitle">Backend para TFG en UNIR usando Spring Boot con BCrypt</p>
+        </header>
+        
+        <section class="info-section" aria-labelledby="project-info-heading">
+            <h2 id="project-info-heading">📦 Información del Proyecto</h2>
+            <div id="app-info" class="loading" role="status" aria-live="polite">Cargando información...</div>
+        </section>
+        
+        <section class="info-section" aria-labelledby="git-info-heading">
+            <h2 id="git-info-heading">🔧 Información de Git</h2>
+            <div id="git-info" class="loading" role="status" aria-live="polite">Cargando información...</div>
+        </section>
+        
+        <section class="info-section" aria-labelledby="links-heading">
+            <h2 id="links-heading">🔗 Enlaces Útiles</h2>
+            <nav class="links" aria-label="Enlaces de navegación">
+                <a href="/actuator/info" class="link-button" target="_blank" rel="noopener noreferrer">
+                    <span aria-hidden="true">📊</span> Info Completa
+                </a>
+                <a href="/actuator/health" class="link-button" target="_blank" rel="noopener noreferrer">
+                    <span aria-hidden="true">💚</span> Health
+                </a>
+                <a href="/actuator/metrics" class="link-button" target="_blank" rel="noopener noreferrer">
+                    <span aria-hidden="true">📈</span> Metrics
+                </a>
+                <a href="/swagger-ui/index.html" class="link-button" target="_blank" rel="noopener noreferrer">
+                    <span aria-hidden="true">📚</span> API Docs
+                </a>
+            </nav>
+        </section>
+        
+        <footer role="contentinfo">
+            <p>Desarrollado con <span aria-label="amor">❤️</span> para el TFG de UNIR</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Dark mode toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Anunciar cambio para lectores de pantalla
+            const button = document.querySelector('.theme-toggle');
+            const announcement = newTheme === 'dark' ? 'Modo oscuro activado' : 'Modo claro activado';
+            button.setAttribute('aria-label', `Cambiar a modo ${newTheme === 'dark' ? 'claro' : 'oscuro'}. ${announcement}`);
+            
+            // Crear anuncio temporal para lectores de pantalla
+            const liveRegion = document.createElement('div');
+            liveRegion.setAttribute('role', 'status');
+            liveRegion.setAttribute('aria-live', 'polite');
+            liveRegion.className = 'sr-only';
+            liveRegion.textContent = announcement;
+            document.body.appendChild(liveRegion);
+            setTimeout(() => liveRegion.remove(), 1000);
+        }
+        
+        // Cargar tema guardado
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+        
+        // Cargar tema al iniciar
+        loadTheme();
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            };
+            return date.toLocaleString('es-ES', options);
+        }
+        
+        async function loadInfo() {
+            try {
+                const response = await fetch('/actuator/info');
+                const data = await response.json();
+                
+                // Información de la aplicación
+                const appInfo = document.getElementById('app-info');
+                if (data.app) {
+                    appInfo.innerHTML = `
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Nombre</div>
+                                <div class="info-value">${data.app.name || 'N/A'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Versión</div>
+                                <div class="info-value">${data.app.version || 'N/A'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Java</div>
+                                <div class="info-value">${data.app['java.version'] || 'N/A'}</div>
+                            </div>
+                        </div>
+                        ${data.app.description ? `
+                            <div class="info-item" style="margin-top: 15px;">
+                                <div class="info-label">Descripción</div>
+                                <div class="info-value">${data.app.description}</div>
+                            </div>
+                        ` : ''}
+                    `;
+                } else {
+                    appInfo.innerHTML = '<div class="error">No se pudo cargar la información de la aplicación</div>';
+                }
+                
+                // Información de Git
+                const gitInfo = document.getElementById('git-info');
+                if (data.git) {
+                    const commit = data.git.commit || {};
+                    const build = data.git.build || {};
+                    
+                    gitInfo.innerHTML = `
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Branch</div>
+                                <div class="info-value">${data.git.branch || 'N/A'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Commit</div>
+                                <div class="info-value">${commit.id?.abbrev || commit.id || 'N/A'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Build Time</div>
+                                <div class="info-value">${build.time ? formatDate(build.time) : 'N/A'}</div>
+                            </div>
+                        </div>
+                        ${commit.message?.short ? `
+                            <div class="info-item" style="margin-top: 15px;">
+                                <div class="info-label">Último Commit</div>
+                                <div class="info-value">${commit.message.short}</div>
+                            </div>
+                        ` : ''}
+                    `;
+                } else {
+                    gitInfo.innerHTML = '<div class="error">No se pudo cargar la información de Git</div>';
+                }
+                
+            } catch (error) {
+                document.getElementById('app-info').innerHTML = 
+                    `<div class="error">Error al cargar la información: ${error.message}</div>`;
+                document.getElementById('git-info').innerHTML = 
+                    `<div class="error">Error al cargar la información de Git</div>`;
+            }
+        }
+        
+        // Cargar información al iniciar
+        loadInfo();
+    </script>
+</body>
+</html>
