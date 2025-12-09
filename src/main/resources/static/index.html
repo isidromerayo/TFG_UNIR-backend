@@ -162,6 +162,20 @@
     </div>
     
     <script>
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            };
+            return date.toLocaleString('es-ES', options);
+        }
+        
         async function loadInfo() {
             try {
                 const response = await fetch('/actuator/info');
@@ -184,11 +198,13 @@
                                 <div class="info-label">Java</div>
                                 <div class="info-value">${data.app['java.version'] || 'N/A'}</div>
                             </div>
-                            <div class="info-item">
-                                <div class="info-label">Descripción</div>
-                                <div class="info-value">${data.app.description || 'N/A'}</div>
-                            </div>
                         </div>
+                        ${data.app.description ? `
+                            <div class="info-item" style="margin-top: 15px;">
+                                <div class="info-label">Descripción</div>
+                                <div class="info-value">${data.app.description}</div>
+                            </div>
+                        ` : ''}
                     `;
                 } else {
                     appInfo.innerHTML = '<div class="error">No se pudo cargar la información de la aplicación</div>';
@@ -211,20 +227,8 @@
                                 <div class="info-value">${commit.id?.abbrev || commit.id || 'N/A'}</div>
                             </div>
                             <div class="info-item">
-                                <div class="info-label">Commit Time</div>
-                                <div class="info-value">${commit.time ? new Date(commit.time).toLocaleString('es-ES') : 'N/A'}</div>
-                            </div>
-                            <div class="info-item">
                                 <div class="info-label">Build Time</div>
-                                <div class="info-value">${build.time ? new Date(build.time).toLocaleString('es-ES') : 'N/A'}</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Build User</div>
-                                <div class="info-value">${build.user?.name || 'N/A'}</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Build Host</div>
-                                <div class="info-value">${build.host || 'N/A'}</div>
+                                <div class="info-value">${build.time ? formatDate(build.time) : 'N/A'}</div>
                             </div>
                         </div>
                         ${commit.message?.short ? `
