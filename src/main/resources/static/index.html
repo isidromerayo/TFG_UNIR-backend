@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TFG UNIR Backend</title>
+    <meta name="description" content="Backend para TFG en UNIR usando Spring Boot con BCrypt - Información del proyecto y estado del sistema">
+    <title>TFG UNIR Backend - Información del Proyecto</title>
     <style>
         :root {
             --bg-gradient-start: #667eea;
@@ -27,19 +28,19 @@
         [data-theme="dark"] {
             --bg-gradient-start: #1a1a2e;
             --bg-gradient-end: #16213e;
-            --container-bg: #0f3460;
-            --text-primary: #e4e4e4;
-            --text-secondary: #b8b8b8;
-            --heading-color: #7b9cff;
-            --heading-secondary: #9d7bff;
-            --section-bg: #1a2942;
-            --item-bg: #0f3460;
-            --border-color: #2d4263;
+            --container-bg: #1e2a3a;
+            --text-primary: #f0f0f0;
+            --text-secondary: #c5c5c5;
+            --heading-color: #8fa9ff;
+            --heading-secondary: #a98fff;
+            --section-bg: #2a3a4a;
+            --item-bg: #1e2a3a;
+            --border-color: #3d4f63;
             --button-bg: #5865f2;
-            --button-hover: #7b9cff;
-            --error-bg: #3d1f1f;
-            --error-border: #ff6b6b;
-            --error-text: #ff9999;
+            --button-hover: #8fa9ff;
+            --error-bg: #4a2020;
+            --error-border: #ff7b7b;
+            --error-text: #ffb3b3;
             --shadow: rgba(0,0,0,0.6);
         }
         
@@ -90,9 +91,25 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         
-        .theme-toggle:hover {
+        .theme-toggle:hover,
+        .theme-toggle:focus {
             background: var(--button-hover);
             transform: rotate(180deg) scale(1.1);
+            outline: 2px solid var(--heading-color);
+            outline-offset: 2px;
+        }
+        
+        .theme-toggle:focus {
+            outline: 3px solid var(--heading-color);
+        }
+        
+        .link-button:focus {
+            outline: 3px solid var(--heading-color);
+            outline-offset: 2px;
+        }
+        
+        header {
+            margin-bottom: 30px;
         }
         
         h1 {
@@ -204,36 +221,89 @@
             font-size: 0.9em;
             transition: all 0.3s ease;
         }
+        
+        /* Clase para elementos solo visibles para lectores de pantalla */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        
+        /* Mejora de contraste para modo claro */
+        :root .info-value {
+            color: #1a1a1a;
+        }
+        
+        /* Skip to main content link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--button-bg);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 100;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">🌓</button>
-        <h1>🎓 TFG UNIR Backend</h1>
-        <p class="subtitle">Backend para TFG en UNIR usando Spring Boot con BCrypt</p>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    <div class="container" role="main" id="main-content"></div>
+        <button 
+            class="theme-toggle" 
+            onclick="toggleTheme()" 
+            aria-label="Cambiar entre modo claro y oscuro"
+            title="Cambiar tema">
+            <span aria-hidden="true">🌓</span>
+        </button>
         
-        <div class="info-section">
-            <h2>📦 Información del Proyecto</h2>
-            <div id="app-info" class="loading">Cargando información...</div>
-        </div>
+        <header>
+            <h1>🎓 TFG UNIR Backend</h1>
+            <p class="subtitle">Backend para TFG en UNIR usando Spring Boot con BCrypt</p>
+        </header>
         
-        <div class="info-section">
-            <h2>🔧 Información de Git</h2>
-            <div id="git-info" class="loading">Cargando información...</div>
-        </div>
+        <section class="info-section" aria-labelledby="project-info-heading">
+            <h2 id="project-info-heading">📦 Información del Proyecto</h2>
+            <div id="app-info" class="loading" role="status" aria-live="polite">Cargando información...</div>
+        </section>
         
-        <div class="info-section">
-            <h2>🔗 Enlaces Útiles</h2>
-            <div class="links">
-                <a href="/actuator/info" class="link-button" target="_blank">📊 Info Completa</a>
-                <a href="/actuator/health" class="link-button" target="_blank">💚 Health</a>
-                <a href="/actuator/metrics" class="link-button" target="_blank">📈 Metrics</a>
-                <a href="/swagger-ui/index.html" class="link-button" target="_blank">📚 API Docs</a>
-            </div>
-        </div>
+        <section class="info-section" aria-labelledby="git-info-heading">
+            <h2 id="git-info-heading">🔧 Información de Git</h2>
+            <div id="git-info" class="loading" role="status" aria-live="polite">Cargando información...</div>
+        </section>
         
-        <footer>
-            <p>Desarrollado con ❤️ para el TFG de UNIR</p>
+        <section class="info-section" aria-labelledby="links-heading">
+            <h2 id="links-heading">🔗 Enlaces Útiles</h2>
+            <nav class="links" aria-label="Enlaces de navegación">
+                <a href="/actuator/info" class="link-button" target="_blank" rel="noopener noreferrer">
+                    <span aria-hidden="true">📊</span> Info Completa
+                </a>
+                <a href="/actuator/health" class="link-button" target="_blank" rel="noopener noreferrer">
+                    <span aria-hidden="true">💚</span> Health
+                </a>
+                <a href="/actuator/metrics" class="link-button" target="_blank" rel="noopener noreferrer">
+                    <span aria-hidden="true">📈</span> Metrics
+                </a>
+                <a href="/swagger-ui/index.html" class="link-button" target="_blank" rel="noopener noreferrer">
+                    <span aria-hidden="true">📚</span> API Docs
+                </a>
+            </nav>
+        </section>
+        
+        <footer role="contentinfo">
+            <p>Desarrollado con <span aria-label="amor">❤️</span> para el TFG de UNIR</p>
         </footer>
     </div>
     
@@ -246,6 +316,20 @@
             
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
+            
+            // Anunciar cambio para lectores de pantalla
+            const button = document.querySelector('.theme-toggle');
+            const announcement = newTheme === 'dark' ? 'Modo oscuro activado' : 'Modo claro activado';
+            button.setAttribute('aria-label', `Cambiar a modo ${newTheme === 'dark' ? 'claro' : 'oscuro'}. ${announcement}`);
+            
+            // Crear anuncio temporal para lectores de pantalla
+            const liveRegion = document.createElement('div');
+            liveRegion.setAttribute('role', 'status');
+            liveRegion.setAttribute('aria-live', 'polite');
+            liveRegion.className = 'sr-only';
+            liveRegion.textContent = announcement;
+            document.body.appendChild(liveRegion);
+            setTimeout(() => liveRegion.remove(), 1000);
         }
         
         // Cargar tema guardado
