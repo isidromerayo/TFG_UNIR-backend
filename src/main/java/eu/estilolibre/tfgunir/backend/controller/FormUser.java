@@ -6,6 +6,7 @@ public class FormUser {
     
 
     public FormUser() {
+        // Constructor vacío requerido para deserialización JSON
     }
 
     public String getEmail() {

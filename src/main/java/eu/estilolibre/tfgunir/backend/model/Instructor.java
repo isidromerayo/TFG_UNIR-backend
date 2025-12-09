@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * 
@@ -24,6 +25,7 @@ import lombok.Data;
 @lombok.EqualsAndHashCode(exclude = {"misCursos"})
 @Entity
 @Table(name = "instructores")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Instructor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +37,7 @@ public class Instructor {
     @Temporal(TemporalType.DATE)
     private Date fechaAlta;
     @OneToMany(mappedBy = "instructor")
-    private Set<Curso> misCursos = new HashSet<Curso>();
+    private Set<Curso> misCursos = new HashSet<>();
     
     @PrePersist
     protected void onCreate() {

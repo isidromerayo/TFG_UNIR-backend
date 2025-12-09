@@ -43,6 +43,7 @@ public class User implements Serializable {
     }
 
     public User() {
+        // Constructor vacío requerido para serialización/deserialización JSON
     }
 
 }

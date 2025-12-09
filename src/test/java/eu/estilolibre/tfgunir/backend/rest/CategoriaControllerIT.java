@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.greaterThan;
 @ActiveProfiles("test")
 public class CategoriaControllerIT {
 
-    private final static String BASE_URI = "http://localhost";
+    private static final String BASE_URI = "http://localhost";
  
     @LocalServerPort
     private int port;

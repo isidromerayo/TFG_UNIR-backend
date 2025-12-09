@@ -149,22 +149,90 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.14</version>
 				<executions>
+					<!-- Preparar agente para tests unitarios -->
 					<execution>
+						<id>prepare-agent-ut</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
+						<configuration>
+							<destFile>${project.build.directory}/jacoco-ut.exec</destFile>
+						</configuration>
 					</execution>
+					<!-- Reporte de tests unitarios -->
 					<execution>
-						<id>report</id>
+						<id>report-ut</id>
 						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
+						<configuration>
+							<dataFile>${project.build.directory}/jacoco-ut.exec</dataFile>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+						</configuration>
+					</execution>
+					<!-- Preparar agente para tests de integración -->
+					<execution>
+						<id>prepare-agent-it</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>prepare-agent-integration</goal>
+						</goals>
+						<configuration>
+							<destFile>${project.build.directory}/jacoco-it.exec</destFile>
+						</configuration>
+					</execution>
+					<!-- Reporte de tests de integración -->
+					<execution>
+						<id>report-it</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>report-integration</goal>
+						</goals>
+						<configuration>
+							<dataFile>${project.build.directory}/jacoco-it.exec</dataFile>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+						</configuration>
+					</execution>
+					<!-- Merge de ambos reportes -->
+					<execution>
+						<id>merge-results</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>merge</goal>
+						</goals>
+						<configuration>
+							<fileSets>
+								<fileSet>
+									<directory>${project.build.directory}</directory>
+									<includes>
+										<include>*.exec</include>
+									</includes>
+								</fileSet>
+							</fileSets>
+							<destFile>${project.build.directory}/jacoco-merged.exec</destFile>
+						</configuration>
+					</execution>
+					<!-- Reporte combinado final -->
+					<execution>
+						<id>report-merged</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${project.build.directory}/jacoco-merged.exec</dataFile>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+						</configuration>
 					</execution>
 				</executions>
 				<configuration>
 					<excludes>
+						<!-- Entidades JPA - POJOs con Lombok -->
 						<exclude>eu/estilolibre/tfgunir/backend/model/*</exclude>
+						<!-- DTOs simples sin lógica de negocio -->
+						<exclude>eu/estilolibre/tfgunir/backend/controller/User.class</exclude>
+						<exclude>eu/estilolibre/tfgunir/backend/controller/FormUser.class</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

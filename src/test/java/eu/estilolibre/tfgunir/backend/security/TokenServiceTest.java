@@ -17,6 +17,16 @@ public class TokenServiceTest {
 
     @Test
     void testLeerToken() {
-
+        String secretKey = "813cef5f-3459-4618-87a6-a69e2a1296d4_mySecretKey_mySecretKey";
+        Date expiration = new Date(System.currentTimeMillis() + 3600000);
+        String email = "test@example.com";
+        
+        TokenService tokenService = new TokenService();
+        String token = tokenService.crearToken(email, secretKey, expiration);
+        
+        String emailFromToken = tokenService.leerToken(token, secretKey);
+        
+        assertNotEquals("", emailFromToken);
+        assertNotEquals(null, emailFromToken);
     }
 }

@@ -22,6 +22,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * 
@@ -30,6 +31,7 @@ import lombok.Data;
 @Entity
 @Table(name = "cursos")
 @lombok.EqualsAndHashCode(exclude = {"alumnos", "contenidos", "avances"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Curso {
 
     @Id
@@ -64,7 +66,7 @@ public class Curso {
         orphanRemoval = true,
         fetch = FetchType.LAZY
     )
-    private Set<Contenido> contenidos = new HashSet<Contenido>();
+    private Set<Contenido> contenidos = new HashSet<>();
     @OneToMany(mappedBy = "curso")
     Set<Avance> avances;
 
