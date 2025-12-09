@@ -1,0 +1,48 @@
+---
+# Codacy Configuration
+# https://docs.codacy.com/repositories-configure/codacy-configuration-file/
+
+# Exclude patterns - Archivos que no deben ser analizados
+exclude_paths:
+  - 'target/**'
+  - '**/node_modules/**'
+  - '**/*.min.js'
+  - 'src/test/resources/**'  # Excluir data.sql y otros recursos de test
+  - 'docs/workflows/**'       # Excluir workflows de documentación
+
+# Engines configuration
+engines:
+  # SpotBugs for Java - Análisis estático de bytecode
+  spotbugs:
+    enabled: true
+    exclude_paths:
+      - 'src/test/**'
+  
+  # PMD for Java - Análisis de código fuente
+  pmd:
+    enabled: true
+    exclude_paths:
+      - 'src/test/**'
+  
+  # Checkstyle for Java - Estilo de código
+  checkstyle:
+    enabled: true
+    exclude_paths:
+      - 'src/test/**'
+  
+  # Desactivar análisis SQL Server (no aplica a H2/MariaDB)
+  tsqllint:
+    enabled: false
+  
+  # Desactivar análisis de SQL genérico para archivos de test
+  sqlint:
+    enabled: false
+
+# Coverage configuration
+coverage:
+  enabled: true
+  exclude_paths:
+    - 'src/test/**'
+    - '**/model/**'
+    - '**/controller/User.java'
+    - '**/controller/FormUser.java'
