@@ -1,5 +1,41 @@
 # Changelog - Imágenes Docker
 
+## [0.3.1] - Backend - 2024-12-09
+
+### 📄 Documentación
+
+#### Added
+- **Página de inicio**: Información del proyecto en `/`
+  - Versión del backend
+  - Información de Git (branch, commit ID)
+  - Fecha de compilación en formato castellano
+  - Descripción del proyecto
+  - Modo oscuro con toggle (🌓)
+  - Accesibilidad WCAG 2.1 AA completa
+
+#### Changed
+- Configuración de Spring Boot Actuator para exponer información
+- Plugin `git-commit-id-maven-plugin` agregado para capturar metadata de Git
+
+#### Accessibility
+- ✅ Contraste optimizado para ambos modos (claro/oscuro)
+- ✅ Navegación por teclado completa
+- ✅ Atributos ARIA para lectores de pantalla
+- ✅ Skip link para contenido principal
+- ✅ Semántica HTML5 correcta
+
+### 📦 Dependencias
+- Spring Boot 3.4.12
+- Spring Security con BCrypt
+- MariaDB JDBC Driver 3.5.6
+- Java 21
+
+### 🔗 Compatibilidad
+- Compatible con MariaDB v0.1.0+
+- Compatible con frontends Angular, React, Vue
+
+---
+
 ## [0.3.0] - Backend - 2024-12-09
 
 ### 🔐 Seguridad
