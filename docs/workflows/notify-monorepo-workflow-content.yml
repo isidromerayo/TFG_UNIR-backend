@@ -15,7 +15,7 @@ jobs:
     
     steps:
     - name: Notify monorepo repository
-      uses: peter-evans/repository-dispatch@v3
+      uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0  # v3.0.0
       with:
         token: ${{ secrets.MONOREPO_DISPATCH_TOKEN }}
         repository: isidromerayo/TFG_UNIR-monorepo
