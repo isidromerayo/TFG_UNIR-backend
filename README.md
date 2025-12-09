@@ -2,6 +2,8 @@
 
 [![Java CI with Maven](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/maven.yml/badge.svg)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/maven.yml)
 [![Pull Request CI](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/pull-request.yml/badge.svg)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/pull-request.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
 
 ### Universidad Internacional de La Rioja
 
@@ -58,14 +60,23 @@ git branch -d feature/nombre-descriptivo
 
 ```bash
 # Tests unitarios
-mvn test
+./mvnw test
 
 # Tests de integración
-mvn -DskipUTs -Pfailsafe verify
+./mvnw -DskipUTs -Pfailsafe verify
 
-# Todos los tests
-mvn verify -Pfailsafe
+# Todos los tests (unitarios + integración)
+./mvnw clean verify -Pfailsafe
+
+# Tests con cobertura de código
+./mvnw clean verify -Pfailsafe
+# Reporte en: target/site/jacoco/index.html
 ```
+
+**Cobertura actual**: 85% (objetivo: ≥80%)
+- Tests unitarios: 11 tests
+- Tests de integración: 4 tests
+- Total: 15 tests
 
 ### 📦 Perfiles de Maven
 
@@ -79,18 +90,55 @@ mvn verify -Pdependency-check
 
 ### 🔍 Análisis de código
 
-```bash
-# Cobertura de código con JaCoCo
-mvn jacoco:report
+#### Cobertura de código (JaCoCo)
 
-# Análisis estático con SpotBugs
-mvn spotbugs:check
+```bash
+# Generar reporte de cobertura (unitarios + integración)
+./mvnw clean verify -Pfailsafe
+
+# Ver reportes
+open target/site/jacoco/index.html      # Reporte combinado (principal)
+open target/site/jacoco-ut/index.html   # Solo tests unitarios
+open target/site/jacoco-it/index.html   # Solo tests de integración
+```
+
+**Configuración**:
+- Reportes separados para UT e IT
+- Reporte combinado (merge automático)
+- Exclusiones: DTOs y entidades JPA
+- Ver: `JACOCO_CONFIGURATION.md` y `COVERAGE_ANALYSIS.md`
+
+#### Análisis estático (SpotBugs)
+
+```bash
+# Análisis con SpotBugs
+./mvnw compile spotbugs:check
 
 # SpotBugs con plugins de seguridad
-mvn spotbugs:spotbugs
+./mvnw spotbugs:spotbugs
+```
 
+#### Análisis de calidad (SonarQube)
+
+```bash
+# Análisis local (requiere SONAR_TOKEN)
+./mvnw sonar:sonar -Dsonar.token=${SONAR_TOKEN}
+
+# Ver resultados en:
+# https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend
+```
+
+**Configuración**: Las propiedades de SonarQube están en el `pom.xml`
+- Ver: `SONARQUBE_POM_CONFIG.md`
+
+#### Análisis de dependencias (OWASP)
+
+```bash
 # OWASP Dependency Check (perfil activado)
-mvn -Pdependency-check verify
+./mvnw -Pdependency-check verify
+
+# Con API Key del NVD
+./mvnw -Pdependency-check verify -Dnvd.api.key=${NVD_API_KEY}
 ```
 
 ### 🔐 Autenticación
@@ -817,11 +865,11 @@ El proyecto está configurado para desplegar en un repositorio local Maven:
 
 Preparar el release
 
-`mvn release:prepare`
+`./mvnw release:prepare`
 
 modo batch (no pregunta)
 
-`mvn release:prepare -B`
+`./mvnw release:prepare -B`
 
 Este comando realiza varias acciones:
 
@@ -833,12 +881,51 @@ Este comando realiza varias acciones:
 
 Hacer el release (deploy)
 
-`mvn release:perform -Dmaven.javadoc.skip=true`
+`./mvnw release:perform -Dmaven.javadoc.skip=true`
 
 Este comando:
 
 * Clona el proyecto desde el tag creado.
 * Compila y despliega el artefacto al repositorio definido en <distributionManagement>.
+
+---
+
+## 📚 Documentación
+
+### Guías de desarrollo
+
+- **[AGENTS.md](AGENTS.md)** - Guía para agentes AI y flujo de trabajo
+- **[MANUAL_WORKFLOW_SETUP.md](MANUAL_WORKFLOW_SETUP.md)** - Configuración manual de workflows
+
+### Calidad de código
+
+- **[COVERAGE_ANALYSIS.md](COVERAGE_ANALYSIS.md)** - Análisis detallado de cobertura de código
+- **[JACOCO_CONFIGURATION.md](JACOCO_CONFIGURATION.md)** - Configuración de JaCoCo (UT + IT + Merge)
+- **[SONARQUBE_POM_CONFIG.md](SONARQUBE_POM_CONFIG.md)** - Configuración de SonarQube en pom.xml
+- **[SONARQUBE_ISSUES.md](SONARQUBE_ISSUES.md)** - Análisis de issues detectados por SonarQube
+
+### Monorepo
+
+- **[MONOREPO_WORKFLOW_DISTRIBUTION.md](MONOREPO_WORKFLOW_DISTRIBUTION.md)** - Distribución de workflows
+- **[SETUP_MONOREPO_SYNC.md](SETUP_MONOREPO_SYNC.md)** - Sincronización con monorepo
+
+---
+
+## 🎯 Métricas de Calidad
+
+| Métrica | Valor | Objetivo | Estado |
+|---------|-------|----------|--------|
+| **Cobertura** | 85% | ≥ 80% | ✅ |
+| **Tests** | 15 (11 UT + 4 IT) | - | ✅ |
+| **Reliability Rating** | A | A | ✅ |
+| **Security Rating** | A | A | ✅ |
+| **Quality Gate** | Passed | Passed | ✅ |
+
+**Última actualización**: 2025-12-08
+
+Ver más detalles en [SonarCloud](https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend)
+
+---
 
 # Badges
 
