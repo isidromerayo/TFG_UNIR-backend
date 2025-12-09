@@ -5,6 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TFG UNIR Backend</title>
     <style>
+        :root {
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --container-bg: white;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --heading-color: #667eea;
+            --heading-secondary: #764ba2;
+            --section-bg: #f8f9fa;
+            --item-bg: white;
+            --border-color: #ddd;
+            --button-bg: #667eea;
+            --button-hover: #764ba2;
+            --error-bg: #fee;
+            --error-border: #f44;
+            --error-text: #c33;
+            --shadow: rgba(0,0,0,0.3);
+        }
+        
+        [data-theme="dark"] {
+            --bg-gradient-start: #1a1a2e;
+            --bg-gradient-end: #16213e;
+            --container-bg: #0f3460;
+            --text-primary: #e4e4e4;
+            --text-secondary: #b8b8b8;
+            --heading-color: #7b9cff;
+            --heading-secondary: #9d7bff;
+            --section-bg: #1a2942;
+            --item-bg: #0f3460;
+            --border-color: #2d4263;
+            --button-bg: #5865f2;
+            --button-hover: #7b9cff;
+            --error-bg: #3d1f1f;
+            --error-border: #ff6b6b;
+            --error-text: #ff9999;
+            --shadow: rgba(0,0,0,0.6);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -13,48 +51,79 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            transition: background 0.3s ease;
         }
         
         .container {
-            background: white;
+            background: var(--container-bg);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px var(--shadow);
             max-width: 800px;
             width: 100%;
             padding: 40px;
+            position: relative;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--button-bg);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .theme-toggle:hover {
+            background: var(--button-hover);
+            transform: rotate(180deg) scale(1.1);
         }
         
         h1 {
-            color: #667eea;
+            color: var(--heading-color);
             margin-bottom: 10px;
             font-size: 2.5em;
+            transition: color 0.3s ease;
         }
         
         .subtitle {
-            color: #666;
+            color: var(--text-secondary);
             margin-bottom: 30px;
             font-size: 1.1em;
+            transition: color 0.3s ease;
         }
         
         .info-section {
-            background: #f8f9fa;
+            background: var(--section-bg);
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
+            transition: background 0.3s ease;
         }
         
         .info-section h2 {
-            color: #764ba2;
+            color: var(--heading-secondary);
             margin-bottom: 15px;
             font-size: 1.3em;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 2px solid var(--heading-color);
             padding-bottom: 10px;
+            transition: color 0.3s ease, border-color 0.3s ease;
         }
         
         .info-grid {
@@ -64,38 +133,43 @@
         }
         
         .info-item {
-            background: white;
+            background: var(--item-bg);
             padding: 15px;
             border-radius: 8px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid var(--heading-color);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
         
         .info-label {
             font-weight: bold;
-            color: #764ba2;
+            color: var(--heading-secondary);
             font-size: 0.9em;
             margin-bottom: 5px;
+            transition: color 0.3s ease;
         }
         
         .info-value {
-            color: #333;
+            color: var(--text-primary);
             word-break: break-all;
             font-family: 'Courier New', monospace;
             font-size: 0.95em;
+            transition: color 0.3s ease;
         }
         
         .loading {
             text-align: center;
-            color: #666;
+            color: var(--text-secondary);
             padding: 20px;
+            transition: color 0.3s ease;
         }
         
         .error {
-            background: #fee;
-            border-left: 4px solid #f44;
+            background: var(--error-bg);
+            border-left: 4px solid var(--error-border);
             padding: 15px;
             border-radius: 8px;
-            color: #c33;
+            color: var(--error-text);
+            transition: all 0.3s ease;
         }
         
         .links {
@@ -106,7 +180,7 @@
         }
         
         .link-button {
-            background: #667eea;
+            background: var(--button-bg);
             color: white;
             padding: 12px 24px;
             border-radius: 8px;
@@ -116,7 +190,7 @@
         }
         
         .link-button:hover {
-            background: #764ba2;
+            background: var(--button-hover);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
@@ -125,14 +199,16 @@
             text-align: center;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid #ddd;
-            color: #666;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
             font-size: 0.9em;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">🌓</button>
         <h1>🎓 TFG UNIR Backend</h1>
         <p class="subtitle">Backend para TFG en UNIR usando Spring Boot con BCrypt</p>
         
@@ -162,6 +238,28 @@
     </div>
     
     <script>
+        // Dark mode toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+        
+        // Cargar tema guardado
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+        
+        // Cargar tema al iniciar
+        loadTheme();
+        
         function formatDate(dateString) {
             const date = new Date(dateString);
             const options = {
