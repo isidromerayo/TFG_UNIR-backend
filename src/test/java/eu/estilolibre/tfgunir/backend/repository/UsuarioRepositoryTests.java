@@ -14,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
-public class UsuarioRepositoryTests {
+class UsuarioRepositoryTests {
  
     @Autowired
     UsuarioRepository repository;
