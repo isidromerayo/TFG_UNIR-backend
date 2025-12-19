@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -14,28 +15,38 @@
 	<name>backend</name>
 	<description>Backend para TFG en UNIR usando Spring Boot</description>
 	<properties>
+		<!-- Java and Build Properties -->
 		<java.version>21</java.version>
-		<maven.failsafe>3.5.4</maven.failsafe>
-		<JJWT_RELEASE_VERSION>0.12.6</JJWT_RELEASE_VERSION>
-		<dependency-check-maven.version>12.1.8</dependency-check-maven.version>
-		
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<!-- Dependencies Versions -->
+		<jjwt.version>0.12.7</jjwt.version>
+		<commons-lang3.version>3.20.0</commons-lang3.version>
+		<springdoc-openapi-starter-webmvc-ui.version>2.5.0</springdoc-openapi-starter-webmvc-ui.version>
+		<springdoc-openapi-starter-common.version>2.5.0</springdoc-openapi-starter-common.version>
+
+		<!-- Plugins Versions -->
+		<maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
+		<git-commit-id-plugin.version>9.0.2</git-commit-id-plugin.version>
+		<sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
+		<dependency-check-maven.version>12.1.9</dependency-check-maven.version>
+		<spotbugs-maven-plugin.version>4.11.0</spotbugs-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
+
 		<!-- SonarQube Configuration -->
 		<sonar.projectKey>isidromerayo_TFG_UNIR-backend</sonar.projectKey>
 		<sonar.organization>isidromerayo</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-		
-		<!-- Coverage Configuration -->
 		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-		
-		<!-- Exclusions from Coverage Analysis -->
 		<sonar.coverage.exclusions>
 			**/model/**,
 			**/controller/User.java,
 			**/controller/FormUser.java
 		</sonar.coverage.exclusions>
-		
-		<!-- Source and Test Directories -->
 		<sonar.sources>src/main/java</sonar.sources>
 		<sonar.tests>src/test/java</sonar.tests>
 		<sonar.java.source>21</sonar.java.source>
@@ -44,8 +55,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/isidromerayo/TFG_UNIR-backend.git</connection>
 		<url>https://github.com/isidromerayo/TFG_UNIR-backend</url>
-	  <tag>v0.2.0</tag>
-  	</scm>
+	</scm>
 	<distributionManagement>
 		<repository>
 			<id>local-central</id>
@@ -58,7 +68,7 @@
 		</snapshotRepository>
 	</distributionManagement>
 	<dependencies>
-	<dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
@@ -116,24 +126,29 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.8.14</version>
+			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-common</artifactId>
+			<version>${springdoc-openapi-starter-common.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
-			<version>0.13.0</version>
+			<version>${jjwt.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
-			<version>0.13.0</version>
+			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-jackson</artifactId>			<!-- or jjwt-gson if Gson is preferred -->
-			<version>0.13.0</version>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
@@ -145,7 +160,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.20.0</version>
+			<version>${commons-lang3.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -155,7 +170,7 @@
 			<plugin>
 				<groupId>io.github.git-commit-id</groupId>
 				<artifactId>git-commit-id-maven-plugin</artifactId>
-				<version>9.0.2</version>
+				<version>${git-commit-id-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>get-the-git-infos</id>
@@ -199,7 +214,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.14</version>
+				<version>${jacoco-maven-plugin.version}</version>
 				<executions>
 					<!-- Preparar agente para tests unitarios -->
 					<execution>
@@ -280,8 +295,10 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<!-- Entidades JPA - POJOs con Lombok -->
-						<exclude>eu/estilolibre/tfgunir/backend/model/*</exclude>
+						<exclude>**/config/**</exclude>
+						<exclude>**/model/**</exclude>
+						<exclude>**/dto/**</exclude>
+						<exclude>**/*Application.class</exclude>
 						<!-- DTOs simples sin lógica de negocio -->
 						<exclude>eu/estilolibre/tfgunir/backend/controller/User.class</exclude>
 						<exclude>eu/estilolibre/tfgunir/backend/controller/FormUser.class</exclude>
@@ -291,7 +308,7 @@
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>4.9.8.2</version>
+				<version>4.9.8.0</version>
 				<dependencies>
 					<!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
 					<dependency>
@@ -311,7 +328,7 @@
 						<plugin>
 							<groupId>com.mebigfatguy.fb-contrib</groupId>
 							<artifactId>fb-contrib</artifactId>
-							<version>7.6.14</version>
+							<version>7.7.2</version>
 						</plugin>
 					</plugins>
 				</configuration>
@@ -321,8 +338,13 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>3.3.1</version>
 				<configuration>
-				  <tagNameFormat>v@{project.version}</tagNameFormat>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${maven-failsafe-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -333,7 +355,7 @@
 				<plugins>
 					<plugin>
 						<artifactId>maven-failsafe-plugin</artifactId>
-						<version>${maven.failsafe}</version>
+						<version>${maven-failsafe-plugin.version}</version>
 						<executions>
 							<execution>
 								<goals>

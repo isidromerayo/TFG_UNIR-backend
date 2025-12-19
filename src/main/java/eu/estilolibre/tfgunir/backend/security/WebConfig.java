@@ -1,4 +1,4 @@
-package com.unir.tfg.config;
+package eu.estilolibre.tfgunir.backend.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
