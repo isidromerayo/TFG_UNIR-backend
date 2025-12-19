@@ -16,7 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class CursoRespositoryTests {
+class CursoRespositoryTests {
     
     @Autowired
     CursoRepository repository;
