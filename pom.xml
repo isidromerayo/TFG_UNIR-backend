@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -22,7 +23,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Dependencies Versions -->
-		<jjwt.version>0.12.6</jjwt.version>
+		<jjwt.version>0.12.7</jjwt.version>
 		<commons-lang3.version>3.20.0</commons-lang3.version>
 		<springdoc-openapi-starter-webmvc-ui.version>2.5.0</springdoc-openapi-starter-webmvc-ui.version>
 		<springdoc-openapi-starter-common.version>2.5.0</springdoc-openapi-starter-common.version>
@@ -31,7 +32,7 @@
 		<maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
 		<git-commit-id-plugin.version>9.0.2</git-commit-id-plugin.version>
 		<sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
-		<dependency-check-maven.version>12.1.8</dependency-check-maven.version>
+		<dependency-check-maven.version>12.1.9</dependency-check-maven.version>
 		<spotbugs-maven-plugin.version>4.11.0</spotbugs-maven-plugin.version>
 		<jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
 
@@ -54,7 +55,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/isidromerayo/TFG_UNIR-backend.git</connection>
 		<url>https://github.com/isidromerayo/TFG_UNIR-backend</url>
-  	</scm>
+	</scm>
 	<distributionManagement>
 		<repository>
 			<id>local-central</id>
@@ -67,7 +68,7 @@
 		</snapshotRepository>
 	</distributionManagement>
 	<dependencies>
-	<dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
@@ -305,13 +306,13 @@
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>${spotbugs-maven-plugin.version}</version>
+				<version>4.9.8.0</version>
 				<dependencies>
 					<!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
 					<dependency>
 						<groupId>com.github.spotbugs</groupId>
 						<artifactId>spotbugs</artifactId>
-						<version>${spotbugs-maven-plugin.version}</version>
+						<version>4.9.8</version>
 					</dependency>
 				</dependencies>
 				<configuration>
@@ -325,7 +326,7 @@
 						<plugin>
 							<groupId>com.mebigfatguy.fb-contrib</groupId>
 							<artifactId>fb-contrib</artifactId>
-							<version>7.6.14</version>
+							<version>7.7.2</version>
 						</plugin>
 					</plugins>
 				</configuration>
@@ -335,7 +336,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>3.3.1</version>
 				<configuration>
-				  <tagNameFormat>v@{project.version}</tagNameFormat>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
 			<plugin>
