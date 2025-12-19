@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.greaterThan;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class CategoriaControllerIT {
+class CategoriaControllerIT {
 
     private static final String BASE_URI = "http://localhost";
  
@@ -21,13 +21,13 @@ public class CategoriaControllerIT {
     private int port;
  
     @BeforeEach
-    public void configureRestAssured() {
+    void configureRestAssured() {
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
     }
 
     @Test
-    public void categoriasAPIStatus() {
+    void categoriasAPIStatus() {
         given().
                 when().
                 get("/api/categorias").

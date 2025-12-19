@@ -13,13 +13,13 @@ import eu.estilolibre.tfgunir.backend.controller.FormUser;
 import io.restassured.RestAssured;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class LoginControllerIT {
+class LoginControllerIT {
 
     @LocalServerPort
     private int port;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         RestAssured.port = port;
     }
 
