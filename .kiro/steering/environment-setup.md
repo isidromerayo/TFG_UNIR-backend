@@ -29,10 +29,10 @@ inclusion: always
 **🔧 Cambios de código (Java, configuración, etc.):**
 ```bash
 # Flujo completo obligatorio
-./mvnw -Pfailsafe verify
+./mvnw -Pintegration-tests verify
 ./mvnw compile spotbugs:check
 # commit
-./mvnw clean verify -Pfailsafe  # antes de push
+./mvnw clean verify -Pintegration-tests  # antes de push
 ```
 
 **📝 Solo documentación (*.md, *.txt, comentarios):**
@@ -60,10 +60,10 @@ inclusion: always
 ./mvnw test
 
 # Tests de integración (con perfil failsafe)
-./mvnw -Pfailsafe verify
+./mvnw -Pintegration-tests verify
 
 # Tests de integración solamente (sin unitarios)
-./mvnw -DskipUTs -Pfailsafe verify
+./mvnw -DskipUTs -Pintegration-tests verify
 
 # Test específico
 ./mvnw test -Dtest=UsuarioRepositoryTests
@@ -81,10 +81,10 @@ inclusion: always
 ./mvnw -Pdependency-check verify
 
 # Build completo con todos los checks
-./mvnw clean verify -Pfailsafe -Pdependency-check
+./mvnw clean verify -Pintegration-tests -Pdependency-check
 
 # Verificación completa (recomendado antes de push)
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 ```
 
 ## 📊 URLs de Desarrollo

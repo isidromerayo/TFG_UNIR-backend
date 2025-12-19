@@ -79,7 +79,7 @@ Hacer cambios en src/
     ↓
 ./mvnw test → Tests unitarios
     ↓
-./mvnw verify -Pfailsafe → Tests integración
+./mvnw verify -Pintegration-tests → Tests integración
     ↓
 Commit y push
 ```
@@ -101,7 +101,7 @@ docs/security/ → Documentación completa
 ```
 COVERAGE_ANALYSIS.md → Estado actual
     ↓
-./mvnw verify -Pfailsafe → Generar reportes
+./mvnw verify -Pintegration-tests → Generar reportes
     ↓
 target/site/jacoco/ → Ver reportes
     ↓
@@ -166,7 +166,7 @@ cd TFG_UNIR-backend
 
 ### "Quiero ver la cobertura de código"
 ```bash
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 open target/site/jacoco/index.html
 ```
 
@@ -176,10 +176,10 @@ open target/site/jacoco/index.html
 ./mvnw test
 
 # Solo integración
-./mvnw -DskipUTs -Pfailsafe verify
+./mvnw -DskipUTs -Pintegration-tests verify
 
 # Todos
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 ```
 
 ### "Quiero probar el login"

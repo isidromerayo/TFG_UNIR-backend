@@ -1,7 +1,6 @@
 package eu.estilolibre.tfgunir.backend.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,15 +51,20 @@ public class LoginController {
      * @return ResponseEntity con token JWT si la autenticación es exitosa,
      *         o mensaje de error si falla
      */
+    /**
+     * DTO para respuestas de error de autenticación.
+     */
+    private record ErrorResponse(String message) {}
+
     @PostMapping("")
-    public ResponseEntity<?> auth(@RequestBody FormUser login) {
+    public ResponseEntity<Object> auth(@RequestBody FormUser login) {
         // Buscar usuario en BBDD
         List<Usuario> result = repository.findByEmail(login.getEmail());
 
         if (result.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "no autorizado"));
+                    .body(new ErrorResponse("no autorizado"));
         }
 
         Usuario usuario = result.get(0);
@@ -84,6 +88,6 @@ public class LoginController {
 
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("message", "no autorizado"));
+                .body(new ErrorResponse("no autorizado"));
     }
 }

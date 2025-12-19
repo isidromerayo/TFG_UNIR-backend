@@ -328,7 +328,7 @@
 	</build>
 	<profiles>
 		<profile>
-			<id>failsafe</id>
+			<id>integration-tests</id>
 			<build>
 				<plugins>
 					<plugin>

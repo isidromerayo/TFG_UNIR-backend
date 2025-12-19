@@ -211,7 +211,7 @@ jwt.expiration=3600000
 
 ```bash
 # Todos los tests pasando
-./mvnw -Pfailsafe verify
+./mvnw -Pintegration-tests verify
 
 # Resultados:
 # - Tests unitarios: 11/11 ✅
@@ -238,13 +238,13 @@ jwt.expiration=3600000
 
 ```bash
 # Tests completos
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 
 # Solo tests unitarios
 ./mvnw test
 
 # Solo tests de integración
-./mvnw -DskipUTs -Pfailsafe verify
+./mvnw -DskipUTs -Pintegration-tests verify
 
 # Verificar SpotBugs
 ./mvnw compile spotbugs:check
