@@ -100,7 +100,7 @@ Según el reporte combinado (`target/site/jacoco/index.html`):
 
 ### Reporte Completo (Unitarios + Integración)
 ```bash
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 ```
 
 Este comando ejecuta:
@@ -117,7 +117,7 @@ Genera solo: `target/site/jacoco-ut/`
 
 ### Solo Tests de Integración
 ```bash
-./mvnw clean -DskipUTs -Pfailsafe verify
+./mvnw clean -DskipUTs -Pintegration-tests verify
 ```
 
 Genera solo: `target/site/jacoco-it/`
@@ -177,7 +177,7 @@ sonar.jacoco.reportPaths=target/jacoco-merged.exec
 
 ```yaml
 - name: Run tests with coverage
-  run: ./mvnw clean verify -Pfailsafe
+  run: ./mvnw clean verify -Pintegration-tests
 
 - name: SonarQube Scan
   env:
@@ -220,5 +220,5 @@ sonar.jacoco.reportPaths=target/jacoco-merged.exec
 1. **El reporte principal es el combinado**: `target/site/jacoco/index.html`
 2. **SonarQube debe usar**: `jacoco-merged.exec` o el XML del reporte combinado
 3. **Los reportes separados** son útiles para debugging y análisis detallado
-4. **El merge es automático**: Se ejecuta en la fase `verify` con `-Pfailsafe`
+4. **El merge es automático**: Se ejecuta en la fase `verify` con `-Pintegration-tests`
 5. **Exclusiones**: El paquete `model` está excluido (entidades JPA con Lombok)

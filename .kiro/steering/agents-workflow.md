@@ -23,13 +23,13 @@ Si ÚNICAMENTE se modifican archivos de documentación (*.md, *.txt, comentarios
 **Para cambios de código (OBLIGATORIO):**
 ```bash
 # OBLIGATORIO: Ejecutar tests completos (unitarios + integración)
-./mvnw -Pfailsafe verify
+./mvnw -Pintegration-tests verify
 
 # OBLIGATORIO: Análisis de código
 ./mvnw compile spotbugs:check
 
 # OBLIGATORIO: Verificación completa antes de push
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 ```
 
 ### 2. Flujo de trabajo MANDATORIO:
@@ -39,16 +39,16 @@ Si ÚNICAMENTE se modifican archivos de documentación (*.md, *.txt, comentarios
    - **Solo documentación** (*.md, *.txt, comentarios): Saltar al paso 5
    - **Cambios de código**: Continuar con paso 3
 3. **Verificar Java 21**: `java -version` - Si no es 21, ejecutar `vfox use java@21`
-4. **Ejecutar Tests Completos**: `./mvnw -Pfailsafe verify` - Incluye unitarios + integración
+4. **Ejecutar Tests Completos**: `./mvnw -Pintegration-tests verify` - Incluye unitarios + integración
 5. **SpotBugs** (solo para cambios de código): `./mvnw compile spotbugs:check`
 6. **Commit**: Solo después de que todo pase
-7. **Verificación final** (solo para cambios de código): `./mvnw clean verify -Pfailsafe` antes de push
+7. **Verificación final** (solo para cambios de código): `./mvnw clean verify -Pintegration-tests` antes de push
 
 ### 2.1. Si hay fallos en tests:
 - **Tests unitarios específicos**: `./mvnw test -Dtest=NombreDelTest`
-- **Tests de integración específicos**: `./mvnw -Pfailsafe verify -Dit.test=NombreDelTestIT`
+- **Tests de integración específicos**: `./mvnw -Pintegration-tests verify -Dit.test=NombreDelTestIT`
 - **Solo tests unitarios (desarrollo rápido)**: `./mvnw test`
-- **Solo tests de integración**: `./mvnw -DskipUTs -Pfailsafe verify`
+- **Solo tests de integración**: `./mvnw -DskipUTs -Pintegration-tests verify`
 - NO ejecutar toda la suite hasta que los fallos estén resueltos
 - Aplicar TDD: escribir test → hacer que pase → refactorizar
 - **CRÍTICO**: Si fallan tests de integración, revisar endpoints y configuración de seguridad

@@ -164,17 +164,17 @@ Documentación principal del proyecto con información general, stack tecnológi
 ./mvnw test
 
 # Tests de integración
-./mvnw -DskipUTs -Pfailsafe verify
+./mvnw -DskipUTs -Pintegration-tests verify
 
 # Todos los tests con cobertura
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 ```
 
 ### Ver Reportes de Cobertura
 
 ```bash
 # Generar reportes
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 
 # Abrir reportes
 open target/site/jacoco/index.html      # Combinado (principal)

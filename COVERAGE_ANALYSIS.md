@@ -338,7 +338,7 @@ Según `pom.xml`, JaCoCo excluye:
 
 ```bash
 # Ejecutar tests con cobertura completa (UT + IT + Merged)
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 
 # Ver reporte HTML combinado (PRINCIPAL)
 xdg-open target/site/jacoco/index.html
@@ -359,7 +359,7 @@ grep "LoginController" target/site/jacoco/jacoco.csv     # Combinado
 ./mvnw clean test
 
 # Solo tests de integración
-./mvnw clean -DskipUTs -Pfailsafe verify
+./mvnw clean -DskipUTs -Pintegration-tests verify
 
 # Verificar archivos generados
 ls -lh target/*.exec

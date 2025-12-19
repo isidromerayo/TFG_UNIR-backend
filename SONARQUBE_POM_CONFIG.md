@@ -97,7 +97,7 @@ Esta es la propiedad más importante para resolver el problema de cobertura:
 
 ```bash
 # 1. Generar cobertura
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 
 # 2. Ejecutar análisis de SonarQube
 ./mvnw sonar:sonar -Dsonar.token=${SONAR_TOKEN}
@@ -107,7 +107,7 @@ Esta es la propiedad más importante para resolver el problema de cobertura:
 
 ```yaml
 - name: Build and Test
-  run: ./mvnw clean verify -Pfailsafe
+  run: ./mvnw clean verify -Pintegration-tests
 
 - name: SonarQube Analysis
   env:

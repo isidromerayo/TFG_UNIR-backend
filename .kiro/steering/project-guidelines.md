@@ -35,10 +35,10 @@ Siempre seguir el flujo definido en AGENTS.md:
 **Para cambios de código:**
 1. Verificar Java 21 activo (`java -version`)
 2. Análisis y desarrollo
-3. Tests completos (`./mvnw -Pfailsafe verify`) - incluye unitarios + integración
+3. Tests completos (`./mvnw -Pintegration-tests verify`) - incluye unitarios + integración
 4. Análisis estático (`./mvnw compile spotbugs:check`)
 5. Commit con mensaje descriptivo (Conventional Commits)
-6. Verificación final (`./mvnw clean verify -Pfailsafe`) antes de push
+6. Verificación final (`./mvnw clean verify -Pintegration-tests`) antes de push
 
 **Para cambios solo de documentación (*.md, *.txt, comentarios):**
 1. Análisis y desarrollo

@@ -344,7 +344,7 @@ podman exec maria_db mariadb -h localhost -u user_tfg -ptfg_un1r_PWD tfg_unir \
 ./mvnw clean package -DskipTests
 
 # Compilar con tests
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 ```
 
 ---

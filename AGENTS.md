@@ -31,7 +31,7 @@ Para asegurar la calidad y estabilidad del código, sigue estos pasos al realiza
     *   Para **cambios de código**, es **mandatorio** ejecutar la suite completa de tests (unitarios e integración). Esto asegura que tus cambios no han roto ninguna funcionalidad existente (regresiones).
     *   **Tests completos (unitarios + integración):**
         ```bash
-        ./mvnw -Pfailsafe verify
+        ./mvnw -Pintegration-tests verify
         ```
     *   **Solo tests unitarios (para desarrollo rápido):**
         ```bash
@@ -39,11 +39,11 @@ Para asegurar la calidad y estabilidad del código, sigue estos pasos al realiza
         ```
     *   **Solo tests de integración:**
         ```bash
-        ./mvnw -DskipUTs -Pfailsafe verify
+        ./mvnw -DskipUTs -Pintegration-tests verify
         ```
     *   Cuando fallen los test y se este arreglando, centrarse primero en lanzar solo los que fallan en lugar de lanzar todos siempre:
         - Tests unitarios específicos: `./mvnw test -Dtest=NombreDelTest`
-        - Tests de integración específicos: `./mvnw -Pfailsafe verify -Dit.test=NombreDelTestIT`
+        - Tests de integración específicos: `./mvnw -Pintegration-tests verify -Dit.test=NombreDelTestIT`
     *   Aplicar TDD a la hora de implementar
     *   Preferiblemente preparar los datos como carga inicial en BBDD en lugar de crear en los test
 
@@ -62,7 +62,7 @@ Para asegurar la calidad y estabilidad del código, sigue estos pasos al realiza
 5.  **Subir cambios al repositorio remoto (git push):**
     *   **Para cambios de código**: Asegúrate de que todos los tests se ejecutan correctamente con el comando:
         ```bash
-        ./mvnw clean verify -Pfailsafe
+        ./mvnw clean verify -Pintegration-tests
         ```
     *   **Para cambios solo de documentación**: Se puede hacer push directamente después del commit.
     *   Para mantener la calidad, revisar que se siguen las guías de SonarQube
@@ -97,7 +97,7 @@ El proyecto mantiene una cobertura de código del **85%** (objetivo: ≥80%).
 
 ```bash
 # Generar todos los reportes (UT + IT + Merged)
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 
 # Ver reportes en navegador
 open target/site/jacoco/index.html      # Reporte combinado (principal)

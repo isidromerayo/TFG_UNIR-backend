@@ -63,13 +63,13 @@ git branch -d feature/nombre-descriptivo
 ./mvnw test
 
 # Tests de integración
-./mvnw -DskipUTs -Pfailsafe verify
+./mvnw -DskipUTs -Pintegration-tests verify
 
 # Todos los tests (unitarios + integración)
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 
 # Tests con cobertura de código
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 # Reporte en: target/site/jacoco/index.html
 ```
 
@@ -82,7 +82,7 @@ git branch -d feature/nombre-descriptivo
 
 ```bash
 # Perfil para tests de integración
-mvn verify -Pfailsafe
+mvn verify -Pintegration-tests
 
 # Perfil para análisis de dependencias
 mvn verify -Pdependency-check
@@ -94,7 +94,7 @@ mvn verify -Pdependency-check
 
 ```bash
 # Generar reporte de cobertura (unitarios + integración)
-./mvnw clean verify -Pfailsafe
+./mvnw clean verify -Pintegration-tests
 
 # Ver reportes
 open target/site/jacoco/index.html      # Reporte combinado (principal)

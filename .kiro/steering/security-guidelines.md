@@ -67,7 +67,7 @@ private String apiKey;
 ### Antes de cada commit:
 - [ ] No hay secrets hardcodeados
 - [ ] Validación de input implementada
-- [ ] **Solo para cambios de código**: Tests completos pasan (`./mvnw -Pfailsafe verify`)
+- [ ] **Solo para cambios de código**: Tests completos pasan (`./mvnw -Pintegration-tests verify`)
 - [ ] **Solo para cambios de código**: Tests de seguridad incluidos
 - [ ] **Solo para cambios de código**: SpotBugs security checks pasan
 - [ ] Logs no exponen datos sensibles
