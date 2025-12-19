@@ -86,7 +86,6 @@ public class TokenServiceTest {
         String email = "test@example.com";
         
         // Act
-        TokenService tokenService = new TokenService();
         String token = tokenService.crearToken(email, SECRET_KEY, expiration);
         String emailFromToken = tokenService.leerToken(token, SECRET_KEY);
         
