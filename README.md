@@ -1,17 +1,37 @@
 # TFG_UNIR Backend
 
-[![Java CI with Maven](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/maven.yml/badge.svg)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/maven.yml)
-[![Pull Request CI](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/pull-request.yml/badge.svg)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/pull-request.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
+<div align="center">
 
-### Universidad Internacional de La Rioja
+## 🛠️ Tecnologías y Herramientas
 
-### Escuela Superior de Ingeniería y Tecnología 
+### 🏗️ Build & CI/CD
+[![Java CI](https://img.shields.io/github/actions/workflow/status/isidromerayo/TFG_UNIR-backend/maven.yml?label=Build&logo=github-actions&logoColor=white)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/maven.yml)
+[![Pull Request](https://img.shields.io/github/actions/workflow/status/isidromerayo/TFG_UNIR-backend/pull-request.yml?label=PR%20Checks&logo=github-actions&logoColor=white)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/pull-request.yml)
 
-#### Grado en Ingeniería Informática
+### 📊 Calidad de Código - SonarQube
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=alert_status&style=flat-square)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=coverage&style=flat-square)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=sqale_rating&style=flat-square)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=bugs&style=flat-square)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
 
-## Frameworks frontend JavaScript: Análisis y estudio práctico
+### 📦 Dependencias
+[![Dependabot](https://img.shields.io/badge/dependabot-enabled-0366d6.svg?logo=dependabot&logoColor=white)](https://github.com/isidromerayo/TFG_UNIR-backend/security/dependabot)
+[![Known Vulnerabilities](https://snyk.io/test/github/isidromerayo/TFG_UNIR-backend/badge.svg)](https://snyk.io/test/github/isidromerayo/TFG_UNIR-backend)
+
+### 📄 Licencia
+[![License](https://img.shields.io/github/license/isidromerayo/TFG_UNIR-backend?color=blue&style=flat-square)](LICENSE)
+[![Java](https://img.shields.io/badge/Java-21-007396?logo=java&logoColor=white)](https://www.oracle.com/java/technologies/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.12-6DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
+
+</div>
+
+## Universidad Internacional de La Rioja
+
+## Escuela Superior de Ingeniería y Tecnología 
+
+### Grado en Ingeniería Informática
+
+## TFG: Frameworks frontend JavaScript: Análisis y estudio práctico
 
 ### Backend
 
