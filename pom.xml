@@ -295,8 +295,10 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<!-- Entidades JPA - POJOs con Lombok -->
-						<exclude>eu/estilolibre/tfgunir/backend/model/*</exclude>
+						<exclude>**/config/**</exclude>
+						<exclude>**/model/**</exclude>
+						<exclude>**/dto/**</exclude>
+						<exclude>**/*Application.class</exclude>
 						<!-- DTOs simples sin lógica de negocio -->
 						<exclude>eu/estilolibre/tfgunir/backend/controller/User.class</exclude>
 						<exclude>eu/estilolibre/tfgunir/backend/controller/FormUser.class</exclude>
