@@ -26,7 +26,7 @@
 		<jjwt.version>0.12.7</jjwt.version>
 		<commons-lang3.version>3.20.0</commons-lang3.version>
 		<springdoc-openapi-starter-webmvc-ui.version>2.5.0</springdoc-openapi-starter-webmvc-ui.version>
-		<springdoc-openapi-starter-common.version>2.5.0</springdoc-openapi-starter-common.version>
+		<springdoc-openapi-starter-common.version>3.0.0</springdoc-openapi-starter-common.version>
 
 		<!-- Plugins Versions -->
 		<maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
