@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.12</version>
-		<relativePath />
+		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>eu.estilolibre.tfgunir</groupId>
@@ -23,7 +23,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Dependencies Versions -->
-		<jjwt.version>0.12.7</jjwt.version>
+		<jjwt.version>0.13.0</jjwt.version>
 		<commons-lang3.version>3.20.0</commons-lang3.version>
 		<springdoc-openapi-starter-webmvc-ui.version>2.5.0</springdoc-openapi-starter-webmvc-ui.version>
 		<springdoc-openapi-starter-common.version>2.5.0</springdoc-openapi-starter-common.version>
