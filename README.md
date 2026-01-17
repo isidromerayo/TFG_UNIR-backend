@@ -21,7 +21,7 @@
 ### 📄 Licencia
 [![License](https://img.shields.io/github/license/isidromerayo/TFG_UNIR-backend?color=blue&style=flat-square)](LICENSE)
 [![Java](https://img.shields.io/badge/Java-21-007396?logo=java&logoColor=white)](https://www.oracle.com/java/technologies/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.12-6DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.9-6DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
 
 </div>
 
@@ -64,13 +64,15 @@ git branch -d feature/nombre-descriptivo
 ### 🛠️ Stack tecnológico
 
 - **Java 21**
-- **Spring Boot 3.4.12**
+- **Spring Boot 3.5.9**
+- **Spring Framework 6.2.15**
+- **Hibernate 6.6.39**
 - **Spring Data JPA** - Persistencia
-- **Spring Security** - Autenticación y autorización
-- **MariaDB** - Base de datos producción
+- **Spring Security 6.5.7** - Autenticación y autorización
+- **MariaDB 3.5.7** - Base de datos producción
 - **H2** - Base de datos testing
 - **JWT** - Tokens de autenticación
-- **Swagger/OpenAPI** - Documentación API
+- **Swagger/OpenAPI 2.8.5** - Documentación API
 - **Lombok** - Reducción de boilerplate
 - **JaCoCo** - Cobertura de código
 - **SpotBugs** - Análisis estático

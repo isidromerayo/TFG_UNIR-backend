@@ -1,5 +1,27 @@
 # Changelog - Imágenes Docker
 
+## [0.4.0] - Backend - 2026-01-17
+
+### 🚀 Actualización Major (Framework)
+
+#### Changed
+- **Spring Boot 3.5.0**: Actualización a la última versión estable del framework.
+- **Base Image**: Eclipse Temurin 21 (LTS) mantenida.
+
+#### Security
+- Actualizaciones de seguridad heredadas de Spring Boot 3.5.
+- Dependencias transitivas actualizadas.
+
+### 📦 Dependencias
+- Spring Boot 3.5.0
+- Java 21
+
+### 🔗 Compatibilidad
+- Compatible con MariaDB v0.1.0+
+- **Nota**: Requiere re-despliegue completo si se actualiza desde versiones < 0.3.0 debido a cambios en BBDD anteriores.
+
+---
+
 ## [0.3.1] - Backend - 2024-12-09
 
 ### 📄 Documentación

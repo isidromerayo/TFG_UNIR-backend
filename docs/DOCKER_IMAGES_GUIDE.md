@@ -22,11 +22,11 @@ Este proyecto proporciona dos formas de obtener las imágenes Docker necesarias:
 ```bash
 # Con Docker
 docker pull isidromerayo/mariadb-tfg:0.1.0
-docker pull isidromerayo/spring-backend-tfg:0.3.0
+docker pull isidromerayo/spring-backend-tfg:0.4.0
 
 # Con Podman
 podman pull docker.io/isidromerayo/mariadb-tfg:0.1.0
-podman pull docker.io/isidromerayo/spring-backend-tfg:0.3.0
+podman pull docker.io/isidromerayo/spring-backend-tfg:0.4.0
 ```
 
 ### Usar con Docker Compose
@@ -40,7 +40,7 @@ services:
     # ...
 
   api_service:
-    image: "isidromerayo/spring-backend-tfg:0.3.0"
+    image: "isidromerayo/spring-backend-tfg:0.4.0"
     # ...
 ```
 
@@ -102,14 +102,14 @@ podman tag localhost/isidromerayo/mariadb-tfg:0.1.0 localhost/isidromerayo/maria
 
 **Con Docker:**
 ```bash
-docker build -t isidromerayo/spring-backend-tfg:0.3.0 .
-docker tag isidromerayo/spring-backend-tfg:0.3.0 isidromerayo/spring-backend-tfg:latest
+docker build -t isidromerayo/spring-backend-tfg:0.4.0 .
+docker tag isidromerayo/spring-backend-tfg:0.4.0 isidromerayo/spring-backend-tfg:latest
 ```
 
 **Con Podman:**
 ```bash
-podman build -t localhost/isidromerayo/spring-backend-tfg:0.3.0 .
-podman tag localhost/isidromerayo/spring-backend-tfg:0.3.0 localhost/isidromerayo/spring-backend-tfg:latest
+podman build -t localhost/isidromerayo/spring-backend-tfg:0.4.0 .
+podman tag localhost/isidromerayo/spring-backend-tfg:0.4.0 localhost/isidromerayo/spring-backend-tfg:latest
 ```
 
 #### 4. Verificar Imágenes Construidas
@@ -128,7 +128,7 @@ Deberías ver:
 ```
 isidromerayo/mariadb-tfg          0.1.0    ...    ...    ...
 isidromerayo/mariadb-tfg          latest   ...    ...    ...
-isidromerayo/spring-backend-tfg   0.3.0    ...    ...    ...
+isidromerayo/spring-backend-tfg   0.4.0    ...    ...    ...
 isidromerayo/spring-backend-tfg   latest   ...    ...    ...
 ```
 
@@ -151,7 +151,7 @@ services:
     # ...
 
   api_service:
-    image: "localhost/isidromerayo/spring-backend-tfg:0.3.0"
+    image: "localhost/isidromerayo/spring-backend-tfg:0.4.0"
     # ...
 ```
 
@@ -161,7 +161,7 @@ Actualiza `scripts/podman-pod.sh`:
 
 ```bash
 MARIA_DB_IMAGE="localhost/isidromerayo/mariadb-tfg:0.1.0"
-API_SERVICE_IMAGE="localhost/isidromerayo/spring-backend-tfg:0.3.0"
+API_SERVICE_IMAGE="localhost/isidromerayo/spring-backend-tfg:0.4.0"
 ```
 
 Luego ejecuta:
@@ -226,7 +226,7 @@ docker push isidromerayo/mariadb-tfg:0.1.0
 docker push isidromerayo/mariadb-tfg:latest
 
 # Publicar Backend
-docker push isidromerayo/spring-backend-tfg:0.3.0
+docker push isidromerayo/spring-backend-tfg:0.4.0
 docker push isidromerayo/spring-backend-tfg:latest
 ```
 
@@ -259,8 +259,9 @@ docker push isidromerayo/spring-backend-tfg:latest
 
 | Tag | Descripción | Tamaño |
 |-----|-------------|--------|
-| `0.3.0` | Versión estable con BCrypt | ~450MB |
-| `latest` | Última versión (actualmente 0.3.0) | ~450MB |
+| `0.4.0` | **Última versión** (Spring Boot 3.5) | ~450MB |
+| `latest` | Referencia a la última versión (`0.4.0`) | ~450MB |
+| `0.3.0` | Versión estable anterior (Spring Boot 3.4) | ~450MB |
 | `0.2.2` | ⚠️ Versión antigua sin BCrypt | ~450MB |
 
 ---
@@ -281,10 +282,10 @@ docker run --rm isidromerayo/mariadb-tfg:0.1.0 mariadbd --version
 
 ```bash
 # Inspeccionar imagen
-docker inspect isidromerayo/spring-backend-tfg:0.3.0 | grep -A 5 "Env"
+docker inspect isidromerayo/spring-backend-tfg:0.4.0 | grep -A 5 "Env"
 
 # Ejecutar y verificar logs
-docker run --rm isidromerayo/spring-backend-tfg:0.3.0 | head -20
+docker run --rm isidromerayo/spring-backend-tfg:0.4.0 | head -20
 ```
 
 ### Verificar Contraseñas BCrypt
@@ -329,7 +330,7 @@ Resultado esperado:
 # Construir localmente
 ./mvnw clean package -DskipTests
 docker build -f Dockerfile-db -t isidromerayo/mariadb-tfg:0.1.0 .
-docker build -t isidromerayo/spring-backend-tfg:0.3.0 .
+docker build -t isidromerayo/spring-backend-tfg:0.4.0 .
 ```
 
 ### Error: "unauthorized: incorrect username or password"
@@ -399,7 +400,7 @@ docker compose down
 
 # Reconstruir imágenes
 docker build -f Dockerfile-db -t isidromerayo/mariadb-tfg:0.1.0 .
-docker build -t isidromerayo/spring-backend-tfg:0.3.0 .
+docker build -t isidromerayo/spring-backend-tfg:0.4.0 .
 
 # Reiniciar
 docker compose up -d

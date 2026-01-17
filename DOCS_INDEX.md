@@ -145,6 +145,27 @@ Documentación principal del proyecto con información general, stack tecnológi
 
 ---
 
+## 🛠️ Mantenimiento y Actualizaciones
+
+### [docs/SPRING_BOOT_LIFECYCLE.md](docs/SPRING_BOOT_LIFECYCLE.md)
+**Ciclo de vida y soporte de Spring Boot**
+- Fechas de lanzamiento y fin de soporte para versiones 3.4 y 3.5
+- Recomendaciones de actualización
+
+**Cuándo usar**: Para planificar actualizaciones de versión del framework.
+
+### [docs/SPRING_BOOT_3.5_MIGRATION.md](docs/SPRING_BOOT_3.5_MIGRATION.md)
+**Documentación de la migración a Spring Boot 3.5.9**
+- Cambios realizados en pom.xml
+- Verificación de dependencias
+- Resolución de warnings de Hibernate
+- Resultados de tests y análisis de calidad
+- Lecciones aprendidas
+
+**Cuándo usar**: Para entender los cambios realizados en la migración a Spring Boot 3.5.9.
+
+---
+
 ## 🚀 Guías Rápidas
 
 ### Migración BCrypt
@@ -201,6 +222,8 @@ open target/site/jacoco-it/index.html   # Solo integración
 | **Cobertura de código** | 85% | ≥ 80% | ✅ |
 | **Tests unitarios** | 11 | - | ✅ |
 | **Tests integración** | 4 | - | ✅ |
+| **Spring Boot** | 3.5.9 | Latest LTS | ✅ |
+| **Java** | 21 | Latest LTS | ✅ |
 | **Reliability Rating** | A | A | ✅ |
 | **Security Rating** | A | A | ✅ |
 | **Quality Gate** | Passed | Passed | ✅ |
