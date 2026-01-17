@@ -21,7 +21,7 @@
 ### 📄 Licencia
 [![License](https://img.shields.io/github/license/isidromerayo/TFG_UNIR-backend?color=blue&style=flat-square)](LICENSE)
 [![Java](https://img.shields.io/badge/Java-21-007396?logo=java&logoColor=white)](https://www.oracle.com/java/technologies/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.12-6DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.9-6DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
 
 </div>
 
