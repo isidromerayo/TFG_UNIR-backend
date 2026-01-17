@@ -64,13 +64,15 @@ git branch -d feature/nombre-descriptivo
 ### 🛠️ Stack tecnológico
 
 - **Java 21**
-- **Spring Boot 3.4.12**
+- **Spring Boot 3.5.9**
+- **Spring Framework 6.2.15**
+- **Hibernate 6.6.39**
 - **Spring Data JPA** - Persistencia
-- **Spring Security** - Autenticación y autorización
-- **MariaDB** - Base de datos producción
+- **Spring Security 6.5.7** - Autenticación y autorización
+- **MariaDB 3.5.7** - Base de datos producción
 - **H2** - Base de datos testing
 - **JWT** - Tokens de autenticación
-- **Swagger/OpenAPI** - Documentación API
+- **Swagger/OpenAPI 2.8.5** - Documentación API
 - **Lombok** - Reducción de boilerplate
 - **JaCoCo** - Cobertura de código
 - **SpotBugs** - Análisis estático

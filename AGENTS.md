@@ -8,10 +8,12 @@ Este es un proyecto backend desarrollado en Java con el framework Spring Boot. U
 
 ### Tecnologías Clave
 - **Lenguaje:** Java 21
-- **Framework:** Spring Boot 3.4.12
+- **Framework:** Spring Boot 3.5.9
+- **Spring Framework:** 6.2.15
+- **Hibernate:** 6.6.39
 - **Gestor de dependencias:** Maven
 - **Base de datos:** H2 (tests), MariaDB (producción)
-- **Seguridad:** Spring Security + JWT (JSON Web Tokens)
+- **Seguridad:** Spring Security 6.5.7 + JWT (JSON Web Tokens)
 - **Testing:** JUnit 5, Mockito, REST Assured (integración)
 - **Calidad:** SpotBugs, JaCoCo (cobertura), SonarCloud
 - **Herramientas:** vfox (gestión versiones Java)
