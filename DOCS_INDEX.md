@@ -145,6 +145,17 @@ Documentación principal del proyecto con información general, stack tecnológi
 
 ---
 
+## 🛠️ Mantenimiento y Actualizaciones
+
+### [docs/SPRING_BOOT_LIFECYCLE.md](docs/SPRING_BOOT_LIFECYCLE.md)
+**Ciclo de vida y soporte de Spring Boot**
+- Fechas de lanzamiento y fin de soporte para versiones 3.4 y 3.5
+- Recomendaciones de actualización
+
+**Cuándo usar**: Para planificar actualizaciones de versión del framework.
+
+---
+
 ## 🚀 Guías Rápidas
 
 ### Migración BCrypt
