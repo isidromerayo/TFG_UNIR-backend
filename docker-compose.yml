@@ -12,6 +12,11 @@
 #   ./scripts/podman-pod.sh start
 #   ./scripts/podman-pod.sh stop
 
+# Custom network configuration for better isolation
+networks:
+  tfg-network:
+    driver: bridge
+
 services:
   maria_db:
     container_name: maria_db
@@ -23,6 +28,11 @@ services:
       - maria-db-data:/var/lib/mysql
       - ../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql
       - ../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-mypass}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-tfg_unir}
+      MYSQL_USER: ${MYSQL_USER:-user_tfg}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-tfg_un1r_PWD}
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s
@@ -30,6 +40,16 @@ services:
       retries: 5
       start_period: 30s
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    networks:
+      - tfg-network
 
   api_service:
     container_name: api_service
@@ -43,15 +63,25 @@ services:
         condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: "jdbc:mariadb://maria_db:3306/tfg_unir"
-      SPRING_DATASOURCE_USERNAME: "user_tfg"
-      SPRING_DATASOURCE_PASSWORD: "tfg_un1r_PWD"
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-user_tfg}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-tfg_un1r_PWD}
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/api || exit 1"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 60s
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    networks:
+      - tfg-network
 
 volumes:
   maria-db-data:

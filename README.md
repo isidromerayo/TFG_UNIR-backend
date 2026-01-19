@@ -222,6 +222,106 @@ mysqldump -u user_tfg -ptfg_un1r_PWD tfg_unir > recursos/db/dump.mariadb.sql
 
 > **Nota**: Este proyecto soporta tanto Docker como Podman. Todos los comandos `docker` pueden reemplazarse por `podman`. Ver la [sección de Podman](#-soporte-para-podman) para más detalles.
 
+#### 🔧 Uso con Podman Pod
+
+El script `scripts/podman-pod.sh` ha sido actualizado para soportar variables de entorno:
+
+```bash
+# Copiar archivo de entorno (si no existe)
+cp .env.example .env
+
+# Iniciar el backend con Podman Pod
+./scripts/podman-pod.sh start
+
+# Verificar estado
+./scripts/podman-pod.sh status
+
+# Ver logs del API
+./scripts/podman-pod.sh logs
+
+# Ver logs de la base de datos
+./scripts/podman-pod.sh logs db
+
+# Detener el backend
+./scripts/podman-pod.sh stop
+```
+
+El script cargará las variables de entorno desde el archivo `.env` y las pasará a los contenedores, con valores por defecto si no están definidas.
+
+#### � Mejoras de Configuración Docker
+
+Recientemente se han implementado las siguientes optimizaciones:
+
+1. **Dockerfile mejorado** - Uso de JRE en lugar de JDK, usuario no root, optimizaciones JVM
+2. **.dockerignore** - Excluye archivos innecesarios del contexto de build
+3. **Variables de entorno** - Soporte para configuración flexible
+4. **Limitaciones de recursos** - Control de CPU y memoria
+5. **Red personalizada** - Mejor aislamiento entre contenedores
+
+#### 🔧 Configuración Inicial
+
+1. **Copiar archivo de entorno**:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Editar configuración**:
+   Abre `.env` y personaliza las credenciales si es necesario. La configuración por defecto es:
+   ```
+   MARIADB_ROOT_PASSWORD=mypass
+   MYSQL_DATABASE=tfg_unir
+   MYSQL_USER=user_tfg
+   MYSQL_PASSWORD=tfg_un1r_PWD
+   ```
+
+#### 🚀 Levantar Servicios
+
+Antes de levantar los servicios, asegúrate de que tienes el JAR de la aplicación compilado (requiere Java 21):
+
+```bash
+# Compilar la aplicación (requiere Java 21)
+./mvnw clean package -DskipTests
+
+# Levantar servicios con docker compose
+docker compose up -d --build
+```
+
+#### 📊 Verificar Estado
+
+```bash
+# Ver containers en ejecución
+docker compose ps
+
+# Ver logs
+docker compose logs -f
+
+# Verificar healthchecks
+docker compose exec api_service wget -qO- http://localhost:8080/actuator/health
+```
+
+#### 🔍 Troubleshooting
+
+**Problema**: El contenedor de la API no se inicia.  
+**Solución**: Verifica que el archivo `target/backend.jar` existe y que las credenciales de la base de datos son correctas.
+
+**Problema**: La API no se conecta a la base de datos.  
+**Solución**: Verifica que el contenedor de MariaDB está saludable (`docker compose ps`).
+
+#### 📈 Optimización de Recursos
+
+El `docker-compose.yml` incluye limitaciones de recursos para prevenir que los contenedores consuman toda la memoria:
+
+```yaml
+deploy:
+  resources:
+    limits:
+      cpus: '1.0'
+      memory: 1G
+    reservations:
+      cpus: '0.5'
+      memory: 512M
+```
+
 #### 🗄️ Docker MariaDB
 
 ##### Usar imagen publicada

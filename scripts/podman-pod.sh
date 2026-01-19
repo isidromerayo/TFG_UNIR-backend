@@ -11,6 +11,11 @@ MARIA_DB_IMAGE="docker.io/isidromerayo/mariadb-tfg:0.1.0"
 API_SERVICE_IMAGE="docker.io/isidromerayo/spring-backend-tfg:0.4.0"
 VOLUME_NAME="tfg_unir-backend_data"
 
+# Cargar variables de entorno desde archivo .env
+if [ -f ".env" ]; then
+    export $(grep -v '^#' .env | xargs)
+fi
+
 # Colores para output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -60,6 +65,10 @@ function start_pod() {
         -v $VOLUME_NAME:/var/lib/mysql \
         -v $(pwd)/../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql \
         -v $(pwd)/../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql \
+        -e MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD:-mypass} \
+        -e MYSQL_DATABASE=${MYSQL_DATABASE:-tfg_unir} \
+        -e MYSQL_USER=${MYSQL_USER:-user_tfg} \
+        -e MYSQL_PASSWORD=${MYSQL_PASSWORD:-tfg_un1r_PWD} \
         $MARIA_DB_IMAGE
     
     # Esperar a que MariaDB esté listo
@@ -70,6 +79,9 @@ function start_pod() {
     print_info "Iniciando backend API..."
     podman run -d --pod $POD_NAME --name $API_SERVICE_CONTAINER \
         -e SPRING_DATASOURCE_URL=jdbc:mariadb://localhost:3306/tfg_unir \
+        -e SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME:-user_tfg} \
+        -e SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD:-tfg_un1r_PWD} \
+        -e JWT_SECRET=${JWT_SECRET:-813cef5f-3459-4618-87a6-a69e2a1296d4_mySecretKey_mySecretKey_CHANGE_IN_PRODUCTION} \
         $API_SERVICE_IMAGE
     
     print_info "Esperando a que el backend esté listo..."
