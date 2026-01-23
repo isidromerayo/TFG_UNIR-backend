@@ -13,8 +13,13 @@ Se ha completado la actualización del proyecto `TFG_UNIR-backend` de la versió
     - **`springdoc-openapi`**: Actualizado a **3.0.1**. Esta versión es necesaria para la compatibilidad con Spring Boot 4 y Jakarta EE 11.
     - **`rest-assured`**: Actualizado a **6.0.0**. Este cambio fue crítico para resolver una incompatibilidad (NullPointerException) con Groovy 5, que es la versión que incluye por defecto Spring Boot 4.
     - **`jjwt`**: Mantenido en **0.12.7** (versión estable y compatible).
-    - **Plugins**: Se han mantenido versiones estables de plugins como `maven-failsafe-plugin` (3.5.4) y `git-commit-id-maven-plugin` (9.0.2).
-    - **JaCoCo**: Se ha corregido el `groupId` a `org.jacoco` y se ha establecido la versión **0.8.12** para asegurar la compatibilidad y resolución correcta desde Maven Central.
+    - **Plugins**: Se han actualizado a las últimas versiones compatibles:
+    - **`jacoco-maven-plugin`**: Actualizado a **0.8.14** (con corrección de `groupId` a `org.jacoco`).
+    - **`spotbugs-maven-plugin`**: Actualizado a **4.9.8.2**.
+    - **`dependency-check-maven`**: Actualizado a **12.2.0**.
+    - **`sonar-maven-plugin`**: Actualizado a **3.11.0.3922**.
+    - **`maven-failsafe-plugin`**: Mantenido en **3.5.4**.
+    - **`git-commit-id-maven-plugin`**: Mantenido en **9.0.2**.
 
 ### 2. Resolución de Problemas (Bug Fixing)
 - **Incompatibilidad de RestAssured**: Se detectó que las pruebas de integración fallaban con un `NullPointerException` interno en RestAssured 5.5.0 al ejecutarse sobre Groovy 5. La actualización a **RestAssured 6.0.0** corrigió este problema de forma definitiva.

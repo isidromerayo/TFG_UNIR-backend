@@ -32,10 +32,10 @@
 		<!-- Plugins Versions -->
 		<maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
 		<git-commit-id-plugin.version>9.0.2</git-commit-id-plugin.version>
-		<sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
-		<dependency-check-maven.version>12.1.9</dependency-check-maven.version>
-		<spotbugs-maven-plugin.version>4.11.0</spotbugs-maven-plugin.version>
-		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+		<sonar-maven-plugin.version>3.11.0.3922</sonar-maven-plugin.version>
+		<dependency-check-maven.version>12.2.0</dependency-check-maven.version>
+		<spotbugs-maven-plugin.version>4.9.8.2</spotbugs-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
 
 		<!-- SonarQube Configuration -->
 		<sonar.projectKey>isidromerayo_TFG_UNIR-backend</sonar.projectKey>
@@ -310,7 +310,7 @@
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>4.9.8.0</version>
+				<version>${spotbugs-maven-plugin.version}</version>
 				<dependencies>
 					<!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
 					<dependency>
