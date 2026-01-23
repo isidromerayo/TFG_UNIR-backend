@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.1</version>
+		<version>4.0.2</version>
 		<relativePath />
 		<!-- lookup parent from repository -->
 	</parent>
@@ -35,7 +35,7 @@
 		<sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
 		<dependency-check-maven.version>12.1.9</dependency-check-maven.version>
 		<spotbugs-maven-plugin.version>4.11.0</spotbugs-maven-plugin.version>
-		<jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 
 		<!-- SonarQube Configuration -->
 		<sonar.projectKey>isidromerayo_TFG_UNIR-backend</sonar.projectKey>
@@ -174,7 +174,6 @@
 			<plugin>
 				<groupId>io.github.git-commit-id</groupId>
 				<artifactId>git-commit-id-maven-plugin</artifactId>
-				<version>${git-commit-id-plugin.version}</version>
 				<executions>
 					<execution>
 						<id>get-the-git-infos</id>
@@ -213,7 +212,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.14.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
@@ -348,7 +346,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>${maven-failsafe-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -359,12 +356,10 @@
 				<plugins>
 					<plugin>
 						<artifactId>maven-failsafe-plugin</artifactId>
-						<version>${maven-failsafe-plugin.version}</version>
 						<executions>
 							<execution>
 								<goals>
 									<goal>integration-test</goal>
-									<goal>verify</goal>
 								</goals>
 							</execution>
 						</executions>

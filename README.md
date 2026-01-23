@@ -20,8 +20,8 @@
 
 ### 📄 Licencia
 [![License](https://img.shields.io/github/license/isidromerayo/TFG_UNIR-backend?color=blue&style=flat-square)](LICENSE)
-[![Java](https://img.shields.io/badge/Java-21-007396?logo=java&logoColor=white)](https://www.oracle.com/java/technologies/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.9-6DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white)](https://www.oracle.com/java/technologies/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.2-6DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
 
 </div>
 
@@ -63,16 +63,16 @@ git branch -d feature/nombre-descriptivo
 
 ### 🛠️ Stack tecnológico
 
-- **Java 21**
-- **Spring Boot 3.5.9**
-- **Spring Framework 6.2.15**
-- **Hibernate 6.6.39**
+- **Java 17**
+- **Spring Boot 4.0.2**
+- **Spring Framework 7.0.3**
+- **Hibernate 7.2.1.Final**
 - **Spring Data JPA** - Persistencia
-- **Spring Security 6.5.7** - Autenticación y autorización
+- **Spring Security 7.0.2** - Autenticación y autorización
 - **MariaDB 3.5.7** - Base de datos producción
 - **H2** - Base de datos testing
 - **JWT** - Tokens de autenticación
-- **Swagger/OpenAPI 2.8.5** - Documentación API
+- **Swagger/OpenAPI 3.0.1** - Documentación API
 - **Lombok** - Reducción de boilerplate
 - **JaCoCo** - Cobertura de código
 - **SpotBugs** - Análisis estático
@@ -96,9 +96,9 @@ git branch -d feature/nombre-descriptivo
 ```
 
 **Cobertura actual**: 85% (objetivo: ≥80%)
-- Tests unitarios: 11 tests
-- Tests de integración: 4 tests
-- Total: 15 tests
+- Tests unitarios: 14 tests
+- Tests de integración: 8 tests
+- Total: 22 tests
 
 ### 📦 Perfiles de Maven
 
