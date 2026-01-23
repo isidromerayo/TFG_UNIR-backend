@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.9</version>
+		<version>4.0.1</version>
 		<relativePath />
 		<!-- lookup parent from repository -->
 	</parent>
@@ -16,7 +16,7 @@
 	<description>Backend para TFG en UNIR usando Spring Boot</description>
 	<properties>
 		<!-- Java and Build Properties -->
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,8 +25,9 @@
 		<!-- Dependencies Versions -->
 		<jjwt.version>0.12.7</jjwt.version>
 		<commons-lang3.version>3.20.0</commons-lang3.version>
-		<springdoc-openapi-starter-webmvc-ui.version>2.8.5</springdoc-openapi-starter-webmvc-ui.version>
-		<springdoc-openapi-starter-common.version>2.8.5</springdoc-openapi-starter-common.version>
+		<springdoc-openapi-starter-webmvc-ui.version>3.0.1</springdoc-openapi-starter-webmvc-ui.version>
+		<springdoc-openapi-starter-common.version>3.0.1</springdoc-openapi-starter-common.version>
+		<rest-assured.version>6.0.0</rest-assured.version>
 
 		<!-- Plugins Versions -->
 		<maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
@@ -157,6 +158,7 @@
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
+			<version>${rest-assured.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
