@@ -1,6 +1,6 @@
 # Índice de Documentación - TFG UNIR Backend
 
-**Última actualización**: 2025-12-08
+**Última actualización**: 2026-01-23
 
 ---
 
@@ -76,7 +76,7 @@ Documentación principal del proyecto con información general, stack tecnológi
 
 ### [COVERAGE_ANALYSIS.md](COVERAGE_ANALYSIS.md)
 **Análisis detallado de cobertura de código**
-- Resumen general: 85% de cobertura
+- Resumen general: 99% de cobertura
 - Cobertura por paquete
 - Áreas que requieren tests
 - Plan de mejora para alcanzar objetivos
@@ -154,6 +154,15 @@ Documentación principal del proyecto con información general, stack tecnológi
 
 **Cuándo usar**: Para planificar actualizaciones de versión del framework.
 
+### [RESUMEN_MIGRACION_v4.md](RESUMEN_MIGRACION_v4.md)
+**Documentación de la migración a Spring Boot 4.0.2**
+- Resumen de cambios en pom.xml
+- Resolución de conflictos (RestAssured, Groovy)
+- Resultados de tests y calidad
+- Estado final del stack tecnológico
+
+**Cuándo usar**: Para entender los detalles de la actualización a Spring Boot 4.
+
 ### [docs/SPRING_BOOT_3.5_MIGRATION.md](docs/SPRING_BOOT_3.5_MIGRATION.md)
 **Documentación de la migración a Spring Boot 3.5.9**
 - Cambios realizados en pom.xml
@@ -219,11 +228,11 @@ open target/site/jacoco-it/index.html   # Solo integración
 
 | Métrica | Valor | Objetivo | Estado |
 |---------|-------|----------|--------|
-| **Cobertura de código** | 85% | ≥ 80% | ✅ |
-| **Tests unitarios** | 11 | - | ✅ |
-| **Tests integración** | 4 | - | ✅ |
-| **Spring Boot** | 3.5.9 | Latest LTS | ✅ |
-| **Java** | 21 | Latest LTS | ✅ |
+| **Cobertura de código** | 99% | ≥ 80% | ✅ |
+| **Tests unitarios** | 14 | - | ✅ |
+| **Tests integración** | 8 | - | ✅ |
+| **Spring Boot** | 4.0.2 | Latest LTS | ✅ |
+| **Java** | 17 | Baseline | ✅ |
 | **Reliability Rating** | A | A | ✅ |
 | **Security Rating** | A | A | ✅ |
 | **Quality Gate** | Passed | Passed | ✅ |

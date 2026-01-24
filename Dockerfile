@@ -1,8 +1,8 @@
-FROM docker.io/eclipse-temurin:21-jre
+FROM docker.io/eclipse-temurin:17-jre
 
 # Set metadata labels
 LABEL org.opencontainers.image.title="TFG UNIR Backend"
-LABEL org.opencontainers.image.version="0.4.0"
+LABEL org.opencontainers.image.version="0.5.0-SNAPSHOT"
 LABEL org.opencontainers.image.description="Backend API for TFG UNIR"
 LABEL org.opencontainers.image.vendor="TFG UNIR"
 LABEL org.opencontainers.image.licenses="MIT"

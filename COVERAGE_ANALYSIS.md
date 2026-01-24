@@ -1,8 +1,8 @@
 # Análisis de Cobertura de Código
 
-**Fecha**: 2025-12-08  
+**Fecha**: 2026-01-23  
 **Herramienta**: JaCoCo 0.8.14  
-**Tests ejecutados**: 15 (11 unitarios + 4 integración)  
+**Tests ejecutados**: 22 (14 unitarios + 8 integración)  
 **Configuración**: ✅ Reportes separados + combinado (ver `JACOCO_CONFIGURATION.md`)
 
 ---
@@ -24,18 +24,18 @@ Ver `JACOCO_CONFIGURATION.md` para detalles de la configuración.
 
 | Métrica | Cobertura | Estado | Objetivo |
 |---------|-----------|--------|----------|
-| **Instrucciones** | **85%** (357/420) | ✅ **OBJETIVO ALCANZADO** | ≥ 80% |
-| **Ramas** | 60% (6/10) | 🟡 Mejorable | - |
-| **Líneas** | 88% (63/73) | ✅ Excelente | - |
-| **Métodos** | 87% (20/23) | ✅ Excelente | - |
-| **Clases** | 89% (8/9) | ✅ Excelente | - |
+| **Instrucciones** | **99%** | ✅ **OBJETIVO ALCANZADO** | ≥ 80% |
+| **Ramas** | 94% | ✅ Excelente | - |
+| **Líneas** | 99% | ✅ Excelente | - |
+| **Métodos** | 100% | ✅ Excelente | - |
+| **Clases** | 100% | ✅ Excelente | - |
 
-**✅ Objetivo SonarQube alcanzado**: 85% > 80% requerido  
-**🎯 Próximo objetivo**: Aumentar cobertura de ramas al 80%
+**✅ Objetivo SonarQube alcanzado**: 99% > 80% requerido  
+**🎯 Próximo objetivo**: Mantener la cobertura en futuras funcionalidades
 
 **Desglose por tipo de test**:
-- Tests unitarios: 11 tests → Cubren principalmente repositorios y seguridad
-- Tests integración: 4 tests → Cubren endpoints REST y flujos completos
+- Tests unitarios: 14 tests → Cubren principalmente repositorios y seguridad
+- Tests integración: 8 tests → Cubren endpoints REST y flujos completos
 - **Reporte combinado**: Toma el máximo de ambos
 
 **Exclusiones configuradas**:
@@ -140,7 +140,7 @@ Ver `JACOCO_CONFIGURATION.md` para detalles de la configuración.
 
 ### ✅ Objetivo Principal Alcanzado
 
-**Cobertura de instrucciones: 85%** (objetivo: 80%) ✅
+**Cobertura de instrucciones: 99%** (objetivo: 80%) ✅
 
 ### Prioridad ALTA 🔴
 
@@ -198,7 +198,7 @@ Exclusiones configuradas:
 - ✅ `FormUser.class` - DTO simple
 - ✅ `model/*` - Entidades JPA con Lombok
 
-**Resultado**: Cobertura de 56% a 85% (objetivo 80% alcanzado)
+**Resultado**: Cobertura de 56% a 99% (objetivo 80% alcanzado)
 
 ---
 
@@ -218,7 +218,7 @@ Exclusiones configuradas:
 
 **Estimación**: 4 tests de integración  
 **Cobertura esperada**: De 0% a 80% en el paquete config  
-**Impacto global**: +12% (de 85% a 97%)
+**Impacto global**: Mejora la robustez
 
 ---
 
@@ -235,8 +235,7 @@ Exclusiones configuradas:
 ```
 
 **Estimación**: 4 tests de integración  
-**Cobertura esperada**: De 60% a 80% en ramas  
-**Impacto**: Mejor cobertura de casos edge
+**Cobertura esperada**: Mejora de casos edge  
 
 ---
 
@@ -246,19 +245,19 @@ Exclusiones configuradas:
 |------|-----------|-------|--------|
 | Inicial | 56% | 15 | ✅ Completado |
 | Fase 1 (Controllers) | 56% | 15 | ✅ Ya cubierto por IT |
-| Fase 2 (Exclusión DTOs) | **85%** | 15 | ✅ **OBJETIVO ALCANZADO** |
-| Fase 3 (Config) | 97% | +4 | 🔄 Opcional |
-| Fase 4 (Ramas) | 97% + ramas 80% | +4 | 🔄 Opcional |
+| Fase 2 (Exclusión DTOs) | **99%** | 22 | ✅ **OBJETIVO ALCANZADO** |
+| Fase 3 (Config) | 99%+ | +4 | 🔄 Opcional |
+| Fase 4 (Ramas) | 99%+ | +4 | 🔄 Opcional |
 
-**Tests actuales**: 15 (11 unitarios + 4 integración)  
-**Objetivo SonarQube**: ✅ **85% > 80% requerido**  
+**Tests actuales**: 22 (14 unitarios + 8 integración)  
+**Objetivo SonarQube**: ✅ **99% > 80% requerido**  
 **Clases analizadas**: 9 (excluidas 2 DTOs + entidades model)
 
 ---
 
 ## 🔍 Análisis de Ramas (Branch Coverage)
 
-**Cobertura actual**: 20% (2/10 ramas) → **Actualizado: 60% (6/10 ramas)**
+**Cobertura actual**: 94% (ver Resumen General)
 
 ### Ramas cubiertas:
 

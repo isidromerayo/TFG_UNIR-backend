@@ -95,7 +95,7 @@ git branch -d feature/nombre-descriptivo
 # Reporte en: target/site/jacoco/index.html
 ```
 
-**Cobertura actual**: 85% (objetivo: ≥80%)
+**Cobertura actual**: 99% (objetivo: ≥80%)
 - Tests unitarios: 14 tests
 - Tests de integración: 8 tests
 - Total: 22 tests
@@ -166,7 +166,7 @@ open target/site/jacoco-it/index.html   # Solo tests de integración
 ### 🔐 Autenticación
 
 El backend utiliza JWT (JSON Web Tokens) para la autenticación.
-- Librería: `jjwt` v0.13.0
+- Librería: `jjwt` v0.12.7
 - Configuración de seguridad con Spring Security
 
 #### 👥 Usuarios de Prueba
@@ -182,7 +182,7 @@ La base de datos incluye usuarios de prueba precargados. Ejemplos:
 
 > 📋 **Lista completa de usuarios**: Ver el [README del monorepo](https://github.com/isidromerayo/TFG_UNIR-monorepo#-usuarios-de-prueba) para la lista completa de usuarios activos y pendientes.
 
-Es necesaria una versión de Java 21, para utilizar Spring Boot 3.4.x
+Es necesaria una versión de Java 17, para utilizar Spring Boot 4.0.2
 
 ```
 cd backend
@@ -276,10 +276,10 @@ Recientemente se han implementado las siguientes optimizaciones:
 
 #### 🚀 Levantar Servicios
 
-Antes de levantar los servicios, asegúrate de que tienes el JAR de la aplicación compilado (requiere Java 21):
+Antes de levantar los servicios, asegúrate de que tienes el JAR de la aplicación compilado (requiere Java 17):
 
 ```bash
-# Compilar la aplicación (requiere Java 21)
+# Compilar la aplicación (requiere Java 17)
 ./mvnw clean package -DskipTests
 
 # Levantar servicios con docker compose

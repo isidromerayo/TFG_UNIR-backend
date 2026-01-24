@@ -93,7 +93,7 @@ git commit -m "test: add integration tests for authentication flow"
 
 ## Cobertura de Código
 
-El proyecto mantiene una cobertura de código del **85%** (objetivo: ≥80%).
+El proyecto mantiene una cobertura de código del **99%** (objetivo: ≥80%).
 
 ### Generar reportes de cobertura
 
@@ -279,4 +279,4 @@ git push origin :refs/tags/v0.3.1
 
 ---
 
-**Última actualización:** 2025-12-09
+**Última actualización:** 2026-01-23

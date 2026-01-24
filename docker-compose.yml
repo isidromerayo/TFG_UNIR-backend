@@ -54,7 +54,7 @@ services:
   api_service:
     container_name: api_service
     hostname: api_service
-    image: "isidromerayo/spring-backend-tfg:0.4.0"
+    image: "isidromerayo/spring-backend-tfg:0.5.0-SNAPSHOT"
     build: .
     ports:
       - "8080:8080"

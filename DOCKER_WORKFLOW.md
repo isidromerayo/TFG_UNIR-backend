@@ -21,10 +21,10 @@ java -jar target/backend.jar
 
 ```bash
 # 1. Compilar el proyecto
-bash -c 'eval "$(vfox activate bash)" && vfox use -g java@21 && ./mvnw clean package -DskipTests'
+bash -c 'eval "$(vfox activate bash)" && vfox use -g java@17 && ./mvnw clean package -DskipTests'
 
 # 2. Construir la imagen con la nueva versión
-VERSION="0.2.2"  # Actualizar según corresponda
+VERSION="0.5.0-SNAPSHOT"  # Actualizar según corresponda
 podman build -t isidromerayo/spring-backend-tfg:${VERSION} .
 
 # 3. Crear tag latest (opcional, solo para versiones estables)
@@ -38,7 +38,7 @@ podman tag isidromerayo/spring-backend-tfg:${VERSION} isidromerayo/spring-backen
 ./mvnw clean package -DskipTests
 
 # 2. Construir la imagen
-VERSION="0.2.2"
+VERSION="0.5.0-SNAPSHOT"
 docker build -t isidromerayo/spring-backend-tfg:${VERSION} .
 
 # 3. Crear tag latest
@@ -103,7 +103,7 @@ podman login docker.io
 # Password: [Personal Access Token]
 
 # 2. Push de la versión específica
-VERSION="0.2.2"
+VERSION="0.5.0-SNAPSHOT"
 podman push isidromerayo/spring-backend-tfg:${VERSION}
 
 # 3. Push del tag latest (solo para versiones estables)
@@ -122,7 +122,7 @@ docker login
 # Password: [Personal Access Token]
 
 # 2. Push de la versión específica
-VERSION="0.2.2"
+VERSION="0.5.0-SNAPSHOT"
 docker push isidromerayo/spring-backend-tfg:${VERSION}
 
 # 3. Push del tag latest

@@ -14,8 +14,8 @@ Las siguientes versiones del proyecto reciben actualizaciones de seguridad:
 
 | Versión | Soportada          | Notas |
 | ------- | ------------------ | ----- |
-| 0.2.x   | :white_check_mark: | Versión actual en desarrollo |
-| < 0.2   | :x:                | Versiones legacy sin soporte |
+| 0.5.x   | :white_check_mark: | Versión actual en desarrollo |
+| < 0.5   | :x:                | Versiones legacy sin soporte |
 
 ## 🔒 Reportar una Vulnerabilidad
 
@@ -84,16 +84,16 @@ Este proyecto implementa múltiples capas de seguridad:
 
 ### Stack de Seguridad
 
-- **Framework**: Spring Boot 3.4.12 con Spring Security
-- **Autenticación**: JWT (JSON Web Tokens) v0.13.0
-- **Java**: OpenJDK 21 (LTS)
+- **Framework**: Spring Boot 4.0.2 con Spring Security 7.0.2
+- **Autenticación**: JWT (JSON Web Tokens) v0.12.7
+- **Java**: OpenJDK 17 (JRE)
 - **Base de datos**: MariaDB con credenciales configurables
 
 ### Análisis Automatizado
 
-- **Análisis estático**: SpotBugs 4.9.8 con plugins de seguridad (find-sec-bugs, fb-contrib)
-- **Análisis de calidad**: SonarCloud con Quality Gate (85% cobertura)
-- **Análisis de dependencias**: OWASP Dependency Check 12.1.8
+- **Análisis estático**: SpotBugs 4.9.8.2 con plugins de seguridad (find-sec-bugs, fb-contrib)
+- **Análisis de calidad**: SonarCloud con Quality Gate (99% cobertura)
+- **Análisis de dependencias**: OWASP Dependency Check 12.2.0
 - **CI/CD**: GitHub Actions con análisis automático en cada PR
 
 ### Áreas de Seguridad Críticas
