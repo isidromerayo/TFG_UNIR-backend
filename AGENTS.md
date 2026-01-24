@@ -173,6 +173,27 @@ Ejecuta la release:
 ./mvnw release:perform -DskipTests -Darguments="-DskipTests"
 ```
 
+#### 3. Imagen Docker/Podman
+
+Tras completar la release con Maven, se debe construir y publicar la imagen del contenedor asociada a la nueva versión:
+
+```bash
+# 1. Checkout del tag de release recién creado
+git checkout v0.5.1
+
+# 2. Construir la imagen (asegurarse de que el .jar en target/ es el correcto)
+podman build -f Dockerfile \
+  -t isidromerayo/spring-backend-tfg:0.5.1 \
+  -t isidromerayo/spring-backend-tfg:latest .
+
+# 3. Publicar a Docker Hub
+podman push isidromerayo/spring-backend-tfg:0.5.1
+podman push isidromerayo/spring-backend-tfg:latest
+
+# 4. Volver a la rama de desarrollo
+git checkout feature/nombre-de-la-rama
+```
+
 ### Ejemplo Completo
 
 ```bash
@@ -186,7 +207,13 @@ git status
 # 3. Ejecutar la release
 ./mvnw release:perform -DskipTests -Darguments="-DskipTests"
 
-# 4. Verificar el artefacto desplegado
+# 4. Construir y publicar imagen Docker
+git checkout v0.5.1
+podman build -t isidromerayo/spring-backend-tfg:0.5.1 .
+podman push isidromerayo/spring-backend-tfg:0.5.1
+git checkout feature/upgrade-spring-boot-4
+
+# 5. Verificar el artefacto desplegado
 ls -lh ~/.m2/repository-local/eu/estilolibre/tfgunir/backend/0.3.1/
 
 # 5. Verificar tags en GitHub
@@ -279,4 +306,4 @@ git push origin :refs/tags/v0.3.1
 
 ---
 
-**Última actualización:** 2026-01-23
+**Última actualización:** 2026-01-24
