@@ -10,8 +10,8 @@
             --bg-gradient-start: #667eea;
             --bg-gradient-end: #764ba2;
             --container-bg: white;
-            --text-primary: #333;
-            --text-secondary: #666;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4b5563;
             --heading-color: #667eea;
             --heading-secondary: #764ba2;
             --section-bg: #f8f9fa;
@@ -26,22 +26,22 @@
         }
         
         [data-theme="dark"] {
-            --bg-gradient-start: #1a1a2e;
-            --bg-gradient-end: #16213e;
-            --container-bg: #1e2a3a;
-            --text-primary: #f0f0f0;
-            --text-secondary: #c5c5c5;
-            --heading-color: #8fa9ff;
-            --heading-secondary: #a98fff;
-            --section-bg: #2a3a4a;
-            --item-bg: #1e2a3a;
-            --border-color: #3d4f63;
-            --button-bg: #5865f2;
-            --button-hover: #8fa9ff;
-            --error-bg: #4a2020;
-            --error-border: #ff7b7b;
-            --error-text: #ffb3b3;
-            --shadow: rgba(0,0,0,0.6);
+            --bg-gradient-start: #0f172a;
+            --bg-gradient-end: #1e293b;
+            --container-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --heading-color: #818cf8;
+            --heading-secondary: #a78bfa;
+            --section-bg: #334155;
+            --item-bg: #1e293b;
+            --border-color: #475569;
+            --button-bg: #6366f1;
+            --button-hover: #818cf8;
+            --error-bg: #452726;
+            --error-border: #f87171;
+            --error-text: #fecaca;
+            --shadow: rgba(0,0,0,0.8);
         }
         
         * {
@@ -56,8 +56,8 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            align-items: flex-start;
+            padding: 40px 20px;
             transition: background 0.3s ease;
         }
         
@@ -235,9 +235,22 @@
             border-width: 0;
         }
         
-        /* Mejora de contraste para modo claro */
-        :root .info-value {
-            color: #1a1a1a;
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+            }
         }
         
         /* Skip to main content link */
@@ -260,7 +273,7 @@
 </head>
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
-    <div class="container" role="main" id="main-content"></div>
+    <div class="container" role="main" id="main-content">
         <button 
             class="theme-toggle" 
             onclick="toggleTheme()" 
@@ -399,7 +412,7 @@
                     
                     grid.appendChild(createInfoItem('Nombre', data.app.name));
                     grid.appendChild(createInfoItem('Versión', data.app.version));
-                    grid.appendChild(createInfoItem('Java', data.app['java.version']));
+                    grid.appendChild(createInfoItem('Java', data.app.java?.version));
                     
                     appInfo.appendChild(grid);
                     

@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Versiones
 MARIADB_VERSION="0.1.0"
-BACKEND_VERSION="0.4.0"
+BACKEND_VERSION="0.5.0-SNAPSHOT"
 DOCKER_USER="isidromerayo"
 
 print_step() {
