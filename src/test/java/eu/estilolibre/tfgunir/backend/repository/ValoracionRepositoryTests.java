@@ -12,8 +12,8 @@ import eu.estilolibre.tfgunir.backend.model.Valoracion;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -81,9 +81,9 @@ class ValoracionRepositoryTests {
     }
 
     @Test
-    void buscarUltimasOpiniones() throws ParseException {
+    void buscarUltimasOpiniones() {
         // Datos iniciales ya tienen una valoración con fecha '2023-05-02'
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         Usuario usuario = usuarioRepository.findById(2L).orElse(null);
         Curso curso = cursoRepository.findById(2L).orElse(null);
 
@@ -93,7 +93,7 @@ class ValoracionRepositoryTests {
         valoracionMedia.setCurso(cursoRepository.findById(4L).orElse(null));
         valoracionMedia.setPuntuacion(4);
         valoracionMedia.setComentario("comentario de prueba de 02-05-2023");
-        valoracionMedia.setFecha(sdf.parse("2023-05-02 10:00:00"));
+        valoracionMedia.setFecha(LocalDateTime.parse("2023-05-02 10:00:00", formatter));
         repository.save(valoracionMedia);
 
         Valoracion valoracionReciente1 = new Valoracion();
@@ -101,7 +101,7 @@ class ValoracionRepositoryTests {
         valoracionReciente1.setCurso(curso);
         valoracionReciente1.setPuntuacion(4);
         valoracionReciente1.setComentario("Más reciente");
-        valoracionReciente1.setFecha(sdf.parse("2024-10-20 12:00:00"));
+        valoracionReciente1.setFecha(LocalDateTime.parse("2024-10-20 12:00:00", formatter));
         repository.save(valoracionReciente1);
 
         Valoracion valoracionReciente2 = new Valoracion();
@@ -109,7 +109,7 @@ class ValoracionRepositoryTests {
         valoracionReciente2.setCurso(curso);
         valoracionReciente2.setPuntuacion(5);
         valoracionReciente2.setComentario("La más reciente de todas");
-        valoracionReciente2.setFecha(sdf.parse("2024-10-25 14:00:00"));
+        valoracionReciente2.setFecha(LocalDateTime.parse("2024-10-25 14:00:00", formatter));
         repository.save(valoracionReciente2);
 
         Valoracion valoracionAntigua = new Valoracion();
@@ -117,7 +117,7 @@ class ValoracionRepositoryTests {
         valoracionAntigua.setCurso(curso);
         valoracionAntigua.setPuntuacion(3);
         valoracionAntigua.setComentario("Antigua");
-        valoracionAntigua.setFecha(sdf.parse("2022-01-01 08:00:00"));
+        valoracionAntigua.setFecha(LocalDateTime.parse("2022-01-01 08:00:00", formatter));
         repository.save(valoracionAntigua);
 
         List<Valoracion> result = repository.findFirst3ByOrderByFechaDescIdDesc();

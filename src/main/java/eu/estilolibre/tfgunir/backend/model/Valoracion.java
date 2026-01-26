@@ -1,6 +1,6 @@
 package eu.estilolibre.tfgunir.backend.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,8 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.Data;
 
 @Data
@@ -32,13 +30,12 @@ public class Valoracion {
     private int puntuacion;
     @Column(columnDefinition = "TEXT")
     private String comentario;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fecha;
+    private LocalDateTime fecha;
 
     @PrePersist
     protected void onCreate() {
         if (fecha == null) {
-            fecha = new Date();
+            fecha = LocalDateTime.now();
         }
     }
 

@@ -1,7 +1,7 @@
 package eu.estilolibre.tfgunir.backend.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,8 +10,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -47,11 +45,9 @@ public class Curso {
     private BigDecimal precio;
     private String etiquetas;
     @Column(name="fecha_creacion")
-    @Temporal(TemporalType.DATE)
-    private Date fechaCreacion;
+    private LocalDate fechaCreacion;
     @Column(name="fecha_actualizacion")
-    @Temporal(TemporalType.DATE)
-    private Date fechaActualizacion;
+    private LocalDate fechaActualizacion;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private Categoria categoria;
@@ -72,11 +68,11 @@ public class Curso {
 
     @PrePersist
     protected void onCreate() {
-        fechaActualizacion = fechaCreacion = new Date();
+        fechaActualizacion = fechaCreacion = LocalDate.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        fechaActualizacion = new Date();
+        fechaActualizacion = LocalDate.now();
     }
 }
