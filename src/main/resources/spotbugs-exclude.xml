@@ -6,4 +6,16 @@
         <Class name="~.*\.model\..*"/>
         <Bug pattern="USBR_UNNECESSARY_STORE_BEFORE_RETURN"/>
     </Match>
+
+    <!-- Ignorar clases generadas por Spring (CGLIB proxies, BeanFactoryRegistrations, etc.) -->
+    <Match>
+        <Class name="~.*\$\$SpringCGLIB\$\$.*"/>
+    </Match>
+    <Match>
+        <Class name="~.*BeanFactoryRegistrations.*"/>
+    </Match>
+    <!-- Ignorar clases AOT/BeanDefinitions generadas por Spring para repositorios y configuración -->
+    <Match>
+        <Class name="~.*__.*"/>
+    </Match>
 </FindBugsFilter>
