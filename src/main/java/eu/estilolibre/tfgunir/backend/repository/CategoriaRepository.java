@@ -18,7 +18,6 @@ public interface CategoriaRepository
         extends PagingAndSortingRepository<Categoria, Long>, CrudRepository<Categoria, Long> {
 
     // idea de optimización
-    @SuppressWarnings("null")
     @Cacheable("categorias")
     List<Categoria> findAll();
 
