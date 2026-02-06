@@ -1,8 +1,8 @@
-# Migración a Spring Boot 3.5.9
+# Migración a Spring Boot 3.5.10
 
-**Fecha:** 2026-01-17  
+**Fecha:** 2026-02-06  
 **Versión Origen:** Spring Boot 3.4.12  
-**Versión Destino:** Spring Boot 3.5.9  
+**Versión Destino:** Spring Boot 3.5.10  
 **Estado:** 🚧 En Progreso  
 **Issue:** [#81](https://github.com/isidromerayo/TFG_UNIR-backend/issues/81)
 
@@ -10,7 +10,7 @@
 
 ## 📊 Resumen Ejecutivo
 
-Este documento registra el proceso de migración del proyecto de Spring Boot 3.4.12 a Spring Boot 3.5.9, incluyendo los cambios realizados, problemas encontrados y soluciones aplicadas.
+Este documento registra el proceso de migración del proyecto de Spring Boot 3.4.12 a Spring Boot 3.5.10, incluyendo los cambios realizados, problemas encontrados y soluciones aplicadas.
 
 ## ✅ Cambios Realizados
 
@@ -30,7 +30,7 @@ Este documento registra el proceso de migración del proyecto de Spring Boot 3.4
 <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.9</version>
+    <version>3.5.10</version>
     <relativePath />
 </parent>
 ```
@@ -50,9 +50,9 @@ Este documento registra el proceso de migración del proyecto de Spring Boot 3.4
 
 Ejecutado `./mvnw dependency:tree` para verificar las versiones resueltas:
 
-- ✅ **Spring Boot:** 3.5.9
+- ✅ **Spring Boot:** 3.5.10
 - ✅ **Spring Framework:** 6.2.15
-- ✅ **Hibernate:** 6.6.39.Final
+- ✅ **Hibernate:** 6.6.41.Final
 - ✅ **MariaDB Driver:** 3.5.7 (gestionado por Spring Boot)
 - ✅ **SpringDoc OpenAPI:** 2.8.5
 - ✅ **JJWT:** 0.12.7
@@ -67,9 +67,9 @@ Ejecutado `./mvnw dependency:tree` para verificar las versiones resueltas:
 - ✅ Compatibilidad verificada
 
 **Resultados:**
-- Spring Boot: 3.5.9 ✅
+- Spring Boot: 3.5.10 ✅
 - Spring Framework: 6.2.15 ✅
-- Hibernate: 6.6.39.Final ✅
+- Hibernate: 6.6.41.Final ✅
 - MariaDB Driver: 3.5.7 ✅
 - SpringDoc OpenAPI: 2.8.5 ✅
 
