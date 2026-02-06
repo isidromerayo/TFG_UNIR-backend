@@ -1,4 +1,6 @@
-FROM docker.io/eclipse-temurin:21-jre
+# Multi-stage Dockerfile for TFG UNIR Backend
+# Stage 1: Build the application
+FROM docker.io/eclipse-temurin:21-jdk AS builder
 
 # Set metadata labels
 LABEL org.opencontainers.image.title="TFG UNIR Backend"
@@ -7,8 +9,27 @@ LABEL org.opencontainers.image.description="Backend API for TFG UNIR"
 LABEL org.opencontainers.image.vendor="TFG UNIR"
 LABEL org.opencontainers.image.licenses="MIT"
 
+# Set working directory
+WORKDIR /app
+
+# Copy pom.xml and dependencies
+COPY pom.xml .
+COPY mvnw .
+COPY .mvn .mvn
+
+# Download dependencies (cache layer)
+RUN ./mvnw dependency:go-offline -B
+
+# Copy source code
+COPY src src
+
+# Build the application
+RUN ./mvnw clean package -DskipTests -Dmaven.javadoc.skip=true
+
+# Stage 2: Create production image
+FROM docker.io/eclipse-temurin:21-jre
+
 # Build arguments
-ARG JAR_FILE=target/backend.jar
 ARG USER=appuser
 ARG UID=1001
 ARG GID=1001
@@ -20,8 +41,8 @@ RUN groupadd -g $GID $USER && \
 # Set working directory
 WORKDIR /app
 
-# Copy application jar
-COPY $JAR_FILE app.jar
+# Copy jar file from builder stage
+COPY --from=builder /app/target/backend.jar app.jar
 
 # Set ownership
 RUN chown -R $USER:$USER /app
