@@ -11,19 +11,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      uses: docker/setup-buildx-action@f04f2d6504ef517627406a48626f8d38406566d8 # v3.10.0
     
     - name: Login to Docker Hub
-      uses: docker/login-action@v3
+      uses: docker/login-action@465a07204fc3d7515a8626be4480674d32f05786 # v3.3.0
       with:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
     
     - name: Build and push backend image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@e016fdb6509f7a755694c39cb015291b5c924a18 # v6.13.0
       with:
         context: .
         file: ./Dockerfile
@@ -33,7 +33,7 @@ jobs:
         cache-to: type=gha,mode=max
     
     - name: Deploy to Render
-      uses: johnbeynon/render-deploy-action@v0.0.8
+      uses: johnbeynon/render-deploy-action@747373c9f7d242416b71bf64c9794d216d7a1267 # v0.0.8
       with:
         service-id: ${{ secrets.RENDER_SERVICE_ID }}
         api-key: ${{ secrets.RENDER_API_KEY }}
