@@ -1,5 +1,23 @@
 # Changelog - Imágenes Docker
 
+## [0.4.2] - Backend - 2026-02-06
+
+### 🚀 Despliegue Automático y Multi-stage Build
+
+#### Added
+- **Multi-stage Dockerfile**: El build de Maven ahora ocurre totalmente dentro del contenedor Docker.
+- **Render.com Integration**: Soporte para despliegue automático desde GitHub.
+
+#### Changed
+- **Dockerfile**: Migración a multi-stage (Maven 3.9.9 + Temurin 21). No requiere JAR pre-construido.
+- **.dockerignore**: Optimizado para incluir el código fuente en el contexto de construcción de Docker.
+- **Workflow**: El despliegue ahora es "push-to-deploy" directo.
+
+#### Technical
+- Base build image: `maven:3.9.9-eclipse-temurin-21`
+- Base runtime image: `eclipse-temurin:21-jre`
+- Reducción de errores en entornos CI/CD al desacoplar la construcción del host local.
+
 ## [0.4.0] - Backend - 2026-01-17
 
 ### 🚀 Actualización Major (Framework)

@@ -1,9 +1,7 @@
 target/
-!target/backend.jar
-
+!.mvn/
 .git
 .gitignore
-.mvn
 *.md
 *.log
 .idea
@@ -12,9 +10,5 @@ target/
 .project
 .classpath
 *.iml
-src/
-pom.xml
-mvnw
-mvnw.cmd
 
 .dockerignore

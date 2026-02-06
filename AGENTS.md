@@ -209,25 +209,34 @@ El proyecto sigue [Semantic Versioning 2.0.0](https://semver.org/):
 
 ### Construcción de Imágenes Docker
 
-Después de la release, construir y publicar imágenes Docker:
+El proyecto utiliza un **Dockerfile multi-stage**, lo que significa que la imagen se construye directamente desde el código fuente sin necesidad de compilar el JAR previamente en tu máquina local.
 
+#### 1. Construcción Local (para pruebas)
 ```bash
-# 1. Checkout del tag de release
-git checkout v0.3.1
+# Construir la imagen (se encargará de ejecutar Maven internamente)
+docker build -t isidromerayo/spring-backend-tfg:latest .
 
-# 2. Construir imagen con Podman/Docker
-podman build -f Dockerfile \
-  -t isidromerayo/spring-backend-tfg:0.3.1 \
-  -t isidromerayo/spring-backend-tfg:latest .
-
-# 3. Publicar a Docker Hub (requiere login)
-podman login docker.io
-podman push isidromerayo/spring-backend-tfg:0.3.1
-podman push isidromerayo/spring-backend-tfg:latest
-
-# 4. Volver a la rama de desarrollo
-git checkout fix/snyk-timing-attack-password
+# Ejecutar el contenedor
+docker run -d -p 8080:8080 \
+  -e SPRING_DATASOURCE_URL=jdbc:postgresql://host:port/db \
+  -e SPRING_DATASOURCE_USERNAME=user \
+  -e SPRING_DATASOURCE_PASSWORD=pass \
+  isidromerayo/spring-backend-tfg:latest
 ```
+
+#### 2. Despliegue Automático (Render.com)
+El despliegue está automatizado mediante **GitHub Actions** o la integración directa de **Render**. Al hacer push a la rama de despliegue, Render detectará el `Dockerfile` y realizará el build completo.
+
+#### 3. Publicación Manual (si fuera necesario)
+```bash
+# Versión específica
+docker build -t isidromerayo/spring-backend-tfg:0.4.2 .
+docker push isidromerayo/spring-backend-tfg:0.4.2
+```
+
+---
+
+**Nota:** Ya no se requiere el uso de `podman` obligatoriamente, aunque sigue siendo compatible. El flujo recomendado es el uso del `Dockerfile` multi-stage.
 
 ### Configuración del Plugin
 
@@ -279,4 +288,4 @@ git push origin :refs/tags/v0.3.1
 
 ---
 
-**Última actualización:** 2026-02-06
+**Última actualización:** 2026-02-06 (Implementación de Multi-stage Build y automatización en Render)

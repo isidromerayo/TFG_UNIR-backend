@@ -276,11 +276,11 @@ Recientemente se han implementado las siguientes optimizaciones:
 
 #### 🚀 Levantar Servicios
 
-Antes de levantar los servicios, asegúrate de que tienes el JAR de la aplicación compilado (requiere Java 21):
+Gracias al uso de **multi-stage builds**, no necesitas compilar el proyecto localmente. Docker se encargará de todo:
 
 ```bash
-# Compilar la aplicación (requiere Java 21)
-./mvnw clean package -DskipTests
+# Copiar archivo de entorno (si no existe)
+cp .env.example .env
 
 # Levantar servicios con docker compose
 docker compose up -d --build
@@ -302,7 +302,7 @@ docker compose exec api_service wget -qO- http://localhost:8080/actuator/health
 #### 🔍 Troubleshooting
 
 **Problema**: El contenedor de la API no se inicia.  
-**Solución**: Verifica que el archivo `target/backend.jar` existe y que las credenciales de la base de datos son correctas.
+**Solución**: Verifica los logs con `docker compose logs api_service`. El build multi-stage asegura que el JAR esté presente, pero puede haber errores de compilación si el código tiene fallos.
 
 **Problema**: La API no se conecta a la base de datos.  
 **Solución**: Verifica que el contenedor de MariaDB está saludable (`docker compose ps`).
@@ -443,13 +443,11 @@ http://localhost:8080/swagger-ui.html
 
 #### Docker Spring Boot 
 
-Construir imagen de aplicación con el jar generado del backend (con el `spring.datasource.url=jdbc:mariadb://app_db:3306/tfg_unir` en el application.properties) hay que ejecutar un maven para generar
+Construir imagen de aplicación (el build de Maven ocurre dentro de Docker):
 
-
-```
+```bash
 cd backend
-./mvnw clean install
-docker build -t isidromerayo/spring-backend-tfg:VERSION-X.Y.Z .
+docker build -t isidromerayo/spring-backend-tfg:VERSION .
 ```
 
 https://spring.io/guides/topicals/spring-boot-docker/
@@ -516,15 +514,13 @@ Para detener las instancias de los contenedores `docker compose stop`.
 
 Esta sección documenta el proceso completo para publicar imágenes del backend en Docker Hub.
 
-##### Flujo completo con Docker
-
 **1. Construir la imagen**
 
-Primero, asegúrate de tener el JAR actualizado:
+La imagen se construye directamente desde el código fuente (multi-stage):
 
 ```bash
 cd backend
-./mvnw clean install
+docker build -t isidromerayo/spring-backend-tfg:1.0.0 .
 ```
 
 **2. Crear la imagen Docker**

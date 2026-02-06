@@ -47,7 +47,7 @@ Render.com es una plataforma de hosting cloud que ofrece servicios gratuitos par
    - Nombre del servicio: `tfg-unir-backend`
    - Región: EU (Frankfurt)
    - Plan: Free
-   - Branch: main
+   - Branch: feature/render-deployment
    - Root Directory: `TFG_UNIR-backend`
    - Runtime: Docker
    - Dockerfile Path: `./Dockerfile`
