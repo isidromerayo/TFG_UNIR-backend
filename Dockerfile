@@ -9,26 +9,6 @@ LABEL org.opencontainers.image.description="Backend API for TFG UNIR"
 LABEL org.opencontainers.image.vendor="TFG UNIR"
 LABEL org.opencontainers.image.licenses="MIT"
 
-# Set working directory
-WORKDIR /app
-
-# Copy pom.xml and dependencies
-COPY pom.xml .
-COPY mvnw .
-COPY .mvn .mvn
-
-# Download dependencies (cache layer)
-RUN ./mvnw dependency:go-offline -B
-
-# Copy source code
-COPY src src
-
-# Build the application
-RUN ./mvnw clean package -DskipTests -Dmaven.javadoc.skip=true
-
-# Stage 2: Create production image
-FROM docker.io/eclipse-temurin:21-jre
-
 # Build arguments
 ARG USER=appuser
 ARG UID=1001
@@ -40,15 +20,6 @@ RUN groupadd -g $GID $USER && \
 
 # Set working directory
 WORKDIR /app
-
-# Copy jar file from builder stage
-COPY --from=builder /app/target/backend.jar app.jar
-
-# Set ownership
-RUN chown -R $USER:$USER /app
-
-# Switch to non-root user
-USER $USER
 
 # JVM optimization flags for production
 ENV JAVA_OPTS="-Xmx512m -Xms256m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+UseContainerSupport -XX:InitialRAMPercentage=50 -XX:MaxRAMPercentage=75"
