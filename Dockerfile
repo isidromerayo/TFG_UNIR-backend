@@ -2,7 +2,7 @@ FROM docker.io/eclipse-temurin:21-jre
 
 # Set metadata labels
 LABEL org.opencontainers.image.title="TFG UNIR Backend"
-LABEL org.opencontainers.image.version="0.4.0"
+LABEL org.opencontainers.image.version="0.4.2"
 LABEL org.opencontainers.image.description="Backend API for TFG UNIR"
 LABEL org.opencontainers.image.vendor="TFG UNIR"
 LABEL org.opencontainers.image.licenses="MIT"
@@ -29,8 +29,11 @@ RUN chown -R $USER:$USER /app
 # Switch to non-root user
 USER $USER
 
-# JVM optimization flags
-ENV JAVA_OPTS="-Xmx512m -Xms256m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+# JVM optimization flags for production
+ENV JAVA_OPTS="-Xmx512m -Xms256m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+UseContainerSupport -XX:InitialRAMPercentage=50 -XX:MaxRAMPercentage=75"
+
+# Production profile
+ENV SPRING_PROFILES_ACTIVE=prod
 
 # Expose application port
 EXPOSE 8080
