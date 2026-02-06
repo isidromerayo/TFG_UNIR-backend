@@ -123,12 +123,14 @@ Documentación principal del proyecto con información general, stack tecnológi
 - Configuración de secretos
 - Integración con SonarQube
 
-### [docs/GITHUB_ACTIONS_SETUP.md](docs/GITHUB_ACTIONS_SETUP.md)
-**Configuración de Secretos para CI/CD**
-- Guía detallada para configurar Docker Hub y Render en GitHub
-- Lista de secretos requeridos
+### [docs/RENDER_DEPLOYMENT_GUIDE.md](docs/RENDER_DEPLOYMENT_GUIDE.md)
+**Guía completa de despliegue en Render.com**
+- Configuración de PostgreSQL e Internal URLs
+- Uso de Environment Groups
+- Troubleshooting de SSL, Puertos y Variables
+- Automatización con GitHub Actions
 
-**Cuándo usar**: Antes de habilitar el flujo de despliegue automatizado.
+**Cuándo usar**: Para realizar o arreglar el despliegue en producción.
 
 ---
 

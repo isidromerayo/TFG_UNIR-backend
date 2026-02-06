@@ -225,7 +225,7 @@ docker run -d -p 8080:8080 \
 ```
 
 #### 2. Despliegue Automático (Render.com)
-El despliegue está automatizado mediante **GitHub Actions** o la integración directa de **Render**. Al hacer push a la rama de despliegue, Render detectará el `Dockerfile` y realizará el build completo.
+El despliegue está automatizado mediante **GitHub Actions** o la integración directa de **Render**. Para más detalles técnicos y soluciones a errores comunes, consulta la **[Guía de Despliegue en Render](docs/RENDER_DEPLOYMENT_GUIDE.md)**. Al hacer push a la rama de despliegue, Render detectará el `Dockerfile` y realizará el build completo de forma automática.
 
 #### 3. Publicación Manual (si fuera necesario)
 ```bash
@@ -285,6 +285,7 @@ git push origin :refs/tags/v0.3.1
 - **[SONARQUBE_POM_CONFIG.md](SONARQUBE_POM_CONFIG.md)** - Configuración de SonarQube
 - **[SECURITY.md](SECURITY.md)** - Política de seguridad
 - **[docs/GITHUB_ACTIONS_SETUP.md](docs/GITHUB_ACTIONS_SETUP.md)** - Configuración de CI/CD (GitHub Secrets)
+- **[docs/RENDER_DEPLOYMENT_GUIDE.md](docs/RENDER_DEPLOYMENT_GUIDE.md)** - Guía completa de despliegue en Render
 - **[CHANGELOG_IMAGES.md](CHANGELOG_IMAGES.md)** - Historial de versiones de imágenes Docker
 
 ---
