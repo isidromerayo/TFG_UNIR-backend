@@ -51,6 +51,7 @@ Render.com es una plataforma de hosting cloud que ofrece servicios gratuitos par
    - Root Directory: `TFG_UNIR-backend`
    - Runtime: Docker
    - Dockerfile Path: `./Dockerfile`
+   - **Nota**: El Dockerfile es multi-stage, por lo que no requiere un JAR preconstruido. Render.com compilará la aplicación automáticamente.
 
 3. **Variables de Entorno**:
    - Añade las siguientes variables de entorno:
