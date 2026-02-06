@@ -225,7 +225,7 @@ docker run -d -p 8080:8080 \
 ```
 
 #### 2. Despliegue Automático (Render.com)
-El despliegue está automatizado mediante **GitHub Actions** o la integración directa de **Render**. Para más detalles técnicos y soluciones a errores comunes, consulta la **[Guía de Despliegue en Render](docs/RENDER_DEPLOYMENT_GUIDE.md)**. Al hacer push a la rama de despliegue, Render detectará el `Dockerfile` y realizará el build completo de forma automática.
+El despliegue está automatizado mediante **GitHub Actions** o la integración directa de **Render**. Para más detalles técnicos y soluciones a errores comunes, consulta la **[Guía de Despliegue en Render](docs/RENDER_DEPLOYMENT_GUIDE.md)**. Al hacer push a la rama configurada (ej: `feature/render-deployment`), Render detectará el `Dockerfile` y realizará el build completo de forma automática.
 
 #### 3. Publicación Manual (si fuera necesario)
 ```bash

@@ -2,9 +2,9 @@ name: Render Deploy
 
 on:
   push:
-    branches: [ main, feature/render-deployment ]
+    branches: [ feature/render-deployment ]
   pull_request:
-    branches: [ main ]
+    branches: [ feature/render-deployment ]
   workflow_dispatch:
 
 jobs:
