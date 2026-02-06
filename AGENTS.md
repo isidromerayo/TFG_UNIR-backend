@@ -284,6 +284,7 @@ git push origin :refs/tags/v0.3.1
 - **[COVERAGE_ANALYSIS.md](COVERAGE_ANALYSIS.md)** - Análisis de cobertura detallado
 - **[SONARQUBE_POM_CONFIG.md](SONARQUBE_POM_CONFIG.md)** - Configuración de SonarQube
 - **[SECURITY.md](SECURITY.md)** - Política de seguridad
+- **[docs/GITHUB_ACTIONS_SETUP.md](docs/GITHUB_ACTIONS_SETUP.md)** - Configuración de CI/CD (GitHub Secrets)
 - **[CHANGELOG_IMAGES.md](CHANGELOG_IMAGES.md)** - Historial de versiones de imágenes Docker
 
 ---

@@ -123,7 +123,12 @@ Documentación principal del proyecto con información general, stack tecnológi
 - Configuración de secretos
 - Integración con SonarQube
 
-**Cuándo usar**: Al configurar o modificar workflows de GitHub Actions.
+### [docs/GITHUB_ACTIONS_SETUP.md](docs/GITHUB_ACTIONS_SETUP.md)
+**Configuración de Secretos para CI/CD**
+- Guía detallada para configurar Docker Hub y Render en GitHub
+- Lista de secretos requeridos
+
+**Cuándo usar**: Antes de habilitar el flujo de despliegue automatizado.
 
 ---
 
