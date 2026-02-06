@@ -12,11 +12,11 @@ Esta fue la versión utilizada anteriormente en el proyecto (`3.4.12`).
 *   **Fin de Soporte Open Source (OSS):** ~Noviembre 2025.
     *   Las versiones menores de Spring Boot (ej. 3.4.x) típicamente tienen un soporte de código abierto de aproximadamente 12 meses.
     *   A fecha de Enero 2026, esta versión ha superado su periodo estándar de soporte gratuito.
-*   **Estado en el Proyecto:** ✅ Migrado a Spring Boot 3.5.9 (Enero 2026).
+*   **Estado en el Proyecto:** ✅ Migrado a Spring Boot 3.5.10 (Febrero 2026).
 
 ### Spring Boot 3.5 (Versión Actual) ✅
 
-Esta es la versión actualmente utilizada en el proyecto (`3.5.9`).
+Esta es la versión actualmente utilizada en el proyecto (`3.5.10`).
 
 *   **Fecha de Lanzamiento:** 22 de Mayo de 2025.
 *   **Fin de Soporte Open Source (OSS):** 30 de Junio de 2026.
@@ -26,7 +26,7 @@ Esta es la versión actualmente utilizada en el proyecto (`3.5.9`).
     *   ✅ Recuperar el soporte activo de la comunidad y actualizaciones de seguridad gratuitas.
     *   ✅ Alineación con Spring Framework 6.2.15.
     *   ✅ Estabilidad a largo plazo (LTS) si se opta por soporte comercial.
-    *   ✅ Hibernate 6.6.39 con validaciones más estrictas.
+    *   ✅ Hibernate 6.6.41 con validaciones más estrictas.
     *   ✅ Detección automática de dialecto de BD (sin necesidad de configuración explícita).
 
 ## Resumen de Fechas Clave
@@ -36,12 +36,12 @@ Esta es la versión actualmente utilizada en el proyecto (`3.5.9`).
 | **3.4** | Nov 2024 | ~Nov 2025 | TBD | ❌ Fuera de soporte |
 | **3.5** | Mayo 2025 | Junio 2026 | Junio 2032 | ✅ Actual |
 
-## Cambios en la Migración a 3.5.9
+## Cambios en la Migración a 3.5.10
 
 ### Dependencias Actualizadas
-- Spring Boot: 3.4.12 → **3.5.9** ✅
+- Spring Boot: 3.4.12 → **3.5.10** ✅
 - Spring Framework: 6.1.x → **6.2.15** ✅
-- Hibernate: 6.5.x → **6.6.39** ✅
+- Hibernate: 6.5.x → **6.6.41** ✅
 - Spring Security: 6.4.x → **6.5.7** ✅
 - SpringDoc OpenAPI: 2.5.0 → **2.8.5** ✅
 - MariaDB Driver: 3.5.6 → **3.5.7** ✅
@@ -59,7 +59,7 @@ Esta es la versión actualmente utilizada en el proyecto (`3.5.9`).
 
 ## Recomendación
 
-El proyecto ha sido **exitosamente migrado a Spring Boot 3.5.9** (Enero 2026), asegurando:
+El proyecto ha sido **exitosamente migrado a Spring Boot 3.5.10** (Febrero 2026), asegurando:
 - ✅ Recepción de parches de seguridad hasta Junio 2026 (OSS)
 - ✅ Soporte extendido hasta Junio 2032 (comercial)
 - ✅ Compatibilidad con el ecosistema Spring actual

@@ -1,6 +1,6 @@
 # Índice de Documentación - TFG UNIR Backend
 
-**Última actualización**: 2025-12-08
+**Última actualización**: 2026-02-06
 
 ---
 
@@ -222,7 +222,7 @@ open target/site/jacoco-it/index.html   # Solo integración
 | **Cobertura de código** | 85% | ≥ 80% | ✅ |
 | **Tests unitarios** | 11 | - | ✅ |
 | **Tests integración** | 4 | - | ✅ |
-| **Spring Boot** | 3.5.9 | Latest LTS | ✅ |
+| **Spring Boot** | 3.5.10 | Latest LTS | ✅ |
 | **Java** | 21 | Latest LTS | ✅ |
 | **Reliability Rating** | A | A | ✅ |
 | **Security Rating** | A | A | ✅ |
