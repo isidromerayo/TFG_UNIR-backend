@@ -2,149 +2,96 @@
 
 ## 🚀 Guía Completa para Desplegar el Backend TFG_UNIR en Render.com
 
-Render.com es una plataforma de hosting cloud que ofrece servicios gratuitos para aplicaciones web y bases de datos. Es ideal para proyectos de TFG porque:
+Render.com es la plataforma elegida para este proyecto debido a su facilidad de uso con Docker y su excelente capa gratuita para PostgreSQL.
 
-- Ofrece **bases de datos MariaDB gratuitas** (512MB RAM, 1GB almacenamiento)
-- Soporta **Docker containers** para fácil deploy
-- Proporciona **certificados SSL gratuitos**
-- Integración con GitHub para **CI/CD automático**
-- Sin coste para proyectos pequeños
-
-## 📋 Prerequisitos
+### 📋 Prerrequisitos
 
 1. **Cuenta en Render.com** (https://render.com)
 2. **Cuenta en Docker Hub** (https://hub.docker.com)
-3. **Repositorio GitHub** del proyecto (https://github.com/isidromerayo/TFG_UNIR-backend)
-4. **Variables de entorno**: JWT_SECRET (generar con `openssl rand -base64 64`)
+3. **Repositorio GitHub** del proyecto
+4. **JWT_SECRET**: Genera una cadena aleatoria fuerte (ej: `openssl rand -base64 64`)
 
-## 🐬 Paso 1: Desplegar la Base de Datos MariaDB
+---
 
-1. **Crear una base de datos en Render.com**:
-   - Inicia sesión en Render.com
-   - Haz clic en "New" → "PostgreSQL" (Nota: Render.com no ofrece MariaDB directo, pero PostgreSQL es compatible con la mayoría de las aplicaciones. Si necesitas MariaDB, usa la opción "Private Service" con Docker)
-   - Configura:
-     - Nombre de la base de datos: `tfg_unir`
-     - Región: EU (Frankfurt) - Recomendado para España
-     - Plan: Free
-   - Haz clic en "Create Database"
+## � Paso 1: Configurar la Base de Datos PostgreSQL
 
-2. **Obtener credenciales de la base de datos**:
-   - Después de crear la base de datos, obtén la URL de conexión, usuario y contraseña
-   - La URL tendrá el formato: `jdbc:postgresql://<host>:5432/<dbname>`
+Aunque el proyecto usa MariaDB en local, **en Render usamos PostgreSQL** por su mejor soporte en la capa gratuita.
 
-3. **Importar datos iniciales**:
-   - Conecta a la base de datos usando herramientas como DBeaver o pgAdmin
-   - Ejecuta el script `../recursos/db/dump.mariadb.sql` (Nota: Puedes necesitar convertir el script de MariaDB a PostgreSQL)
+1. **Crear la Base de Datos**:
+   - Inicia sesión en Render y ve a **New** → **PostgreSQL**.
+   - Nombre: `tfg-unir-db`.
+   - Región: `Frankfurt (EU)` (recomendado para baja latencia en España).
+   - Plan: `Free`.
+2. **Obtener la "Internal Database URL"**:
+   - Una vez creada, copia el valor de **Internal Database URL**. 
+   - ⚠️ **IMPORTANTE**: No uses la External URL para el backend, la Internal es más rápida y segura.
 
-## 🚀 Paso 2: Desplegar la Aplicación Spring Boot
+---
 
-1. **Conectar el repositorio GitHub**:
-   - En Render.com, haz clic en "New" → "Web Service"
-   - Selecciona "GitHub" y conecta tu repositorio
-   - Elige la rama `main`
+## � Paso 2: Crear un Environment Group (Recomendado)
 
-2. **Configurar el servicio**:
-   - Nombre del servicio: `tfg-unir-backend`
-   - Región: EU (Frankfurt)
-   - Plan: Free
-   - Branch: feature/render-deployment
-   - Root Directory: `TFG_UNIR-backend`
-   - Runtime: Docker
-   - Dockerfile Path: `./Dockerfile`
-   - **Nota**: El Dockerfile es multi-stage, por lo que no requiere un JAR preconstruido. Render.com compilará la aplicación automáticamente.
+Para gestionar mejor las credenciales y reutilizarlas en otros servicios:
 
-3. **Variables de Entorno**:
-   - Añade las siguientes variables de entorno:
-     - `SPRING_DATASOURCE_URL`: URL de conexión a la base de datos PostgreSQL
-     - `SPRING_DATASOURCE_USERNAME`: Usuario de la base de datos
-     - `SPRING_DATASOURCE_PASSWORD`: Contraseña de la base de datos
-     - `JWT_SECRET`: Clave secreta para JWT (genera una con `openssl rand -base64 64`)
-     - `SPRING_PROFILES_ACTIVE`: `prod`
+1. Ve a **Dashboard** → **Environment Groups** → **New Environment Group**.
+2. Nombre: `common`.
+3. Añade las siguientes variables:
+   - `SPRING_DATASOURCE_URL`: (Pega la **Internal Database URL** de PostgreSQL)
+   - `SPRING_PROFILES_ACTIVE`: `prod`
+   - `JWT_SECRET`: (Tu clave generada)
+   - `SPRING_DATASOURCE_USERNAME`: (El usuario que te dio Render)
+   - `SPRING_DATASOURCE_PASSWORD`: (La contraseña que te dio Render)
 
-4. **Deploy**:
-   - Haz clic en "Create Web Service"
-   - Render.com compilará y deployará la aplicación automáticamente
+---
 
-## 🔄 Paso 3: Configurar CI/CD Automático
+## 🚀 Paso 3: Desplegar el Web Service (Backend)
 
-1. **Añadir secrets en GitHub**:
-   - En tu repositorio GitHub, ve a "Settings" → "Secrets and variables" → "Actions"
-   - Añade las siguientes secrets:
-     - `DOCKER_HUB_USERNAME`: Tu username de Docker Hub
-     - `DOCKER_HUB_TOKEN`: Token de acceso a Docker Hub (genera uno en https://hub.docker.com/settings/security)
-     - `RENDER_SERVICE_ID`: ID del servicio web en Render.com (obténlo de la URL del servicio)
-     - `RENDER_API_KEY`: API Key de Render.com (obténlo en https://dashboard.render.com/account#api-keys)
+1. En el Dashboard de Render: **New** → **Web Service** → **Build and deploy from a Git repository**.
+2. Conecta tu repositorio de GitHub.
+3. **Configuración Inicial**:
+   - **Name**: `tfg-unir-backend`.
+   - **Runtime**: `Docker`.
+   - **Branch**: `feature/render-deployment` (o la que uses para producción).
+   - **Root Directory**: `TFG_UNIR-backend`.
+4. **Vincular Variables**:
+   - Ve a la pestaña **Environment**.
+   - En **Linked Environment Groups**, selecciona `common` y dale a **Link**.
 
-2. **Workflow de GitHub Actions**:
-   - El archivo `.github/workflows/render-deploy.yml` está configurado para:
-     - Build de la imagen Docker en cada push a main
-     - Push de la imagen a Docker Hub
-     - Deploy automático en Render.com
+---
 
-## ✅ Paso 4: Probar la API Desplegada
+## 🔄 Paso 4: Automatización con GitHub Actions (CI/CD)
 
-1. **Verificar el healthcheck**:
-   - Abre la URL: `https://<tu-servicio>.onrender.com/actuator/health`
-   - Deberías obtener una respuesta como: `{"status":"UP"}`
+El archivo `.github/workflows/render-deploy.yml` gestiona el despliegue automático.
 
-2. **Prueba de login**:
-   - Usa curl o Postman para probar el endpoint de login:
-   ```bash
-   curl -X POST -H "Content-Type: application/json" -d '{"email":"c@example.com","password":"1234"}' https://<tu-servicio>.onrender.com/api/login
-   ```
+1. **GitHub Secrets**: En tu repo de GitHub (**Settings** → **Secrets** → **Actions**), añade:
+   - `DOCKER_HUB_USERNAME`
+   - `DOCKER_HUB_TOKEN`
+   - `RENDER_API_KEY` (En Render: Account Settings → API Keys)
+   - `RENDER_SERVICE_ID` (Se encuentra en la URL de tu servicio en Render: `srv-xxxxxxxx`)
 
-3. **Acceder a Swagger UI**:
-   - Abre la URL: `https://<tu-servicio>.onrender.com/swagger-ui.html`
+2. **Seguridad**: Las acciones están fijadas por **commit SHA** para cumplir con estándares de seguridad (Codacy).
 
-## 🔍 Troubleshooting
+---
 
-### Problemas Comunes
+## 🔍 Troubleshooting (Solución de problemas)
 
-1. **La aplicación no se conecta a la base de datos**:
-   - Verifica las variables de entorno `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` y `SPRING_DATASOURCE_PASSWORD`
-   - Asegúrate de que la base de datos esté en funcionamiento
-   - Comprueba que la URL de conexión sea correcta (para PostgreSQL es `jdbc:postgresql://`)
+### 1. Error: `'url' must start with "jdbc"` o `UnknownHostException: notset`
+- **Causa**: El servicio no está leyendo las variables de entorno.
+- **Solución**: Asegúrate de haber vinculado el **Environment Group** `common` al servicio web.
 
-2. **El healthcheck falla**:
-   - Verifica que la aplicación esté escuchando en el puerto 8080
-   - Asegúrate de que el endpoint `/actuator/health` esté expuesto
+### 2. Error SSL: `Could not open SSL root certificate file /root/.postgresql/root.crt`
+- **Solución**: El código ya está configurado para usar `NonValidatingFactory`. No necesitas subir certificados manualmente.
 
-3. **El login no funciona**:
-   - Verifica la variable `JWT_SECRET`
-   - Asegúrate de que el usuario exista en la base de datos
-   - Comprueba los logs de la aplicación en Render.com
+### 3. Error: `NumberFormatException` al arrancar
+- **Causa**: Comentarios en la misma línea que un valor numérico en los archivos `.properties`.
+- **Solución**: Mantén los comentarios en líneas separadas.
 
-### Visualización de Logs
+### 4. Error: `No open ports detected`
+- **Solución**: La aplicación usa automáticamente `${PORT}` proporcionado por Render. No fuerces el puerto 8080 en la configuración del Dashboard de Render.
 
-En Render.com, ve a tu servicio web → "Logs" para ver los logs de la aplicación.
+---
 
-## 📊 Monitoreo
+## ✅ Verificación final
 
-Render.com ofrece herramientas de monitoreo básicas:
-
-- **Logs**: Registros de la aplicación
-- **Metrics**: Uso de CPU, memoria y red
-- **Alerts**: Notificaciones por email para errores
-- **Healthchecks**: Verificación automática del estado
-
-## 🔒 Seguridad
-
-### Mejoras de Seguridad para Producción
-
-1. **Variables de Entorno**: No hardcodear credenciales
-2. **HTTPS**: Render.com proporciona SSL gratuitamente
-3. **CORS**: Configurar correctamente el acceso CORS
-4. **Firewall**: Restringir el acceso a la base de datos
-5. **Actualizaciones**: Mantener las dependencias al día
-
-## 📈 Escalabilidad
-
-Si necesitas más recursos:
-
-1. **Cambiar de plan**: Render.com ofrece planes pagos con más RAM y CPU
-2. **Base de datos**: Puedes escalar la base de datos a un plan más grande
-3. **Balanceo de Carga**: Render.com soporta balanceo de carga para servicios web
-
-## 🤝 Contribuciones
-
-Si encuentras problemas o mejoras para esta guía, por favor abre un Issue o Pull Request en el repositorio.
+Una vez desplegado, el estado en Render debe aparecer como **Live** ✅.
+Puedes probar el estado de salud en:
+`https://tu-servicio.onrender.com/actuator/health`
