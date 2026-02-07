@@ -21,7 +21,7 @@ services:
   postgres_db:
     container_name: postgres_db
     hostname: postgres_db
-    image: "postgres:latest"
+    image: "isidromerayo/postgres-tfg:1.0"
     ports:
       - "5432:5432"
     volumes:
@@ -54,7 +54,7 @@ services:
   api_service:
     container_name: api_service
     hostname: api_service
-    image: "isidromerayo/spring-backend-tfg:0.4.0"
+    image: "isidromerayo/spring-backend-tfg:0.5.0"
     build: .
     ports:
       - "8080:8080"
