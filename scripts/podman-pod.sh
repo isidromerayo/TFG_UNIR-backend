@@ -5,11 +5,11 @@
 set -e
 
 POD_NAME="backend-pod"
-MARIA_DB_CONTAINER="maria_db"
+POSTGRES_DB_CONTAINER="postgres_db"
 API_SERVICE_CONTAINER="api_service"
-MARIA_DB_IMAGE="docker.io/isidromerayo/mariadb-tfg:0.1.0"
+POSTGRES_DB_IMAGE="docker.io/postgres:latest"
 API_SERVICE_IMAGE="docker.io/isidromerayo/spring-backend-tfg:0.4.0"
-VOLUME_NAME="tfg_unir-backend_data"
+VOLUME_NAME="tfg_unir-backend_pg_data"
 
 # Cargar variables de entorno desde archivo .env
 if [ -f ".env" ]; then
@@ -35,11 +35,9 @@ function print_error() {
 }
 
 function check_sql_files() {
-    if [ ! -f "../recursos/db/create.mariadb.sql" ] || [ ! -f "../recursos/db/dump.mariadb.sql" ]; then
-        print_error "Los archivos SQL no existen en ../recursos/db/"
-        print_error "Asegúrate de que existen:"
-        print_error "  - ../recursos/db/create.mariadb.sql"
-        print_error "  - ../recursos/db/dump.mariadb.sql"
+    if [ ! -f "../recursos/db/postgresql/01-create.sql" ] || [ ! -f "../recursos/db/postgresql/02-create.sql" ] || [ ! -f "../recursos/db/postgresql/03-create.sql" ]; then
+        print_error "Los archivos SQL no existen en ../recursos/db/postgresql/"
+        print_error "Asegúrate de que existen los scripts 01, 02 y 03."
         exit 1
     fi
 }
@@ -57,28 +55,28 @@ function start_pod() {
     
     # Crear el pod
     print_info "Creando pod $POD_NAME..."
-    podman pod create --name $POD_NAME -p 8080:8080 -p 3306:3306
+    podman pod create --name $POD_NAME -p 8080:8080 -p 5432:5432
     
-    # Ejecutar MariaDB
-    print_info "Iniciando MariaDB..."
-    podman run -d --pod $POD_NAME --name $MARIA_DB_CONTAINER \
-        -v $VOLUME_NAME:/var/lib/mysql \
-        -v $(pwd)/../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql \
-        -v $(pwd)/../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql \
-        -e MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD:-mypass} \
-        -e MYSQL_DATABASE=${MYSQL_DATABASE:-tfg_unir} \
-        -e MYSQL_USER=${MYSQL_USER:-user_tfg} \
-        -e MYSQL_PASSWORD=${MYSQL_PASSWORD:-tfg_un1r_PWD} \
-        $MARIA_DB_IMAGE
+    # Ejecutar PostgreSQL
+    print_info "Iniciando PostgreSQL..."
+    podman run -d --pod $POD_NAME --name $POSTGRES_DB_CONTAINER \
+        -v $VOLUME_NAME:/var/lib/postgresql \
+        -v $(pwd)/../recursos/db/postgresql/01-create.sql:/docker-entrypoint-initdb.d/01-create.sql \
+        -v $(pwd)/../recursos/db/postgresql/02-create.sql:/docker-entrypoint-initdb.d/02-create.sql \
+        -v $(pwd)/../recursos/db/postgresql/03-create.sql:/docker-entrypoint-initdb.d/03-create.sql \
+        -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-mypass} \
+        -e POSTGRES_DB=${POSTGRES_DB:-tfg_unir} \
+        -e POSTGRES_USER=${POSTGRES_USER:-user_tfg} \
+        $POSTGRES_DB_IMAGE
     
-    # Esperar a que MariaDB esté listo
-    print_info "Esperando a que MariaDB esté listo..."
+    # Esperar a que PostgreSQL esté listo
+    print_info "Esperando a que PostgreSQL esté listo..."
     sleep 10
     
     # Ejecutar el backend
     print_info "Iniciando backend API..."
     podman run -d --pod $POD_NAME --name $API_SERVICE_CONTAINER \
-        -e SPRING_DATASOURCE_URL=jdbc:mariadb://localhost:3306/tfg_unir \
+        -e SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/tfg_unir \
         -e SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME:-user_tfg} \
         -e SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD:-tfg_un1r_PWD} \
         -e JWT_SECRET=${JWT_SECRET:-813cef5f-3459-4618-87a6-a69e2a1296d4_mySecretKey_mySecretKey_CHANGE_IN_PRODUCTION} \

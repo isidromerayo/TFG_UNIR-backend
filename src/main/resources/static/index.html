@@ -1,55 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Backend para TFG en UNIR usando Spring Boot con BCrypt - Información del proyecto y estado del sistema">
+    <meta name="description"
+        content="Backend para TFG en UNIR usando Spring Boot con BCrypt - Información del proyecto y estado del sistema">
     <title>TFG UNIR Backend - Información del Proyecto</title>
     <style>
         :root {
-            --bg-gradient-start: #667eea;
-            --bg-gradient-end: #764ba2;
-            --container-bg: white;
-            --text-primary: #333;
-            --text-secondary: #666;
-            --heading-color: #667eea;
-            --heading-secondary: #764ba2;
-            --section-bg: #f8f9fa;
-            --item-bg: white;
-            --border-color: #ddd;
-            --button-bg: #667eea;
-            --button-hover: #764ba2;
-            --error-bg: #fee;
-            --error-border: #f44;
-            --error-text: #c33;
-            --shadow: rgba(0,0,0,0.3);
+            --bg-gradient-start: #4c51bf;
+            /* Indigo más oscuro */
+            --bg-gradient-end: #6b46c1;
+            /* Púrpura más oscuro */
+            --container-bg: #ffffff;
+            --text-primary: #1a202c;
+            /* Gris casi negro */
+            --text-secondary: #4a5568;
+            /* Gris oscuro */
+            --heading-color: #2d3748;
+            /* Azul grisáceo muy oscuro */
+            --heading-secondary: #44337a;
+            /* Púrpura oscuro */
+            --section-bg: #edf2f7;
+            --item-bg: #ffffff;
+            --border-color: #cbd5e0;
+            --button-bg: #4c51bf;
+            --button-hover: #434190;
+            --error-bg: #fff5f5;
+            --error-border: #c53030;
+            --error-text: #9b2c2c;
+            --shadow: rgba(0, 0, 0, 0.2);
         }
-        
+
         [data-theme="dark"] {
-            --bg-gradient-start: #1a1a2e;
-            --bg-gradient-end: #16213e;
-            --container-bg: #1e2a3a;
-            --text-primary: #f0f0f0;
-            --text-secondary: #c5c5c5;
-            --heading-color: #8fa9ff;
-            --heading-secondary: #a98fff;
-            --section-bg: #2a3a4a;
-            --item-bg: #1e2a3a;
-            --border-color: #3d4f63;
-            --button-bg: #5865f2;
-            --button-hover: #8fa9ff;
-            --error-bg: #4a2020;
-            --error-border: #ff7b7b;
-            --error-text: #ffb3b3;
-            --shadow: rgba(0,0,0,0.6);
+            --bg-gradient-start: #1a202c;
+            --bg-gradient-end: #171923;
+            --container-bg: #2d3748;
+            --text-primary: #edf2f7;
+            --text-secondary: #cbd5e0;
+            --heading-color: #ebf4ff;
+            --heading-secondary: #e9d8fd;
+            --section-bg: #1a202c;
+            --item-bg: #2d3748;
+            --border-color: #718096;
+            --button-bg: #4c51bf;
+            --button-hover: #434190;
+            --error-bg: #742a2a;
+            --error-border: #feb2b2;
+            --error-text: #fff5f5;
+            --shadow: rgba(0, 0, 0, 0.5);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
@@ -60,7 +68,7 @@
             padding: 20px;
             transition: background 0.3s ease;
         }
-        
+
         .container {
             background: var(--container-bg);
             border-radius: 20px;
@@ -71,7 +79,7 @@
             position: relative;
             transition: background 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .theme-toggle {
             position: absolute;
             top: 20px;
@@ -88,9 +96,9 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-        
+
         .theme-toggle:hover,
         .theme-toggle:focus {
             background: var(--button-hover);
@@ -98,34 +106,34 @@
             outline: 2px solid var(--heading-color);
             outline-offset: 2px;
         }
-        
+
         .theme-toggle:focus {
             outline: 3px solid var(--heading-color);
         }
-        
+
         .link-button:focus {
             outline: 3px solid var(--heading-color);
             outline-offset: 2px;
         }
-        
+
         header {
             margin-bottom: 30px;
         }
-        
+
         h1 {
             color: var(--heading-color);
             margin-bottom: 10px;
             font-size: 2.5em;
             transition: color 0.3s ease;
         }
-        
+
         .subtitle {
             color: var(--text-secondary);
             margin-bottom: 30px;
             font-size: 1.1em;
             transition: color 0.3s ease;
         }
-        
+
         .info-section {
             background: var(--section-bg);
             border-radius: 10px;
@@ -133,7 +141,7 @@
             margin-bottom: 20px;
             transition: background 0.3s ease;
         }
-        
+
         .info-section h2 {
             color: var(--heading-secondary);
             margin-bottom: 15px;
@@ -142,13 +150,13 @@
             padding-bottom: 10px;
             transition: color 0.3s ease, border-color 0.3s ease;
         }
-        
+
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
         }
-        
+
         .info-item {
             background: var(--item-bg);
             padding: 15px;
@@ -156,7 +164,7 @@
             border-left: 4px solid var(--heading-color);
             transition: background 0.3s ease, border-color 0.3s ease;
         }
-        
+
         .info-label {
             font-weight: bold;
             color: var(--heading-secondary);
@@ -164,7 +172,7 @@
             margin-bottom: 5px;
             transition: color 0.3s ease;
         }
-        
+
         .info-value {
             color: var(--text-primary);
             word-break: break-all;
@@ -172,14 +180,14 @@
             font-size: 0.95em;
             transition: color 0.3s ease;
         }
-        
+
         .loading {
             text-align: center;
             color: var(--text-secondary);
             padding: 20px;
             transition: color 0.3s ease;
         }
-        
+
         .error {
             background: var(--error-bg);
             border-left: 4px solid var(--error-border);
@@ -188,14 +196,14 @@
             color: var(--error-text);
             transition: all 0.3s ease;
         }
-        
+
         .links {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
             margin-top: 20px;
         }
-        
+
         .link-button {
             background: var(--button-bg);
             color: white;
@@ -205,13 +213,13 @@
             transition: all 0.3s;
             font-weight: 500;
         }
-        
+
         .link-button:hover {
             background: var(--button-hover);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-        
+
         footer {
             text-align: center;
             margin-top: 30px;
@@ -221,7 +229,7 @@
             font-size: 0.9em;
             transition: all 0.3s ease;
         }
-        
+
         /* Clase para elementos solo visibles para lectores de pantalla */
         .sr-only {
             position: absolute;
@@ -234,12 +242,12 @@
             white-space: nowrap;
             border-width: 0;
         }
-        
-        /* Mejora de contraste para modo claro */
-        :root .info-value {
-            color: #1a1a1a;
+
+        /* Mejora de contraste */
+        .info-value {
+            color: var(--text-primary);
         }
-        
+
         /* Skip to main content link */
         .skip-link {
             position: absolute;
@@ -252,38 +260,36 @@
             border-radius: 0 0 4px 0;
             z-index: 100;
         }
-        
+
         .skip-link:focus {
             top: 0;
         }
     </style>
 </head>
+
 <body>
     <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
-    <div class="container" role="main" id="main-content"></div>
-        <button 
-            class="theme-toggle" 
-            onclick="toggleTheme()" 
-            aria-label="Cambiar entre modo claro y oscuro"
+    <div class="container" role="main" id="main-content">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Cambiar entre modo claro y oscuro"
             title="Cambiar tema">
             <span aria-hidden="true">🌓</span>
         </button>
-        
+
         <header>
             <h1>🎓 TFG UNIR Backend</h1>
             <p class="subtitle">Backend para TFG en UNIR usando Spring Boot con BCrypt</p>
         </header>
-        
+
         <section class="info-section" aria-labelledby="project-info-heading">
             <h2 id="project-info-heading">📦 Información del Proyecto</h2>
             <div id="app-info" class="loading" role="status" aria-live="polite">Cargando información...</div>
         </section>
-        
+
         <section class="info-section" aria-labelledby="git-info-heading">
             <h2 id="git-info-heading">🔧 Información de Git</h2>
             <div id="git-info" class="loading" role="status" aria-live="polite">Cargando información...</div>
         </section>
-        
+
         <section class="info-section" aria-labelledby="links-heading">
             <h2 id="links-heading">🔗 Enlaces Útiles</h2>
             <nav class="links" aria-label="Enlaces de navegación">
@@ -301,27 +307,27 @@
                 </a>
             </nav>
         </section>
-        
+
         <footer role="contentinfo">
             <p>Desarrollado con <span aria-label="amor">❤️</span> para el TFG de UNIR</p>
         </footer>
     </div>
-    
+
     <script>
         // Dark mode toggle
         function toggleTheme() {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
+
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
-            
+
             // Anunciar cambio para lectores de pantalla
             const button = document.querySelector('.theme-toggle');
             const announcement = newTheme === 'dark' ? 'Modo oscuro activado' : 'Modo claro activado';
             button.setAttribute('aria-label', `Cambiar a modo ${newTheme === 'dark' ? 'claro' : 'oscuro'}. ${announcement}`);
-            
+
             // Crear anuncio temporal para lectores de pantalla
             const liveRegion = document.createElement('div');
             liveRegion.setAttribute('role', 'status');
@@ -331,19 +337,19 @@
             document.body.appendChild(liveRegion);
             setTimeout(() => liveRegion.remove(), 1000);
         }
-        
+
         // Cargar tema guardado
         function loadTheme() {
             const savedTheme = localStorage.getItem('theme');
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-            
+
             document.documentElement.setAttribute('data-theme', theme);
         }
-        
+
         // Cargar tema al iniciar
         loadTheme();
-        
+
         function formatDate(dateString) {
             const date = new Date(dateString);
             const options = {
@@ -357,52 +363,52 @@
             };
             return date.toLocaleString('es-ES', options);
         }
-        
+
         // Función helper para crear elementos de forma segura
         function createInfoItem(label, value) {
             const item = document.createElement('div');
             item.className = 'info-item';
-            
+
             const labelDiv = document.createElement('div');
             labelDiv.className = 'info-label';
             labelDiv.textContent = label;
-            
+
             const valueDiv = document.createElement('div');
             valueDiv.className = 'info-value';
             valueDiv.textContent = value || 'N/A';
-            
+
             item.appendChild(labelDiv);
             item.appendChild(valueDiv);
-            
+
             return item;
         }
-        
+
         function createErrorMessage(message) {
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error';
             errorDiv.textContent = message;
             return errorDiv;
         }
-        
+
         async function loadInfo() {
             try {
                 const response = await fetch('/actuator/info');
                 const data = await response.json();
-                
+
                 // Información de la aplicación
                 const appInfo = document.getElementById('app-info');
                 appInfo.innerHTML = ''; // Limpiar contenido
-                
+
                 if (data.app) {
                     const grid = document.createElement('div');
                     grid.className = 'info-grid';
-                    
+
                     grid.appendChild(createInfoItem('Nombre', data.app.name));
                     grid.appendChild(createInfoItem('Versión', data.app.version));
                     grid.appendChild(createInfoItem('Java', data.app['java.version']));
-                    
+
                     appInfo.appendChild(grid);
-                    
+
                     if (data.app.description) {
                         const descItem = createInfoItem('Descripción', data.app.description);
                         descItem.style.marginTop = '15px';
@@ -411,24 +417,24 @@
                 } else {
                     appInfo.appendChild(createErrorMessage('No se pudo cargar la información de la aplicación'));
                 }
-                
+
                 // Información de Git
                 const gitInfo = document.getElementById('git-info');
                 gitInfo.innerHTML = ''; // Limpiar contenido
-                
+
                 if (data.git) {
                     const commit = data.git.commit || {};
                     const build = data.git.build || {};
-                    
+
                     const grid = document.createElement('div');
                     grid.className = 'info-grid';
-                    
+
                     grid.appendChild(createInfoItem('Branch', data.git.branch));
                     grid.appendChild(createInfoItem('Commit', commit.id?.abbrev || commit.id));
                     grid.appendChild(createInfoItem('Build Time', build.time ? formatDate(build.time) : null));
-                    
+
                     gitInfo.appendChild(grid);
-                    
+
                     if (commit.message?.short) {
                         const commitItem = createInfoItem('Último Commit', commit.message.short);
                         commitItem.style.marginTop = '15px';
@@ -437,20 +443,21 @@
                 } else {
                     gitInfo.appendChild(createErrorMessage('No se pudo cargar la información de Git'));
                 }
-                
+
             } catch (error) {
                 const appInfo = document.getElementById('app-info');
                 appInfo.innerHTML = '';
                 appInfo.appendChild(createErrorMessage('Error al cargar la información: ' + error.message));
-                
+
                 const gitInfo = document.getElementById('git-info');
                 gitInfo.innerHTML = '';
                 gitInfo.appendChild(createErrorMessage('Error al cargar la información de Git'));
             }
         }
-        
+
         // Cargar información al iniciar
         loadInfo();
     </script>
 </body>
+
 </html>

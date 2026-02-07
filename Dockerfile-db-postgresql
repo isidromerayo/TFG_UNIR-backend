@@ -1,0 +1,7 @@
+FROM docker.io/postgres:latest
+
+ENV POSTGRES_PASSWORD=tfg_un1r_PWD
+ENV POSTGRES_DB=tfg_unir
+ENV POSTGRES_USER=user_tfg
+
+EXPOSE 5432
