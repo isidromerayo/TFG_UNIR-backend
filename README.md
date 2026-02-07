@@ -182,7 +182,7 @@ La base de datos incluye usuarios de prueba precargados. Ejemplos:
 
 > 📋 **Lista completa de usuarios**: Ver el [README del monorepo](https://github.com/isidromerayo/TFG_UNIR-monorepo#-usuarios-de-prueba) para la lista completa de usuarios activos y pendientes.
 
-Es necesaria una versión de Java 21, para utilizar Spring Boot 3.4.x
+Es necesaria una versión de Java 21, para utilizar Spring Boot 3.5.x
 
 ```
 cd backend
@@ -195,6 +195,8 @@ cd backend
 $ psql --version
 psql (PostgreSQL) 15.x
 ```
+
+> ℹ️ **Soporte Legacy**: Si necesitas utilizar **MariaDB** o **MySQL**, consulta la [Guía de Uso de MariaDB/MySQL](docs/MARIADB_MYSQL_GUIDE.md).
 
 ##### Crear base de datos y usuario
 
