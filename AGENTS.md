@@ -227,7 +227,42 @@ docker run -d -p 8080:8080 \
   isidromerayo/spring-backend-tfg:latest
 ```
 
-#### 2. Despliegue Optimizado en Render.com (Recomendado)
+#### 2. Manejo de Archivos Grandes con Git LFS
+
+El proyecto utiliza **Git LFS (Large File Storage)** para gestionar el JAR compilado (64.94 MB) y evitar warnings de GitHub.
+
+**Configuración de Git LFS:**
+```bash
+# Instalar Git LFS (si no está instalado)
+sudo apt install git-lfs  # Ubuntu/Debian
+brew install git-lfs      # macOS
+
+# Inicializar LFS en el repositorio
+git lfs install
+
+# Track del JAR
+git lfs track "target/backend.jar"
+git add .gitattributes
+git commit -m "chore: add backend.jar to LFS tracking"
+
+# Mover JAR existente a LFS
+git rm --cached target/backend.jar
+git add target/backend.jar
+git commit -m "chore: move backend.jar to LFS storage"
+```
+
+**Ventajas de Git LFS:**
+- ✅ **Sin warnings**: GitHub no muestra advertencias de tamaño
+- ✅ **Repo ligero**: Solo punteros en el repo principal
+- ✅ **Descargas rápidas**: Clone del código sin archivos grandes
+- ✅ **Versionado optimizado**: Storage dedicado para archivos grandes
+
+**Límites y Costos:**
+- **Gratis**: 1GB storage + 1GB bandwidth/mes
+- **Pro ($5/mes)**: 50GB storage + 100GB bandwidth/mes
+- **Business ($25/mes)**: 200GB storage + 1TB bandwidth/mes
+
+#### 3. Despliegue Optimizado en Render.com (Recomendado)
 El despliegue está optimizado para velocidad usando JAR pre-compilado:
 
 **Flujo optimizado:**
@@ -305,6 +340,36 @@ git tag -d v0.3.1
 git push origin :refs/tags/v0.3.1
 ```
 
+**Problema:** PostgreSQL DDL syntax error en logs
+```
+ERROR: syntax error at or near "default"
+alter table if exists usuarios alter column estado set data type char(1) default 'P'
+```
+**Causa:** `columnDefinition` con `default` en `@Column` annotation no es válido en PostgreSQL.
+
+**Solución:** Remover `columnDefinition` y usar `@PrePersist` para el valor default:
+```java
+// ANTES (problemático):
+@Column(name = "estado", length = 1, columnDefinition = "char(1) default 'P'")
+private String estado;
+
+// DESPUÉS (correcto):
+@Column(name = "estado", length = 1)
+private String estado;
+
+@PrePersist
+void prePersist() {
+    if (this.estado == null)
+        this.estado = "P";
+}
+```
+
+**Problema:** Warnings de Hibernate sobre dialecto
+```
+HHH90000025: PostgreSQLDialect does not need to be specified explicitly
+```
+**Solución:** Es informativo. Hibernate 6.6+ detecta automáticamente el dialecto. Puede ignorarse o comentarse la propiedad en `application.properties`.
+
 ## Recursos Adicionales
 
 - **[README.md](README.md)** - Documentación principal del proyecto
@@ -319,4 +384,4 @@ git push origin :refs/tags/v0.3.1
 
 ---
 
-**Última actualización:** 2026-02-06 (Implementación de Multi-stage Build y automatización en Render)
+**Última actualización:** 2026-02-08 (Implementación de Git LFS para JAR optimizado y fix de warnings PostgreSQL)
