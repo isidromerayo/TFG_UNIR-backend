@@ -12,7 +12,7 @@ Este es un proyecto backend desarrollado en Java con el framework Spring Boot. U
 - **Spring Framework:** 6.2.15
 - **Hibernate:** 6.6.41
 - **Gestor de dependencias:** Maven
-- **Base de datos:** H2 (tests), MariaDB (producción)
+- **Base de datos:** H2 (tests), PostgreSQL (producción)
 - **Seguridad:** Spring Security 6.5.7 + JWT (JSON Web Tokens)
 - **Testing:** JUnit 5, Mockito, REST Assured (integración)
 - **Calidad:** SpotBugs, JaCoCo (cobertura), SonarCloud
@@ -281,6 +281,7 @@ git push origin :refs/tags/v0.3.1
 
 - **[README.md](README.md)** - Documentación principal del proyecto
 - **[DOCS_INDEX.md](DOCS_INDEX.md)** - Índice completo de documentación
+- **[docs/MARIADB_MYSQL_GUIDE.md](docs/MARIADB_MYSQL_GUIDE.md)** - Guía de uso de MariaDB/MySQL (Legacy)
 - **[COVERAGE_ANALYSIS.md](COVERAGE_ANALYSIS.md)** - Análisis de cobertura detallado
 - **[SONARQUBE_POM_CONFIG.md](SONARQUBE_POM_CONFIG.md)** - Configuración de SonarQube
 - **[SECURITY.md](SECURITY.md)** - Política de seguridad
