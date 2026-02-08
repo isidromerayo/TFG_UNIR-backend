@@ -57,7 +57,44 @@ Para gestionar mejor las credenciales y reutilizarlas en otros servicios:
 
 ---
 
-## 🔄 Paso 4: Automatización con GitHub Actions (CI/CD)
+## ⚡ Paso 4: Flujo de Despliegue Optimizado (Recomendado)
+
+El proyecto utiliza un **flujo optimizado** que reduce drásticamente los tiempos de despliegue usando JAR pre-compilado.
+
+### 🎯 Ventajas del Flujo Optimizado:
+- ⚡ **Tiempo de deploy**: ~30s (vs 5-10min con multi-stage)
+- 🎯 **Control total**: Sabes exactamente qué JAR se despliega
+- 📦 **Cache eficiente**: Aprovecha Docker cache del JAR
+- 💰 **Costo menor**: Menos tiempo de build en Render
+
+### 🔄 Flujo Optimizado Paso a Paso:
+
+```bash
+# 1. Compilar el JAR localmente (con PostgreSQL)
+./mvnw clean package -DskipTests
+
+# 2. Añadir JAR y cambios al git
+git add target/backend.jar Dockerfile .github/workflows/render-deploy.yml
+git commit -m "feat: update JAR and deploy changes"
+
+# 3. Push para activar despliegue automático
+git push origin feature/render-deployment
+```
+
+### 📋 Qué sucede en el deploy:
+1. **GitHub Actions** se activa automáticamente
+2. **Build Docker** rápido (~30s) usando JAR pre-compilado
+3. **Push a Docker Hub** con imagen optimizada
+4. **Deploy a Render** usando la nueva imagen
+
+### ⚠️ Notas Importantes:
+- El JAR (`target/backend.jar`) está incluido en git con excepción en `.gitignore`
+- El Dockerfile está optimizado para copiar directamente el JAR
+- Los GitHub Actions usan versiones estables para evitar errores
+
+---
+
+## 🔄 Paso 5: Automatización con GitHub Actions (CI/CD)
 
 El archivo `.github/workflows/render-deploy.yml` gestiona el despliegue automático.
 
@@ -86,6 +123,18 @@ El archivo `.github/workflows/render-deploy.yml` gestiona el despliegue automát
 
 ### 4. Error: `No open ports detected`
 - **Solución**: La aplicación usa automáticamente `${PORT}` proporcionado por Render. No fuerces el puerto 8080 en la configuración del Dashboard de Render.
+
+### 5. Error: GitHub Actions "Action could not be found"
+- **Causa**: SHAs desactualizados en el workflow.
+- **Solución**: El workflow usa versiones estables (`@v4`, `@v3`, etc.) para evitar este problema.
+
+### 6. Error: Deploy lento o fallido
+- **Causa**: Olvidaste compilar el JAR antes del push.
+- **Solución**: Siempre ejecuta `./mvnw clean package -DskipTests` antes de hacer commit y push.
+
+### 7. Error: JAR no encontrado en Docker build
+- **Causa**: El JAR no está en git o .gitignore lo está bloqueando.
+- **Solución**: Verifica que `!target/backend.jar` esté en `.gitignore` y que el JAR esté commiteado.
 
 ---
 

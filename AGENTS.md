@@ -209,11 +209,14 @@ El proyecto sigue [Semantic Versioning 2.0.0](https://semver.org/):
 
 ### Construcción de Imágenes Docker
 
-El proyecto utiliza un **Dockerfile multi-stage**, lo que significa que la imagen se construye directamente desde el código fuente sin necesidad de compilar el JAR previamente en tu máquina local.
+El proyecto utiliza un **Dockerfile optimizado** que usa JAR pre-compilado para despliegues rápidos en Render.com.
 
 #### 1. Construcción Local (para pruebas)
 ```bash
-# Construir la imagen (se encargará de ejecutar Maven internamente)
+# Compilar el JAR primero
+./mvnw clean package -DskipTests
+
+# Construir la imagen con JAR pre-compilado
 docker build -t isidromerayo/spring-backend-tfg:latest .
 
 # Ejecutar el contenedor
@@ -224,19 +227,44 @@ docker run -d -p 8080:8080 \
   isidromerayo/spring-backend-tfg:latest
 ```
 
-#### 2. Despliegue Automático (Render.com)
-El despliegue está automatizado mediante **GitHub Actions** o la integración directa de **Render**. Para más detalles técnicos y soluciones a errores comunes, consulta la **[Guía de Despliegue en Render](docs/RENDER_DEPLOYMENT_GUIDE.md)**. Al hacer push a la rama configurada (ej: `feature/render-deployment`), Render detectará el `Dockerfile` y realizará el build completo de forma automática.
+#### 2. Despliegue Optimizado en Render.com (Recomendado)
+El despliegue está optimizado para velocidad usando JAR pre-compilado:
 
-#### 3. Publicación Manual (si fuera necesario)
+**Flujo optimizado:**
 ```bash
-# Versión específica
-docker build -t isidromerayo/spring-backend-tfg:0.4.2 .
-docker push isidromerayo/spring-backend-tfg:0.4.2
+# 1. Compilar el JAR localmente
+./mvnw clean package -DskipTests
+
+# 2. Añadir JAR y cambios al git
+git add target/backend.jar Dockerfile .github/workflows/render-deploy.yml
+git commit -m "feat: update JAR and deploy changes"
+
+# 3. Push para activar despliegue automático
+git push origin feature/render-deployment
+```
+
+**Ventajas del flujo optimizado:**
+- ⚡ **Tiempo de deploy**: ~30s (vs 5-10min con multi-stage)
+- 🎯 **Control total**: Sabes exactamente qué JAR se despliega
+- 📦 **Cache eficiente**: Aprovecha Docker cache del JAR
+- 💰 **Costo menor**: Menos tiempo de build en Render
+
+#### 3. Despliegue Automático (Render.com)
+El despliegue está automatizado mediante **GitHub Actions**. Para más detalles técnicos y soluciones a errores comunes, consulta la **[Guía de Despliegue en Render](docs/RENDER_DEPLOYMENT_GUIDE.md)**. Al hacer push a la rama `feature/render-deployment`, se activa el workflow optimizado.
+
+#### 4. Publicación Manual (si fuera necesario)
+```bash
+# Compilar JAR primero
+./mvnw clean package -DskipTests
+
+# Construir y publicar imagen
+docker build -t isidromerayo/spring-backend-tfg:0.5.1-SNAPSHOT .
+docker push isidromerayo/spring-backend-tfg:0.5.1-SNAPSHOT
 ```
 
 ---
 
-**Nota:** Ya no se requiere el uso de `podman` obligatoriamente, aunque sigue siendo compatible. El flujo recomendado es el uso del `Dockerfile` multi-stage.
+**Nota:** El flujo recomendado para Render.com es usar JAR pre-compilado (Opción 1) para máxima velocidad y eficiencia. El Dockerfile multi-stage sigue siendo compatible para otros entornos.
 
 ### Configuración del Plugin
 
