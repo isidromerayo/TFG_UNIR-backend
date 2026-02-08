@@ -69,7 +69,7 @@ git branch -d feature/nombre-descriptivo
 - **Hibernate 6.6.41**
 - **Spring Data JPA** - Persistencia
 - **Spring Security 6.5.7** - Autenticación y autorización
-- **MariaDB 3.5.7** - Base de datos producción
+- **PostgreSQL 15+** - Base de datos producción
 - **H2** - Base de datos testing
 - **JWT** - Tokens de autenticación
 - **Swagger/OpenAPI 2.8.5** - Documentación API
@@ -182,40 +182,49 @@ La base de datos incluye usuarios de prueba precargados. Ejemplos:
 
 > 📋 **Lista completa de usuarios**: Ver el [README del monorepo](https://github.com/isidromerayo/TFG_UNIR-monorepo#-usuarios-de-prueba) para la lista completa de usuarios activos y pendientes.
 
-Es necesaria una versión de Java 21, para utilizar Spring Boot 3.4.x
+Es necesaria una versión de Java 21, para utilizar Spring Boot 3.5.x
 
 ```
 cd backend
 ./mvnw clean install
 ```
 
-#### BBDD: MariaDB para producción
+#### BBDD: PostgreSQL para producción
 
+```bash
+$ psql --version
+psql (PostgreSQL) 15.x
 ```
-$ mariadb --version
-mariadb  Ver 15.1 Distrib 10.3.38-MariaDB, for debian-linux-gnu (x86_64) using readline 5.2
-```
+
+> ℹ️ **Soporte Legacy**: Si necesitas utilizar **MariaDB** o **MySQL**, consulta la [Guía de Uso de MariaDB/MySQL](docs/MARIADB_MYSQL_GUIDE.md).
 
 ##### Crear base de datos y usuario
 
-```
-MariaDB [(none)]> create database tfg_unir; -- create NEW database
-MariaDB [(none)]> create user 'user_tfg'@'%' identified by 'tfg_un1r_PWD'; -- create user
-MariaDB [(none)]> grant all on tfg_unir.* to 'user_tfg'@'%'; -- give all privileges to the user
+```sql
+-- Crear base de datos
+CREATE DATABASE tfg_unir;
+
+-- Crear usuario
+CREATE USER user_tfg WITH PASSWORD 'tfg_un1r_PWD';
+
+-- Dar privilegios
+GRANT ALL PRIVILEGES ON DATABASE tfg_unir TO user_tfg;
 ```
 
 ##### Carga inicial de datos
 
-Los recursos están el proyecto [TFG UNIR](https://github.com/isidromerayo/TFG_UNIR)
+Los scripts para PostgreSQL están organizados en `recursos/db/postgresql/`:
 
-```
-mariadb -u user_tfg -ptfg_un1r_PWD tfg_unir < recursos/db/dump.mariadb.sql 
+```bash
+psql -h localhost -U user_tfg -d tfg_unir -f recursos/db/postgresql/01-create.sql
+psql -h localhost -U user_tfg -d tfg_unir -f recursos/db/postgresql/02-create.sql
+psql -h localhost -U user_tfg -d tfg_unir -f recursos/db/postgresql/03-create.sql
 ```
 
-Backup con mysql de datos
+Backup de datos:
 
-```
-mysqldump -u user_tfg -ptfg_un1r_PWD tfg_unir > recursos/db/dump.mariadb.sql 
+```bash
+pg_dump -h localhost -U user_tfg -d tfg_unir > recursos/db/postgresql/dump.postgresql.sql
 ```
 
 #### 🐳 Containerización con Docker/Podman
@@ -268,10 +277,9 @@ Recientemente se han implementado las siguientes optimizaciones:
 2. **Editar configuración**:
    Abre `.env` y personaliza las credenciales si es necesario. La configuración por defecto es:
    ```
-   MARIADB_ROOT_PASSWORD=mypass
-   MYSQL_DATABASE=tfg_unir
-   MYSQL_USER=user_tfg
-   MYSQL_PASSWORD=tfg_un1r_PWD
+   POSTGRES_PASSWORD=mypass
+   POSTGRES_DB=tfg_unir
+   POSTGRES_USER=user_tfg
    ```
 
 #### 🚀 Levantar Servicios
@@ -305,7 +313,7 @@ docker compose exec api_service wget -qO- http://localhost:8080/actuator/health
 **Solución**: Verifica que el archivo `target/backend.jar` existe y que las credenciales de la base de datos son correctas.
 
 **Problema**: La API no se conecta a la base de datos.  
-**Solución**: Verifica que el contenedor de MariaDB está saludable (`docker compose ps`).
+**Solución**: Verifica que el contenedor de PostgreSQL está saludable (`docker compose ps`).
 
 #### 📈 Optimización de Recursos
 
@@ -322,14 +330,14 @@ deploy:
       memory: 512M
 ```
 
-#### 🗄️ Docker MariaDB
+#### 🗄️ Docker PostgreSQL
 
-##### Usar imagen publicada
+##### Usar imagen oficial
 
-Para usar la imagen de MariaDB ya publicada con datos de prueba precargados:
+Para usar una instancia limpia de PostgreSQL:
 
 ```bash
-docker run --name mariadb-tfg -p 3306:3306 -d isidromerayo/mariadb-tfg
+docker run --name postgres-tfg -e POSTGRES_PASSWORD=mypass -e POSTGRES_DB=tfg_unir -e POSTGRES_USER=user_tfg -p 5432:5432 -d postgres:latest
 ```
 
 Esta imagen incluye:
@@ -337,43 +345,37 @@ Esta imagen incluye:
 - Usuario `user_tfg` con contraseña `tfg_un1r_PWD`
 - Datos de prueba precargados
 
-##### Construir imagen de MariaDB
+##### Construir imagen personalizada de PostgreSQL (Opcional)
 
-El proyecto incluye un `Dockerfile-db` para crear la imagen de MariaDB:
+El proyecto incluye un `Dockerfile-db-postgresql` para crear una imagen personalizada si fuera necesario:
 
 **1. Verificar prerequisitos**
 
-Asegúrate de que existen los scripts SQL en `../recursos/db/`:
-- `create.mariadb.sql` - Script de creación de esquema
-- `dump.mariadb.sql` - Datos iniciales
+Asegúrate de que existen los scripts SQL en `../recursos/db/postgresql/`:
+- `01-create.sql`
+- `02-create.sql`
+- `03-create.sql`
 
 **2. Construir la imagen**
 
 ```bash
 cd backend
 
-# Construir con versión específica
-docker build -f Dockerfile-db -t isidromerayo/mariadb-tfg:0.0.4 .
-
-# Crear tag latest
-docker tag isidromerayo/mariadb-tfg:0.0.4 isidromerayo/mariadb-tfg:latest
+# Construir imagen personalizada
+docker build -f Dockerfile-db-postgresql -t isidromerayo/postgres-tfg:latest .
 ```
 
 **3. Probar la imagen localmente**
 
 ```bash
 # Ejecutar contenedor
-docker run --name mariadb-test -p 3306:3306 -d isidromerayo/mariadb-tfg:0.0.4
+docker run --name postgres-test -p 5432:5432 -d isidromerayo/postgres-tfg:latest
 
 # Verificar que funciona
-docker logs mariadb-test
+docker logs postgres-test
 
 # Conectar a la base de datos
-mariadb -h 127.0.0.1 -u user_tfg -ptfg_un1r_PWD tfg_unir
-
-# Limpiar después de probar
-docker stop mariadb-test
-docker rm mariadb-test
+psql -h localhost -U user_tfg -d tfg_unir
 ```
 
 **4. Publicar en Docker Hub**
@@ -467,7 +469,7 @@ Con docker compose se montará un contenedor con MariaDB (datos precargados) y o
 
 2. **Configuración del backend**: El `application.properties` debe soportar variables de entorno:
    ```properties
-   spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:mariadb://localhost:3306/tfg_unir}
+   spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/tfg_unir}
    ```
 
 3. **Imagen del backend actualizada**: Si modificas el código, necesitas:
@@ -508,8 +510,8 @@ Para detener las instancias de los contenedores `docker compose stop`.
 
 ```
 [+] Stopping 2/2
- ✔ Container backend-api_service-1  Stopped     0.3s 
- ✔ Container backend-maria_db-1     Stopped     0.5s 
+ ✔ Container backend-api_service-1    Stopped     0.3s 
+ ✔ Container backend-postgres_db-1   Stopped     0.5s 
 ```
 
 #### 📤 Publicar imágenes en Docker Hub
@@ -801,24 +803,28 @@ El script automáticamente:
 **1. Crear el pod**
 ```bash
 cd backend
-podman pod create --name backend-pod -p 8080:8080 -p 3306:3306
+podman pod create --name backend-pod -p 8080:8080 -p 5432:5432
 ```
 
-**2. Ejecutar MariaDB en el pod**
+**2. Ejecutar PostgreSQL en el pod**
 ```bash
-podman run -d --pod backend-pod --name maria_db \
-  -v tfg_unir-backend_data:/var/lib/mysql \
-  -v $(pwd)/../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql \
-  -v $(pwd)/../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql \
-  isidromerayo/mariadb-tfg:0.0.4
+podman run -d --pod backend-pod --name postgres_db \
+  -v tfg_unir-backend_pg_data:/var/lib/postgresql/data \
+  -v $(pwd)/../recursos/db/postgresql/01-create.sql:/docker-entrypoint-initdb.d/01-create.sql \
+  -v $(pwd)/../recursos/db/postgresql/02-create.sql:/docker-entrypoint-initdb.d/02-create.sql \
+  -v $(pwd)/../recursos/db/postgresql/03-create.sql:/docker-entrypoint-initdb.d/03-create.sql \
+  -e POSTGRES_PASSWORD=mypass \
+  -e POSTGRES_DB=tfg_unir \
+  -e POSTGRES_USER=user_tfg \
+  postgres:latest
 ```
 
 **3. Ejecutar el backend en el pod**
 ```bash
 # Nota: Usamos localhost porque están en el mismo pod
 podman run -d --pod backend-pod --name api_service \
-  -e SPRING_DATASOURCE_URL=jdbc:mariadb://localhost:3306/tfg_unir \
-  isidromerayo/spring-backend-tfg:0.2.1
+  -e SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/tfg_unir \
+  isidromerayo/spring-backend-tfg:latest
 ```
 
 **4. Verificar el estado**
@@ -1043,7 +1049,7 @@ Este comando:
 | **Security Rating** | A | A | ✅ |
 | **Quality Gate** | Passed | Passed | ✅ |
 
-**Última actualización**: 2026-02-06
+**Última actualización**: 2026-02-07 (Migración a PostgreSQL)
 
 Ver más detalles en [SonarCloud](https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend)
 

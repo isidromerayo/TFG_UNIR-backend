@@ -18,23 +18,23 @@ networks:
     driver: bridge
 
 services:
-  maria_db:
-    container_name: maria_db
-    hostname: maria_db
-    image: "isidromerayo/mariadb-tfg:0.1.0"
+  postgres_db:
+    container_name: postgres_db
+    hostname: postgres_db
+    image: "isidromerayo/postgres-tfg:1.0"
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - maria-db-data:/var/lib/mysql
-      - ../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql
-      - ../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql
+      - postgres-db-data:/var/lib/postgresql
+      - ../recursos/db/postgresql/01-create.sql:/docker-entrypoint-initdb.d/01-create.sql
+      - ../recursos/db/postgresql/02-create.sql:/docker-entrypoint-initdb.d/02-create.sql
+      - ../recursos/db/postgresql/03-create.sql:/docker-entrypoint-initdb.d/03-create.sql
     environment:
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-mypass}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-tfg_unir}
-      MYSQL_USER: ${MYSQL_USER:-user_tfg}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-tfg_un1r_PWD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tfg_un1r_PWD}
+      POSTGRES_DB: ${POSTGRES_DB:-tfg_unir}
+      POSTGRES_USER: ${POSTGRES_USER:-user_tfg}
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user_tfg} -d ${POSTGRES_DB:-tfg_unir}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -54,15 +54,15 @@ services:
   api_service:
     container_name: api_service
     hostname: api_service
-    image: "isidromerayo/spring-backend-tfg:0.4.0"
+    image: "isidromerayo/spring-backend-tfg:0.5.0"
     build: .
     ports:
       - "8080:8080"
     depends_on:
-      maria_db:
+      postgres_db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mariadb://maria_db:3306/tfg_unir"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres_db:5432/tfg_unir"
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-user_tfg}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-tfg_un1r_PWD}
     healthcheck:
@@ -84,4 +84,4 @@ services:
       - tfg-network
 
 volumes:
-  maria-db-data:
+  postgres-db-data:

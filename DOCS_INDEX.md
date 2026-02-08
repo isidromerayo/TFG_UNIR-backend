@@ -1,6 +1,6 @@
 # Índice de Documentación - TFG UNIR Backend
 
-**Última actualización**: 2026-02-06
+**Última actualización**: 2026-02-07
 
 ---
 
@@ -163,6 +163,19 @@ Documentación principal del proyecto con información general, stack tecnológi
 - Lecciones aprendidas
 
 **Cuándo usar**: Para entender los cambios realizados en la migración a Spring Boot 3.5.9.
+
+---
+
+## 🗄️ Base de Datos (Legacy)
+
+### [docs/MARIADB_MYSQL_GUIDE.md](docs/MARIADB_MYSQL_GUIDE.md)
+**Guía de uso para MariaDB y MySQL**
+- Configuración de dependencias Maven
+- Propiedades de conexión
+- Ejecución con Docker y Podman
+- Scripts SQL legacy
+
+**Cuándo usar**: Si necesitas utilizar MariaDB o MySQL en lugar de PostgreSQL.
 
 ---
 

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>eu.estilolibre.tfgunir</groupId>
 	<artifactId>backend</artifactId>
-	<version>0.4.2-SNAPSHOT</version>
+	<version>0.5.1-SNAPSHOT</version>
 	<name>backend</name>
 	<description>Backend para TFG en UNIR usando Spring Boot</description>
 	<properties>
@@ -106,8 +106,8 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.mariadb.jdbc</groupId>
-			<artifactId>mariadb-java-client</artifactId>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
