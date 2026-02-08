@@ -1,4 +1,5 @@
 target/
+!target/backend.jar
 !.mvn/
 .git
 .gitignore
