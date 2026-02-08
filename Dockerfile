@@ -18,8 +18,8 @@ ARG GID=1001
 RUN apt-get update && \
     apt-get install -y curl && \
     apt-get clean && \
-    groupadd -g $GID $USER && \
-    useradd -u $UID -g $GID -s /bin/false $USER
+    groupadd -g "$GID" "$USER" && \
+    useradd -u "$UID" -g "$GID" -s /bin/false "$USER"
 
 # Set working directory
 WORKDIR /app
