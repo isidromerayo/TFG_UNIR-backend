@@ -23,6 +23,14 @@ Documentación principal del proyecto con información general, stack tecnológi
 
 **Cuándo usar**: Antes de realizar cualquier cambio en el código.
 
+### [docs/USING_SKILLS.md](docs/USING_SKILLS.md)
+**Guía de uso y estandarización de skills para agentes AI**
+- Estructura del repositorio (`.agents/skills/` + symlinks por herramienta)
+- Cómo añadir/actualizar skills con `npx skills add`
+- Revisión y commit para compartir con el equipo
+
+**Cuándo usar**: Al añadir nuevas skills o al alinear el setup de agentes AI del equipo.
+
 ---
 
 ## 🔐 Seguridad

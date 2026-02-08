@@ -25,15 +25,15 @@
 
 </div>
 
-## Universidad Internacional de La Rioja
+# Universidad Internacional de La Rioja
 
 ## Escuela Superior de Ingeniería y Tecnología 
 
 ### Grado en Ingeniería Informática
 
-## TFG: Frameworks frontend JavaScript: Análisis y estudio práctico
+#### TFG: Frameworks frontend JavaScript: Análisis y estudio práctico
 
-### Backend
+##### Backend
 
 ## 🚀 Desarrollo y Contribución
 
@@ -60,6 +60,13 @@ git checkout main
 git pull origin main
 git branch -d feature/nombre-descriptivo
 ```
+
+### 🤖 Skills para agentes de IA (estandarización del equipo)
+
+Este repositorio versiona *skills* (guías y patrones en Markdown) para que los agentes de IA trabajen alineados con el stack y las convenciones del proyecto.
+
+- **Reglas de contribución y flujo de trabajo**: [AGENTS.md](AGENTS.md)
+- **Gestión de skills (estructura, alta/actualización)**: [docs/USING_SKILLS.md](docs/USING_SKILLS.md)
 
 ### 🛠️ Stack tecnológico
 
