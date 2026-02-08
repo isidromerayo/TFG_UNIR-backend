@@ -13,15 +13,14 @@ Render.com es la plataforma elegida para este proyecto debido a su facilidad de 
 
 ---
 
-## � Paso 1: Configurar la Base de Datos PostgreSQL
+## Paso 1: Configurar la Base de Datos PostgreSQL
 
-Aunque el proyecto usa MariaDB en local, **en Render usamos PostgreSQL** por su mejor soporte en la capa gratuita.
+El proyecto usa **PostgreSQL** tanto en desarrollo local como en producción. Render ofrece PostgreSQL nativo en su capa gratuita, lo que lo hace ideal para el despliegue.
 
 1. **Crear la Base de Datos**:
    - Inicia sesión en Render y ve a **New** → **PostgreSQL**.
    - Nombre: `tfg-unir-db`.
    - Región: `Frankfurt (EU)` (recomendado para baja latencia en España).
-   - Plan: `Free`.
 2. **Obtener la "Internal Database URL"**:
    - Una vez creada, copia el valor de **Internal Database URL**. 
    - ⚠️ **IMPORTANTE**: No uses la External URL para el backend, la Internal es más rápida y segura.
