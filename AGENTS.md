@@ -3,27 +3,52 @@
 ## Proyecto
 Java 21 + Spring Boot 3.5.11 + Maven. Backend con seguridad JWT, H2 (tests), PostgreSQL (prod).
 
+## Estructura del Proyecto
+```
+src/main/java/eu/estilolibre/tfgunir/backend/
+├── controller/    # REST endpoints
+├── service/      # Lógica de negocio
+├── repository/   # Acceso a datos JPA
+├── model/        # Entidades JPA
+├── dto/          # Data Transfer Objects
+├── config/       # Configuración Spring
+├── security/     # JWT, filtros, auth
+├── exception/    # Manejo centralizado de errores
+└── TfgUnirBackendApplication.java
+```
+
 ## Comandos
 
-### Build
+### Build y Run
 ```bash
 ./mvnw clean compile
 ./mvnw package -DskipTests
+./mvnw spring-boot:run
 ```
 
 ### Tests
 ```bash
-# Unitarios
+# Unitarios (todos)
 ./mvnw test
 
 # Integración
 ./mvnw -Pintegration-tests verify
 
-# Un solo test unitario
+# Un solo test unitario (clase exacta)
 ./mvnw test -Dtest=UsuarioServiceTest
 
 # Un solo test de integración
 ./mvnw -Pintegration-tests verify -Dit.test=LoginControllerIT
+
+# Por patrón (wildcard)
+./mvnw test -Dtest="*ServiceTest"
+./mvnw test -Dtest="*ControllerTest,*ServiceTest"
+
+# Tests en paralelo (más rápido)
+./mvnw test -Dparallel=classes -DuseUnlimitedThreads=true
+
+# Verbose output para debug
+./mvnw test -Dtest=UsuarioServiceTest -Dsurefire.useFile=false
 ```
 
 ### Quality
@@ -31,11 +56,14 @@ Java 21 + Spring Boot 3.5.11 + Maven. Backend con seguridad JWT, H2 (tests), Pos
 # SpotBugs (análisis estático)
 ./mvnw compile spotbugs:check
 
-# Cobertura (genera reportes en target/site/jacoco/)
+# Cobertura (reportes en target/site/jacoco/)
 ./mvnw clean verify -Pintegration-tests
 
-# OWASP Dependency Check
+# OWASP Dependency Check (vulnerabilidades)
 ./mvnw -Pdependency-check verify -Dnvd.api.key=${NVD_API_KEY}
+
+# Análisis SonarQube
+./mvnw sonar:sonar
 ```
 
 ---
@@ -63,6 +91,7 @@ import eu.estilolibre.tfgunir.backend.model.Usuario;
 - Métodos/variables: `camelCase` (e.g., `findByEmail`)
 - Constantes: `UPPER_SNAKE_CASE` con `static final`
 - Paquetes: minúsculas (e.g., `eu.estilolibre.tfgunir.backend.security`)
+- Tests: `NombreClaseTest` / `NombreClaseIT` (para integración)
 
 ### Inyección de Dependencias
 - **Prefiere constructor**, usa `final` para campos inmutables
@@ -123,10 +152,37 @@ public class UsuarioService {
 }
 ```
 
+### Controladores REST
+- Usa `@RestController` + `@RequestMapping`
+- Devuelve `ResponseEntity<?>` para control de HTTP
+- Anota DTOs de request con `@Valid`
+```java
+@RestController
+@RequestMapping("/api/usuarios")
+public class UsuarioController {
+    private final UsuarioService service;
+
+    @PostMapping
+    public ResponseEntity<UsuarioResponse> create(@Valid @RequestBody CreateUserRequest req) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(req));
+    }
+}
+```
+
 ### Manejo de Errores
 - `@ControllerAdvice` para excepciones centralizadas
 - Códigos HTTP apropiados (400, 401, 403, 404, 500)
 - No expongas detalles internos al cliente
+```java
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(new ErrorResponse(ex.getMessage()));
+    }
+}
+```
 
 ### Validación
 - Anotaciones Jakarta (`@NotBlank`, `@Email`, `@Size`, etc.)
@@ -135,12 +191,80 @@ public class UsuarioService {
 ### Logging
 - `java.util.logging.Logger` (no SLF4J)
 - No loguees passwords, tokens, datos sensibles
+```java
+private static final Logger LOGGER = Logger.getLogger(UsuarioService.class.getName());
+```
 
-### Commits (Conventional Commits)
+### Seguridad JWT
+- Filtros que extienden `OncePerRequestFilter`
+- Tokens en headers `Authorization: Bearer <token>`
+- CSRF deshabilitado para APIs stateless
+```java
+@Component
+public class JwtAuthFilter extends OncePerRequestFilter {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+            FilterChain chain) throws ServletException, IOException {
+        // Validar token y establecer autenticación
+    }
+}
+```
+
+---
+
+## Testing (TDD)
+
+### Estructura de Tests
+- Unitarios: `src/test/java/` (mismo paquete que clase testada)
+- Integración: `src/test/java/` con sufijo `IT`
+- Usa `@DataJpaTest` para tests de repositorio
+- Usa `@WebMvcTest` para tests de controlador
+- Usa `@SpringBootTest` para tests de integración
+
+### Patrones de Test
+```java
+@ExtendWith(MockitoExtension.class)
+class UsuarioServiceTest {
+    @Mock UsuarioRepository repository;
+    @InjectMocks UsuarioService service;
+
+    @Test
+    void findById_returnsUser_whenExists() {
+        when(repository.findById(1L)).thenReturn(Optional.of(usuario));
+        
+        Optional<Usuario> result = service.findById(1L);
+        
+        assertThat(result).isPresent();
+    }
+}
+```
+
+### Herramientas
+- JUnit 5 + Mockito
+- AssertJ para assertions
+- MockMvc para tests web
+- Testcontainers para BD en integración
+
+---
+
+## API Documentation
+- Swagger/OpenAPI disponible en `/swagger-ui.html`
+- Annotations: `@Operation`, `@ApiResponse`, `@Parameter`
+```java
+@Operation(summary = "Crear usuario", description = "Crea un nuevo usuario en el sistema")
+@ApiResponse(responseCode = "201", description = "Usuario creado")
+@PostMapping
+public ResponseEntity<UsuarioResponse> create(...) { }
+```
+
+---
+
+## Commits (Conventional Commits)
 ```bash
 git commit -m "feat: add user registration endpoint"
 git commit -m "fix: resolve null pointer in login"
 git commit -m "test: add auth flow integration tests"
+git commit -m "security: add rate limiting to login endpoint"
 ```
 
 ---
@@ -152,6 +276,17 @@ git commit -m "test: add auth flow integration tests"
 3. **Cobertura objetivo**: ≥80%
 4. Crear rama nueva para cada feature/fix
 5. Ejecutar test específico que falla antes de todos: `./mvnw test -Dtest=NombreTest`
+6. **Nunca expongas secrets** en código o logs
+7. Valida todas las inputs con Bean Validation
+8. Dependencias actualizadas (OWASP check)
+
+---
+
+## Perfiles Spring
+
+- `default`: Desarrollo local (H2)
+- `test`: Tests unitarios (H2 en memoria)
+- `prod`: PostgreSQL, producción
 
 ---
 
