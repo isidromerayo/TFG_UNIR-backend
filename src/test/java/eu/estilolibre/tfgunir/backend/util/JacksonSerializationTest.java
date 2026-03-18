@@ -26,7 +26,7 @@ class JacksonSerializationTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void serializarUsuario_incluyePasswordPorDefecto() throws JsonProcessingException {
+    void serializarUsuario_debeExcluirPassword() throws JsonProcessingException {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
         usuario.setNombre("Juan");
@@ -37,9 +37,10 @@ class JacksonSerializationTest {
 
         String json = objectMapper.writeValueAsString(usuario);
 
+        assertThat(json).doesNotContain("secreto123");
+        assertThat(json).doesNotContain("\"password\"");
         assertThat(json).contains("juan@example.com");
         assertThat(json).contains("Juan");
-        assertThat(json).contains("password");
     }
 
     @Test

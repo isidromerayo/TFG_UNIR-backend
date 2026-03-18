@@ -15,6 +15,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
@@ -29,6 +30,7 @@ public class Usuario {
     private String apellidos;
     @Column(unique = true)
     private String email;
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
     @Column(name = "estado", length = 1, columnDefinition = "char(1) default 'P'")
