@@ -14,10 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@TestPropertySource(properties = {
-    "jwt.secret=813cef5f-3459-4618-87a6-a69e2a1296d4_mySecretKey_mySecretKey",
-    "jwt.expiration=3600000" // 1 hora en milisegundos
-})
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class TokenServiceTest {
     
     @Autowired
