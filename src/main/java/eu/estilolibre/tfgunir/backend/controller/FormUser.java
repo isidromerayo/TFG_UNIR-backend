@@ -24,7 +24,7 @@ public class FormUser {
 
     @Override
     public String toString() {
-        return "FormUser [email=" + email + ", password=" + password + "]";
+        return "FormUser [email=" + email + ", password=***]";
     }
     
 
