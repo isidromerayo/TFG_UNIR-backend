@@ -37,10 +37,10 @@ class JacksonSerializationTest {
 
         String json = objectMapper.writeValueAsString(usuario);
 
-        assertThat(json).doesNotContain("secreto123");
-        assertThat(json).doesNotContain("\"password\"");
-        assertThat(json).contains("juan@example.com");
-        assertThat(json).contains("Juan");
+        assertThat(json)
+            .doesNotContain("secreto123")
+            .doesNotContain("\"password\"")
+            .contains("juan@example.com", "Juan");
     }
 
     @Test
@@ -55,9 +55,10 @@ class JacksonSerializationTest {
 
         String json = objectMapper.writeValueAsString(curso);
 
-        assertThat(json).contains("Spring Boot Avanzado");
-        assertThat(json).contains("49.99");
-        assertThat(json).doesNotContain("hibernateLazyInitializer");
+        assertThat(json)
+            .contains("Spring Boot Avanzado")
+            .contains("49.99")
+            .doesNotContain("hibernateLazyInitializer");
     }
 
     @Test
@@ -70,9 +71,9 @@ class JacksonSerializationTest {
 
         String json = objectMapper.writeValueAsString(instructor);
 
-        assertThat(json).doesNotContain("hibernateLazyInitializer");
-        assertThat(json).doesNotContain("handler");
-        assertThat(json).contains("Carlos");
+        assertThat(json)
+            .doesNotContain("hibernateLazyInitializer", "handler")
+            .contains("Carlos");
     }
 
     @Test

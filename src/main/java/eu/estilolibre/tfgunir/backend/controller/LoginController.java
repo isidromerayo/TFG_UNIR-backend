@@ -42,16 +42,6 @@ public class LoginController {
     }
 
     /**
-     * Autentica un usuario y genera un token JWT.
-     * 
-     * Utiliza BCrypt para comparación segura de contraseñas (constant-time),
-     * previniendo timing attacks.
-     * 
-     * @param login Credenciales del usuario (email y password)
-     * @return ResponseEntity con token JWT si la autenticación es exitosa,
-     *         o mensaje de error si falla
-     */
-    /**
      * DTO para respuestas de error de autenticación.
      */
     private record ErrorResponse(String message) {}

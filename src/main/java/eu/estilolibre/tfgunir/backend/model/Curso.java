@@ -24,9 +24,6 @@ import jakarta.persistence.PreUpdate;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-/**
- * 
- */
 @Data
 @Entity
 @Table(name = "cursos")
