@@ -18,9 +18,6 @@ import jakarta.persistence.PrePersist;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-/**
- * 
- */
 @Data
 @lombok.EqualsAndHashCode(exclude = {"misCursos"})
 @Entity

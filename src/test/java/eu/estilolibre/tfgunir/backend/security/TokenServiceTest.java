@@ -11,7 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * Clase de prueba para el servicio de tokens JWT.
- * Incluye pruebas para los métodos actuales y obsoletos para mantener la compatibilidad.
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
