@@ -15,10 +15,14 @@ TDD guidance for Spring Boot services with 80%+ coverage (unit + integration).
 
 ## Workflow
 
-1) Write tests first (they should fail)
-2) Implement minimal code to pass
-3) Refactor with tests green
-4) Enforce coverage (JaCoCo)
+Follow the **5-Step TDD Cycle** from `xp-tdd-practices`:
+
+1. **Write a failing test (RED)** - Describe the behavior you want
+2. **Run the test (Verify Failure)** - Confirm it fails for the right reason
+3. **Write minimal code (GREEN)** - Only what's needed to pass
+4. **Run all tests (Verify Success)** - Ensure nothing broke
+5. **Refactor (REFACTOR)** - Clean up, keep tests green
+6. **Enforce coverage (JaCoCo)** - Target ≥80%
 
 ## Unit Tests (JUnit 5 + Mockito)
 
@@ -41,10 +45,12 @@ class MarketServiceTest {
 }
 ```
 
-Patterns:
-- Arrange-Act-Assert
-- Avoid partial mocks; prefer explicit stubbing
+Patterns (see `testing-standards` for details):
+- **FIRST** principles: Fast, Independent, Repeatable, Self-validating, Timely
+- Arrange-Act-Assert structure
 - Use `@ParameterizedTest` for variants
+- Test Data Builders for complex objects
+- Avoid partial mocks; prefer explicit stubbing
 
 ## Web Layer Tests (MockMvc)
 
@@ -155,3 +161,10 @@ class MarketBuilder {
 - Gradle: `./gradlew test jacocoTestReport`
 
 **Remember**: Keep tests fast, isolated, and deterministic. Test behavior, not implementation details.
+
+---
+
+## Related Guidelines
+
+- `xp-tdd-practices` - TDD 5-step cycle, TPP, Inside-Out/Outside-In
+- `testing-standards` - FIRST principles, Arrange-Act-Assert, naming conventions, mocks policy

@@ -222,6 +222,50 @@ class UsuarioServiceTest {
 
 ---
 
+## Development Workflow
+
+Follow TDD for every change:
+
+1. **RED**: Write a failing test first
+2. **GREEN**: Write minimal code to pass
+3. **REFACTOR**: Clean up with tests green
+4. **VERIFY**: Run full validation
+
+See `xp-tdd-practices` for detailed TDD cycle guidance.
+
+---
+
+## Non-Negotiable Rules
+
+> These rules are **never optional**. Violating them requires immediate correction.
+
+1. **No production code without a failing test first**
+2. **Never skip TDD** - Tests are not optional
+3. **Never commit directly to main** - Use feature branches
+4. **Never leave the build red** - Fix failures immediately
+5. **Never expose secrets in code or logs**
+6. **Always validate inputs with Bean Validation**
+7. **Always refactor only with tests green**
+
+---
+
+## Quick Verification
+
+Before any commit, run:
+
+```bash
+./mvnw clean compile && ./mvnw test && ./mvnw compile spotbugs:check
+```
+
+This validates: compile → unit tests → static analysis
+
+For full coverage check:
+```bash
+./mvnw clean verify -Pintegration-tests
+```
+
+---
+
 ## API Documentation
 Swagger UI en `/swagger-ui.html`
 ```java
@@ -230,6 +274,21 @@ Swagger UI en `/swagger-ui.html`
 @PostMapping
 public ResponseEntity<UsuarioResponse> create(...) { }
 ```
+
+---
+
+## Skills Available
+
+| Skill | Purpose |
+|-------|---------|
+| `springboot-tdd` | TDD workflow, JUnit 5, Mockito patterns |
+| `springboot-security` | Auth, JWT, CSRF, OWASP best practices |
+| `springboot-patterns` | REST APIs, layered architecture, DTOs |
+| `xp-tdd-practices` | TDD cycle, TPP, Inside-Out/Outside-In |
+| `testing-standards` | FIRST principles, Arrange-Act-Assert, naming |
+| `action-tdd` | Enforce TDD cycle when being skipped |
+| `task-validate` | Full validation: compile → test → coverage |
+| `task-testing-review` | Test quality and coverage review |
 
 ---
 
@@ -244,4 +303,4 @@ public ResponseEntity<UsuarioResponse> create(...) { }
 
 ---
 
-**Última actualización:** 2026-03-18
+**Última actualización:** 2026-04-01
