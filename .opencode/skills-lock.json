@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "java-spring-development": {
+      "source": "mindrally/skills",
+      "sourceType": "github",
+      "computedHash": "d2f82b82003dcd350cf6ad9622e787c658a2d161958a75d0e44a8de2c71f9175"
+    }
+  }
+}

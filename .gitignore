@@ -36,3 +36,13 @@ build/
 .env
 docker-compose.override.yml
 sbom.json
+
+### Node ###
+node_modules/
+bun.lock
+
+### Agent configs ###
+.kilocode/workflows/
+.kiro/steering/
+.opencode/command/
+.opencode/node_modules/
