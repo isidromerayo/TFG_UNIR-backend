@@ -266,6 +266,45 @@ For full coverage check:
 
 ---
 
+## Coverage Strategy
+
+### JaCoCo Exclusions (Current)
+
+The project intentionally excludes certain packages from coverage to focus on tested business logic:
+
+| Package | Coverage | Reason |
+|---------|----------|--------|
+| `model/` | Excluded | JPA entities - tested via integration tests |
+| `dto/` | Excluded | Simple DTOs with minimal logic |
+| `config/` | Excluded | Spring configuration classes |
+
+**Current coverage: 100%** on included packages (security, controller, repository)
+
+### Coverage Goals
+
+| Layer | Target | Method |
+|-------|--------|--------|
+| Security | 100% | Unit + Integration tests |
+| Controller | 100% | Integration tests (MockMvc) |
+| Repository | 100% | @DataJpaTest |
+| Service | ≥90% | Unit tests (when implemented) |
+| Model/DTO | N/A | Excluded from metrics |
+
+### Adding Tests for Excluded Packages
+
+When adding tests for model/dto/config:
+
+1. **Remove exclusions** from `pom.xml` (jacoco-maven-plugin configuration)
+2. **Add corresponding tests** following TDD
+3. **Update coverage targets** to ≥80% overall
+
+```bash
+# After adding tests and removing exclusions:
+./mvnw clean verify -Pintegration-tests
+```
+
+---
+
 ## API Documentation
 Swagger UI en `/swagger-ui.html`
 ```java

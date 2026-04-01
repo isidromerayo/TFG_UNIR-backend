@@ -64,8 +64,18 @@ This generates:
 | Compilation | Success | `./mvnw compile` |
 | Unit tests | 100% pass | `./mvnw test` |
 | SpotBugs | 0 violations | `./mvnw spotbugs:check` |
-| Coverage | ≥80% | JaCoCo report |
+| Coverage | 100% (included) | JaCoCo report |
 | Integration | 100% pass | `./mvnw verify -Pintegration-tests` |
+
+### Coverage Notes
+
+This project uses **targeted coverage** - only security, controller, and repository packages count toward the 100% target. The following packages are excluded from metrics:
+
+- `model/` - JPA entities
+- `dto/` - Simple DTOs
+- `config/` - Spring configuration
+
+Review coverage at: `target/site/jacoco/index.html`
 
 ## Failure Handling
 
@@ -94,7 +104,7 @@ This generates:
 - [ ] `./mvnw clean compile` succeeds
 - [ ] `./mvnw test` all pass
 - [ ] `./mvnw spotbugs:check` passes
-- [ ] Coverage ≥80% (JaCoCo)
+- [ ] Coverage = 100% (included packages: security, controller, repository)
 - [ ] No secrets in code (check git diff)
 - [ ] Tests follow naming convention
 - [ ] Code follows conventions in AGENTS.md

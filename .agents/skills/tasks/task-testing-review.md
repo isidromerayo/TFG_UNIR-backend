@@ -67,10 +67,23 @@ void example() {
 
 | Layer | Target | Command |
 |-------|--------|---------|
+| Security | 100% | JaCoCo report |
+| Controller | 100% | JaCoCo report |
+| Repository | 100% | JaCoCo report |
 | Service | ≥90% | JaCoCo report |
-| Controller | ≥80% | JaCoCo report |
-| Repository | ≥70% | JaCoCo report |
-| **Overall** | **≥80%** | JaCoCo report |
+| **Included packages** | **100%** | JaCoCo report |
+
+### Project-Specific Exclusions
+
+This project intentionally excludes certain packages from coverage metrics:
+
+| Package | Reason |
+|---------|--------|
+| `model/` | JPA entities - tested via integration tests |
+| `dto/` | Simple DTOs with minimal logic |
+| `config/` | Spring configuration classes |
+
+**Note:** Coverage targets apply only to non-excluded packages. The goal is 100% coverage on included packages (security, controller, repository).
 
 ### Coverage Report Location
 
@@ -128,8 +141,8 @@ Check for these issues:
 - [ ] Tests are fast (<100ms unit tests)
 
 ### Coverage
-- [ ] Overall coverage ≥80%
-- [ ] Service layer coverage ≥90%
+- [ ] Included packages (security, controller, repository) coverage = 100%
+- [ ] Service layer coverage ≥90% (when implemented)
 - [ ] Exception paths covered
 - [ ] Edge cases covered
 
