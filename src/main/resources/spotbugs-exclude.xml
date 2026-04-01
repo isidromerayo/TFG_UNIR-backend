@@ -6,4 +6,10 @@
         <Class name="~.*\.model\..*"/>
         <Bug pattern="USBR_UNNECESSARY_STORE_BEFORE_RETURN"/>
     </Match>
+    
+    <!-- Excluir warnings de USBR en clases con @Data de Lombok -->
+    <Match>
+        <Class name="~.*\.controller\.FormUser"/>
+        <Bug pattern="USBR_UNNECESSARY_STORE_BEFORE_RETURN"/>
+    </Match>
 </FindBugsFilter>
