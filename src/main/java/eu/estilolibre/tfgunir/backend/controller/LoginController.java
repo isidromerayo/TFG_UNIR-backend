@@ -1,11 +1,11 @@
 package eu.estilolibre.tfgunir.backend.controller;
 
-import java.util.List;
-
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import eu.estilolibre.tfgunir.backend.model.Usuario;
-import eu.estilolibre.tfgunir.backend.repository.UsuarioRepository;
 import eu.estilolibre.tfgunir.backend.security.TokenService;
+import eu.estilolibre.tfgunir.backend.service.UsuarioService;
 
 /**
  * Controlador de autenticación.
@@ -25,18 +25,19 @@ import eu.estilolibre.tfgunir.backend.security.TokenService;
 @CrossOrigin(origins = { "http://localhost:4200", "http://localhost:3000", "http://localhost:5173" })
 @RestController
 @RequestMapping("/api/auth")
+@Validated
 public class LoginController {
 
-    private final UsuarioRepository repository;
+    private final UsuarioService usuarioService;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
     @Autowired
     public LoginController(
-            UsuarioRepository repository,
+            UsuarioService usuarioService,
             PasswordEncoder passwordEncoder,
             TokenService tokenService) {
-        this.repository = repository;
+        this.usuarioService = usuarioService;
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
     }
@@ -47,20 +48,16 @@ public class LoginController {
     private record ErrorResponse(String message) {}
 
     @PostMapping("")
-    public ResponseEntity<Object> auth(@RequestBody FormUser login) {
-        // Buscar usuario en BBDD
-        List<Usuario> result = repository.findByEmail(login.getEmail());
-
-        if (result.isEmpty()) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(new ErrorResponse("no autorizado"));
-        }
-
-        Usuario usuario = result.get(0);
+    public ResponseEntity<Object> auth(@Valid @RequestBody FormUser login) {
+        var usuarioOpt = usuarioService.findByEmail(login.getEmail());
         
-        // ✅ SEGURIDAD: Comparación constant-time con BCrypt
-        // Previene timing attacks al comparar passwords
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse("no autorizado"));
+        }
+        
+        var usuario = usuarioOpt.get();
         boolean passwordMatches = passwordEncoder.matches(login.getPassword(), usuario.getPassword());
         boolean isActive = "A".equals(usuario.getEstado());
         
@@ -77,7 +74,7 @@ public class LoginController {
         }
 
         return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorResponse("no autorizado"));
+            .status(HttpStatus.UNAUTHORIZED)
+            .body(new ErrorResponse("no autorizado"));
     }
 }
