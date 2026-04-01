@@ -298,8 +298,6 @@
 						<exclude>**/config/**</exclude>
 						<exclude>**/model/**</exclude>
 						<exclude>**/dto/**</exclude>
-						<exclude>**/exception/**</exclude>
-						<exclude>**/service/**</exclude>
 						<exclude>**/*Application.class</exclude>
 						<exclude>eu/estilolibre/tfgunir/backend/controller/User.class</exclude>
 						<exclude>eu/estilolibre/tfgunir/backend/controller/FormUser.class</exclude>
