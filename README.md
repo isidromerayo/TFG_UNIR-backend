@@ -66,7 +66,7 @@ git branch -d feature/nombre-descriptivo
 Este repositorio versiona *skills* (guías y patrones en Markdown) para que los agentes de IA trabajen alineados con el stack y las convenciones del proyecto.
 
 - **Reglas de contribución y flujo de trabajo**: [AGENTS.md](AGENTS.md)
-- **Gestión de skills (estructura, alta/actualización)**: [docs/USING_SKILLS.md](docs/USING_SKILLS.md)
+- **Gestión de skills (estructura, alta/actualización)**: [docs/skills/USING_SKILLS.md](docs/skills/USING_SKILLS.md)
 
 ### 🛠️ Stack tecnológico
 
@@ -135,7 +135,7 @@ open target/site/jacoco-it/index.html   # Solo tests de integración
 - Reportes separados para UT e IT
 - Reporte combinado (merge automático)
 - Exclusiones: DTOs y entidades JPA
-- Ver: `JACOCO_CONFIGURATION.md` y `COVERAGE_ANALYSIS.md`
+- Ver: `docs/quality/JACOCO_CONFIGURATION.md` y `docs/quality/COVERAGE_ANALYSIS.md`
 
 #### Análisis estático (SpotBugs)
 
@@ -158,7 +158,7 @@ open target/site/jacoco-it/index.html   # Solo tests de integración
 ```
 
 **Configuración**: Las propiedades de SonarQube están en el `pom.xml`
-- Ver: `SONARQUBE_POM_CONFIG.md`
+- Ver: `docs/quality/SONARQUBE_POM_CONFIG.md`
 
 #### Análisis de dependencias (OWASP)
 
@@ -1030,19 +1030,19 @@ Este comando:
 ### Guías de desarrollo
 
 - **[AGENTS.md](AGENTS.md)** - Guía para agentes AI y flujo de trabajo
-- **[MANUAL_WORKFLOW_SETUP.md](MANUAL_WORKFLOW_SETUP.md)** - Configuración manual de workflows
+- **[MANUAL_WORKFLOW_SETUP.md](docs/workflows/github/MANUAL_WORKFLOW_SETUP.md)** - Configuración manual de workflows
 
 ### Calidad de código
 
-- **[COVERAGE_ANALYSIS.md](COVERAGE_ANALYSIS.md)** - Análisis detallado de cobertura de código
-- **[JACOCO_CONFIGURATION.md](JACOCO_CONFIGURATION.md)** - Configuración de JaCoCo (UT + IT + Merge)
-- **[SONARQUBE_POM_CONFIG.md](SONARQUBE_POM_CONFIG.md)** - Configuración de SonarQube en pom.xml
-- **[SONARQUBE_ISSUES.md](SONARQUBE_ISSUES.md)** - Análisis de issues detectados por SonarQube
+- **[COVERAGE_ANALYSIS.md](docs/quality/COVERAGE_ANALYSIS.md)** - Análisis detallado de cobertura de código
+- **[JACOCO_CONFIGURATION.md](docs/quality/JACOCO_CONFIGURATION.md)** - Configuración de JaCoCo (UT + IT + Merge)
+- **[SONARQUBE_POM_CONFIG.md](docs/quality/SONARQUBE_POM_CONFIG.md)** - Configuración de SonarQube en pom.xml
+- **[SONARQUBE_ISSUES.md](docs/quality/SONARQUBE_ISSUES.md)** - Análisis de issues detectados por SonarQube
 
 ### Monorepo
 
-- **[MONOREPO_WORKFLOW_DISTRIBUTION.md](MONOREPO_WORKFLOW_DISTRIBUTION.md)** - Distribución de workflows
-- **[SETUP_MONOREPO_SYNC.md](SETUP_MONOREPO_SYNC.md)** - Sincronización con monorepo
+- **[MONOREPO_WORKFLOW_DISTRIBUTION.md](docs/workflows/github/MONOREPO_WORKFLOW_DISTRIBUTION.md)** - Distribución de workflows
+- **[SETUP_MONOREPO_SYNC.md](docs/workflows/github/SETUP_MONOREPO_SYNC.md)** - Sincronización con monorepo
 
 ---
 

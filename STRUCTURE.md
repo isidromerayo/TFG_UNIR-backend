@@ -6,10 +6,8 @@
 TFG_UNIR-backend/
 │
 ├── 📄 README.md                    # Documentación principal
-├── 📄 DOCS_INDEX.md                # Índice de toda la documentación
-├── 📄 SECURITY_BCRYPT.md           # Guía rápida de BCrypt (punto de entrada)
-├── 📄 SECURITY.md                  # Política de seguridad
-├── 📄 AGENTS.md                    # Guía para desarrolladores
+├── 📄 AGENTS.md                    # Guía para desarrolladores e IA
+├── 📄 STRUCTURE.md                 # Estructura del proyecto
 │
 ├── 📂 src/                         # Código fuente
 │   ├── main/java/                  # Código principal
@@ -31,17 +29,37 @@ TFG_UNIR-backend/
 │   ├── test-login.sh               # 🔐 Pruebas de login
 │   └── podman-pod.sh               # 🐳 Gestión de contenedores Podman
 │
-├── 📂 docs/                        # Documentación
-│   ├── README.md                   # Índice de documentación
-│   ├── PODMAN_GUIDE.md             # 🐳 Guía completa de Podman
-│   ├── security/                   # 🔐 Documentación de seguridad
-│   │   ├── README.md                      # Índice de seguridad
-│   │   ├── QUICK_START_BCRYPT.md          # Inicio rápido BCrypt
-│   │   ├── BCRYPT_MIGRATION_SUMMARY.md    # Resumen completo
-│   │   ├── BUILD_AND_TEST_BCRYPT.md       # Guía detallada
-│   │   ├── PR_SNYK_TIMING_ATTACK.md       # PR timing attack
-│   │   └── SNYK_SECURITY_ISSUE.md         # Issue Snyk
-│   └── workflows/                  # Documentación de workflows
+├── 📂 docs/                        # Documentación organizada
+│   ├── README.md                   # 📚 Índice principal de documentación
+│   ├── quality/                    # 📊 Calidad de código
+│   │   ├── COVERAGE_ANALYSIS.md
+│   │   ├── JACOCO_CONFIGURATION.md
+│   │   ├── SONARQUBE_*.md
+│   │   └── CODACY_ISSUES.md
+│   ├── security/                   # 🔐 Seguridad y BCrypt
+│   │   ├── README.md
+│   │   ├── SECURITY.md
+│   │   ├── SECURITY_BCRYPT.md
+│   │   └── (otros archivos de seguridad)
+│   ├── workflows/                  # 🔄 CI/CD y GitHub Actions
+│   │   └── github/                 # Plantillas de workflows
+│   ├── docker/                     # 🐳 Docker, Podman e imágenes
+│   │   ├── DOCKER_WORKFLOW.md
+│   │   ├── DOCKER_IMAGES_GUIDE.md
+│   │   ├── PODMAN_GUIDE.md
+│   │   └── releases/               # Releases de imágenes
+│   ├── database/                   # 🗄️ Bases de datos
+│   │   ├── MARIADB_MYSQL_GUIDE.md
+│   │   └── PR_POSTGRESQL_MIGRATION.md
+│   ├── migration/                  # 🔄 Migraciones de versión
+│   │   ├── SPRING_BOOT_3.5_MIGRATION.md
+│   │   ├── MIGRATION_EXECUTION_GUIDE.md
+│   │   └── plan/                   # Planes detallados
+│   ├── releases/                   # 🚀 Changelogs y versiones
+│   │   └── CHANGELOG_IMAGES.md
+│   └── skills/                     # 🤖 Skills para agentes IA
+│       ├── USING_SKILLS.md
+│       └── SKILLS_ANALYSIS_REPORT.md
 │
 ├── 📂 recursos/db/                 # Recursos de base de datos
 │   ├── PASSWORDS_INFO.md           # 🔐 Info de contraseñas
@@ -67,8 +85,8 @@ TFG_UNIR-backend/
 ### Para Empezar
 
 1. **Nuevo en el proyecto**: Lee [README.md](README.md)
-2. **Buscar documentación**: Consulta [DOCS_INDEX.md](DOCS_INDEX.md)
-3. **Trabajar con BCrypt**: Empieza con [SECURITY_BCRYPT.md](SECURITY_BCRYPT.md)
+2. **Buscar documentación**: Consulta [docs/README.md](docs/README.md)
+3. **Trabajar con BCrypt**: Empieza con [docs/security/SECURITY_BCRYPT.md](docs/security/SECURITY_BCRYPT.md)
 
 ### Desarrollo
 
@@ -87,7 +105,7 @@ Commit y push
 ### Seguridad y BCrypt
 
 ```
-SECURITY_BCRYPT.md → Guía rápida
+docs/security/SECURITY_BCRYPT.md → Guía rápida
     ↓
 ./scripts/build-and-test-bcrypt.sh → Build y test
     ↓
@@ -99,19 +117,19 @@ docs/security/ → Documentación completa
 ### Calidad de Código
 
 ```
-COVERAGE_ANALYSIS.md → Estado actual
+docs/quality/COVERAGE_ANALYSIS.md → Estado actual
     ↓
 ./mvnw verify -Pintegration-tests → Generar reportes
     ↓
 target/site/jacoco/ → Ver reportes
     ↓
-SONARQUBE_ISSUES.md → Issues detectados
+docs/quality/SONARQUBE_ISSUES.md → Issues detectados
 ```
 
 ## 📚 Documentación por Tema
 
 ### 🔐 Seguridad
-- **Punto de entrada**: [SECURITY_BCRYPT.md](SECURITY_BCRYPT.md)
+- **Punto de entrada**: [docs/security/SECURITY_BCRYPT.md](docs/security/SECURITY_BCRYPT.md)
 - **Índice completo**: [docs/security/README.md](docs/security/README.md)
 - **Quick Start**: [docs/security/QUICK_START_BCRYPT.md](docs/security/QUICK_START_BCRYPT.md)
 - **Resumen**: [docs/security/BCRYPT_MIGRATION_SUMMARY.md](docs/security/BCRYPT_MIGRATION_SUMMARY.md)
@@ -124,21 +142,22 @@ SONARQUBE_ISSUES.md → Issues detectados
 - **Podman Pod**: `scripts/podman-pod.sh`
 
 ### 🐳 Contenedores
-- **Guía Podman**: [docs/PODMAN_GUIDE.md](docs/PODMAN_GUIDE.md)
+- **Guía Podman**: [docs/docker/PODMAN_GUIDE.md](docs/docker/PODMAN_GUIDE.md)
+- **Guía Docker**: [docs/docker/DOCKER_WORKFLOW.md](docs/docker/DOCKER_WORKFLOW.md)
 - **Docker Compose**: `docker-compose.yml`
 - **Dockerfile Backend**: `Dockerfile`
 - **Dockerfile MariaDB**: `Dockerfile-db`
 
 ### 📊 Calidad
-- **Cobertura**: [COVERAGE_ANALYSIS.md](COVERAGE_ANALYSIS.md)
-- **JaCoCo**: [JACOCO_CONFIGURATION.md](JACOCO_CONFIGURATION.md)
-- **SonarQube**: [SONARQUBE_POM_CONFIG.md](SONARQUBE_POM_CONFIG.md)
-- **Issues**: [SONARQUBE_ISSUES.md](SONARQUBE_ISSUES.md)
+- **Cobertura**: [docs/quality/COVERAGE_ANALYSIS.md](docs/quality/COVERAGE_ANALYSIS.md)
+- **JaCoCo**: [docs/quality/JACOCO_CONFIGURATION.md](docs/quality/JACOCO_CONFIGURATION.md)
+- **SonarQube**: [docs/quality/SONARQUBE_POM_CONFIG.md](docs/quality/SONARQUBE_POM_CONFIG.md)
+- **Issues**: [docs/quality/SONARQUBE_ISSUES.md](docs/quality/SONARQUBE_ISSUES.md)
 
 ### 🔄 CI/CD
-- **Workflows**: [MANUAL_WORKFLOW_SETUP.md](MANUAL_WORKFLOW_SETUP.md)
-- **Monorepo**: [MONOREPO_WORKFLOW_DISTRIBUTION.md](MONOREPO_WORKFLOW_DISTRIBUTION.md)
-- **Sync**: [SETUP_MONOREPO_SYNC.md](SETUP_MONOREPO_SYNC.md)
+- **Workflows**: [docs/workflows/github/MANUAL_WORKFLOW_SETUP.md](docs/workflows/github/MANUAL_WORKFLOW_SETUP.md)
+- **Monorepo**: [docs/workflows/github/MONOREPO_WORKFLOW_DISTRIBUTION.md](docs/workflows/github/MONOREPO_WORKFLOW_DISTRIBUTION.md)
+- **Sync**: [docs/workflows/github/SETUP_MONOREPO_SYNC.md](docs/workflows/github/SETUP_MONOREPO_SYNC.md)
 
 ### 🗄️ Base de Datos
 - **Contraseñas**: [recursos/db/PASSWORDS_INFO.md](recursos/db/PASSWORDS_INFO.md)
@@ -146,6 +165,8 @@ SONARQUBE_ISSUES.md → Issues detectados
 - **Verificación**: `recursos/db/verify-passwords.py`
 - **Datos**: `recursos/db/dump.mariadb.sql`
 - **Esquema**: `recursos/db/create.mariadb.sql`
+- **MariaDB/MySQL**: [docs/database/MARIADB_MYSQL_GUIDE.md](docs/database/MARIADB_MYSQL_GUIDE.md)
+- **PostgreSQL**: [docs/database/PR_POSTGRESQL_MIGRATION.md](docs/database/PR_POSTGRESQL_MIGRATION.md)
 
 ## 🎯 Casos de Uso Comunes
 
@@ -192,7 +213,7 @@ open target/site/jacoco/index.html
 ```
 
 ### "Quiero entender la seguridad"
-1. Lee [SECURITY_BCRYPT.md](SECURITY_BCRYPT.md)
+1. Lee [docs/security/SECURITY_BCRYPT.md](docs/security/SECURITY_BCRYPT.md)
 2. Consulta [docs/security/README.md](docs/security/README.md)
 3. Revisa [docs/security/BCRYPT_MIGRATION_SUMMARY.md](docs/security/BCRYPT_MIGRATION_SUMMARY.md)
 
@@ -207,13 +228,13 @@ open target/site/jacoco/index.html
 | Busco... | Archivo |
 |----------|---------|
 | Documentación general | [README.md](README.md) |
-| Índice de docs | [DOCS_INDEX.md](DOCS_INDEX.md) |
-| Guía BCrypt | [SECURITY_BCRYPT.md](SECURITY_BCRYPT.md) |
-| Guía Podman | [docs/PODMAN_GUIDE.md](docs/PODMAN_GUIDE.md) |
+| Índice de docs | [docs/README.md](docs/README.md) |
+| Guía BCrypt | [docs/security/SECURITY_BCRYPT.md](docs/security/SECURITY_BCRYPT.md) |
+| Guía Podman | [docs/docker/PODMAN_GUIDE.md](docs/docker/PODMAN_GUIDE.md) |
 | Scripts disponibles | [scripts/README.md](scripts/README.md) |
 | Docs de seguridad | [docs/security/README.md](docs/security/README.md) |
-| Cobertura de código | [COVERAGE_ANALYSIS.md](COVERAGE_ANALYSIS.md) |
-| Configuración SonarQube | [SONARQUBE_POM_CONFIG.md](SONARQUBE_POM_CONFIG.md) |
+| Cobertura de código | [docs/quality/COVERAGE_ANALYSIS.md](docs/quality/COVERAGE_ANALYSIS.md) |
+| Configuración SonarQube | [docs/quality/SONARQUBE_POM_CONFIG.md](docs/quality/SONARQUBE_POM_CONFIG.md) |
 | Flujo de desarrollo | [AGENTS.md](AGENTS.md) |
 | Info de contraseñas | [recursos/db/PASSWORDS_INFO.md](recursos/db/PASSWORDS_INFO.md) |
 
@@ -240,6 +261,6 @@ open target/site/jacoco/index.html
 ## 🆘 Ayuda
 
 Si no encuentras lo que buscas:
-1. Consulta [DOCS_INDEX.md](DOCS_INDEX.md)
+1. Consulta [docs/README.md](docs/README.md)
 2. Busca en el directorio correspondiente
 3. Revisa los README.md de cada carpeta
