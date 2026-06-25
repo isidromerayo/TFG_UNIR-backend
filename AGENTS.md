@@ -1,7 +1,7 @@
 # AGENTS.md - TFG UNIR Backend
 
 ## Stack
-- Java 21 + Spring Boot 3.5.14 + Maven (`./mvnw`)
+- Java 21 + Spring Boot 3.5.15 + Maven (`./mvnw`)
 - H2 (tests), PostgreSQL (prod)
 - JWT auth, CSRF disabled, stateless API
 - Logging: `java.util.logging.Logger` (not SLF4J)
@@ -49,11 +49,11 @@
 - SonarQube: https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend
 
 ## Known Vulnerabilities
-Current scan shows Apache Tomcat CVEs (CVE-2026-34483, 34486, 34487, 34500) in `tomcat-embed-core-10.1.53`.
-Check `target/dependency-check-report.html` after running OWASP scan.
+No Tomcat CVEs — Spring Boot 3.5.15 ships `tomcat-embed-core-10.1.55` (all previous CVEs fixed).
+Run OWASP scan periodically: `./mvnw -Pdependency-check verify -Dnvd.api.key=$NVD_API_KEY`
 
 ## Skills
 `springboot-tdd`, `springboot-security`, `springboot-patterns`, `xp-tdd-practices`, `testing-standards`, `action-tdd`, `task-validate`, `task-testing-review`
 
 ---
-**Updated:** 2026-05-01
+**Updated:** 2026-06-25

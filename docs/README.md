@@ -1,6 +1,6 @@
 # Documentación del Proyecto TFG UNIR Backend
 
-**Última actualización**: 2026-05-01
+**Última actualización**: 2026-06-25
 
 ---
 
@@ -126,7 +126,7 @@ open target/site/jacoco-it/index.html   # Solo integración
 | **Cobertura de código** | 100%* | ≥ 80% | ✅ |
 | **Tests unitarios** | 11 | - | ✅ |
 | **Tests integración** | 4 | - | ✅ |
-| **Spring Boot** | 3.5.11 | Latest | ✅ |
+| **Spring Boot** | 3.5.15 | Latest | ✅ |
 | **Java** | 21 | LTS | ✅ |
 | **Quality Gate** | Passed | Passed | ✅ |
 
