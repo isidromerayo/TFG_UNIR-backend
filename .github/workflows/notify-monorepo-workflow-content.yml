@@ -17,12 +17,8 @@ jobs:
     - name: Prepare commit message
       id: prepare
       run: |
-        # Escapar caracteres especiales en el mensaje del commit
-        COMMIT_MSG="${{ github.event.head_commit.message }}"
-        # Reemplazar saltos de línea con \n y escapar comillas
-        ESCAPED_MSG=$(echo "$COMMIT_MSG" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
-        echo "commit_message=$ESCAPED_MSG" >> $GITHUB_OUTPUT
-        
+        echo "commit_message=${{ toJSON(github.event.head_commit.message) }}" >> $GITHUB_OUTPUT
+
     - name: Notify monorepo repository
       uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0  # v3.0.0
       with:
@@ -34,7 +30,7 @@ jobs:
             "repository": "TFG_UNIR-backend",
             "ref": "${{ github.ref }}",
             "sha": "${{ github.sha }}",
-            "commit_message": "${{ steps.prepare.outputs.commit_message }}",
+            "commit_message": ${{ steps.prepare.outputs.commit_message }},
             "pusher": "${{ github.event.pusher.name }}",
             "timestamp": "${{ github.event.head_commit.timestamp }}"
           }
