@@ -1,10 +1,11 @@
 # AGENTS.md - TFG UNIR Backend
 
 ## Stack
-- Java 21 + Spring Boot 3.5.14 + Maven (`./mvnw`)
+- Java 21 + Spring Boot 3.5.16 + Maven (`./mvnw`)
 - H2 (tests), PostgreSQL (prod)
 - JWT auth, CSRF disabled, stateless API
 - Logging: `java.util.logging.Logger` (not SLF4J)
+- Security plugins: SpotBugs 4.10.2 + FindSecBugs 1.14.0 + fb-contrib 7.7.4
 
 ## Package Layout
 `src/main/java/eu/estilolibre/tfgunir/backend/`
@@ -24,8 +25,8 @@
 # Full verification with coverage
 ./mvnw clean verify -Pintegration-tests
 
-# Vulnerability scan (requires NVD_API_KEY)
-./mvnw -Pdependency-check verify -Dnvd.api.key=$NVD_API_KEY
+# Vulnerability scan (requires NVD_API_KEY) - skips tests, only runs OWASP check
+./mvnw -Pdependency-check dependency-check:check -Dnvd.api.key=$NVD_API_KEY
 ```
 
 ## Non-Negotiable Rules
@@ -49,11 +50,16 @@
 - SonarQube: https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend
 
 ## Known Vulnerabilities
-Current scan shows Apache Tomcat CVEs (CVE-2026-34483, 34486, 34487, 34500) in `tomcat-embed-core-10.1.53`.
-Check `target/dependency-check-report.html` after running OWASP scan.
+No Tomcat CVEs — Spring Boot 3.5.16 ships `tomcat-embed-core-10.1.55` (all previous CVEs fixed).
+Run OWASP scan periodically: `./mvnw -Pdependency-check dependency-check:check -Dnvd.api.key=$NVD_API_KEY`
+
+### Dependency-Check False Positives
+These CVEs are flagged by the CPE matcher but do **not** affect the project:
+- **CVE-2026-34479, CVE-2026-34477** on `log4j-api-2.24.3.jar` — both require `log4j-core` (not present). The project only has `log4j-api` (interfaces) and `log4j-to-slf4j` (routing bridge). These CVEs target the Log4j 1→2 bridge XML layout and SocketAppender SSL — none of which are used.
+- **All CVEs on `swagger-ui-5.32.2.jar` (DOMPurify@3.3.2)** — Swagger UI is a dev-only client-side tool served via `springdoc-openapi`. DOMPurify runs in the browser, sanitizing user-supplied HTML before rendering. The backend never passes user HTML through DOMPurify, so these CVEs are not exploitable server-side. No remediation required.
 
 ## Skills
 `springboot-tdd`, `springboot-security`, `springboot-patterns`, `xp-tdd-practices`, `testing-standards`, `action-tdd`, `task-validate`, `task-testing-review`
 
 ---
-**Updated:** 2026-05-01
+**Updated:** 2026-06-28
