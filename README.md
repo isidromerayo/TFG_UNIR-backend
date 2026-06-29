@@ -21,7 +21,7 @@
 ### 📄 Licencia
 [![License](https://img.shields.io/github/license/isidromerayo/TFG_UNIR-backend?color=blue&style=flat-square)](LICENSE)
 [![Java](https://img.shields.io/badge/Java-21-007396?logo=java&logoColor=white)](https://www.oracle.com/java/technologies/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.15-6DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.16-6DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
 
 </div>
 
@@ -71,15 +71,15 @@ Este repositorio versiona *skills* (guías y patrones en Markdown) para que los 
 ### 🛠️ Stack tecnológico
 
 - **Java 21**
-- **Spring Boot 3.5.15**
-- **Spring Framework 6.2.15**
-- **Hibernate 6.6.41**
+- **Spring Boot 3.5.16**
+- **Spring Framework 6.2.19**
+- **Hibernate 6.6.53.Final**
 - **Spring Data JPA** - Persistencia
-- **Spring Security 6.5.7** - Autenticación y autorización
+- **Spring Security 6.5.11** - Autenticación y autorización
 - **PostgreSQL 15+** - Base de datos producción
 - **H2** - Base de datos testing
 - **JWT** - Tokens de autenticación
-- **Swagger/OpenAPI 2.8.5** - Documentación API
+- **Swagger/OpenAPI 2.8.17** - Documentación API
 - **Lombok** - Reducción de boilerplate
 - **JaCoCo** - Cobertura de código
 - **SpotBugs** - Análisis estático
@@ -1056,7 +1056,7 @@ Este comando:
 | **Security Rating** | A | A | ✅ |
 | **Quality Gate** | Passed | Passed | ✅ |
 
-**Última actualización**: 2026-02-07 (Migración a PostgreSQL)
+**Última actualización**: 2026-06-29 (Release v0.6.2)
 
 Ver más detalles en [SonarCloud](https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend)
 
