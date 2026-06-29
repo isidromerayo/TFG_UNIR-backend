@@ -1,7 +1,7 @@
 # AGENTS.md - TFG UNIR Backend
 
 ## Stack
-- Java 21 + Spring Boot 3.5.16 + Maven (`./mvnw`)
+- Java 21 + Spring Boot 3.5.16 + Maven 3.9.9 (`./mvnw`)
 - H2 (tests), PostgreSQL (prod)
 - JWT auth, CSRF disabled, stateless API
 - Logging: `java.util.logging.Logger` (not SLF4J)
