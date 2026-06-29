@@ -34,7 +34,7 @@
 		<sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
 		<dependency-check-maven.version>12.2.2</dependency-check-maven.version>
 		<spotbugs-maven-plugin.version>4.10.2.0</spotbugs-maven-plugin.version>
-		<jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
 
 		<!-- SonarQube Configuration -->
 		<sonar.projectKey>isidromerayo_TFG_UNIR-backend</sonar.projectKey>
