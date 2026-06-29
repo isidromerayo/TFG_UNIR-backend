@@ -14,18 +14,25 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - name: Prepare commit message
+      id: prepare
+      run: |
+        cat >> "$GITHUB_OUTPUT" <<'OUTPUTEOF'
+        commit_message=${{ toJSON(github.event.head_commit.message) }}
+        OUTPUTEOF
+
     - name: Notify monorepo repository
       uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0  # v3.0.0
       with:
         token: ${{ secrets.MONOREPO_DISPATCH_TOKEN }}
         repository: isidromerayo/TFG_UNIR-monorepo
-        event-type: submodule-update
+        event-type: submodule-updated
         client-payload: |
           {
             "repository": "TFG_UNIR-backend",
             "ref": "${{ github.ref }}",
             "sha": "${{ github.sha }}",
-            "commit_message": "${{ github.event.head_commit.message }}",
+            "commit_message": ${{ steps.prepare.outputs.commit_message }},
             "pusher": "${{ github.event.pusher.name }}",
             "timestamp": "${{ github.event.head_commit.timestamp }}"
           }
