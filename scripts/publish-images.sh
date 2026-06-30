@@ -40,8 +40,8 @@ for arg in "$@"; do
   esac
 done
 
-# Extraer versión del pom.xml
-BACKEND_VERSION=$(grep -oPm1 '(?<=<version>)[^<]+' pom.xml | head -1)
+# Extraer versión del proyecto del pom.xml (segundo <version>, tras el del parent)
+BACKEND_VERSION=$(grep -o '<version>[^<]*</version>' pom.xml | sed -n '2p' | sed 's|<version>||;s|</version>||')
 
 print_step() {
     echo -e "${YELLOW}>>> $1${NC}"
@@ -65,8 +65,8 @@ echo -e "${BLUE}========================================${NC}"
 echo ""
 
 # Validar que estamos en el directorio correcto
-if [ ! -f "Dockerfile-db" ] || [ ! -f "Dockerfile" ]; then
-    print_error "Archivos Dockerfile no encontrados"
+if [ ! -f "Dockerfile" ]; then
+    print_error "Archivo Dockerfile no encontrado"
     print_error "Ejecuta este script desde TFG_UNIR-backend/"
     exit 1
 fi
@@ -105,14 +105,18 @@ fi
 print_info "Usando: $CONTAINER_CMD"
 echo ""
 
-# Paso 1: Construir imagen de MariaDB
-print_step "Construyendo imagen de MariaDB v${MARIADB_VERSION}..."
-MARIA_TAGS="-t ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION} -t ${DOCKER_USER}/mariadb-tfg:latest"
-if [ "$DRY_RUN" = true ]; then
-    print_info "  $CONTAINER_CMD build -f Dockerfile-db $MARIA_TAGS ."
+# Paso 1: Construir imagen de MariaDB (si existe Dockerfile-db-mariadb)
+if [ -f "Dockerfile-db-mariadb" ]; then
+    print_step "Construyendo imagen de MariaDB v${MARIADB_VERSION}..."
+    MARIA_TAGS="-t ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION} -t ${DOCKER_USER}/mariadb-tfg:latest"
+    if [ "$DRY_RUN" = true ]; then
+        print_info "  $CONTAINER_CMD build -f Dockerfile-db-mariadb $MARIA_TAGS ."
+    else
+        $CONTAINER_CMD build -f Dockerfile-db-mariadb $MARIA_TAGS .
+        print_success "Imagen de MariaDB construida"
+    fi
 else
-    $CONTAINER_CMD build -f Dockerfile-db $MARIA_TAGS .
-    print_success "Imagen de MariaDB construida"
+    print_info "Dockerfile-db-mariadb no encontrado, saltando imagen de MariaDB"
 fi
 
 # Paso 2: Construir imagen del Backend
@@ -140,15 +144,18 @@ if [ "$SKIP_LOGIN" = false ] && [ "$DRY_RUN" = false ]; then
     print_success "Autenticado en Docker Hub"
 fi
 
-# Paso 4: Publicar imagen de MariaDB
-print_step "Publicando MariaDB v${MARIADB_VERSION}..."
-if [ "$DRY_RUN" = true ]; then
-    print_info "  $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}"
-    print_info "  $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:latest"
-else
-    $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}
-    $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:latest
-    print_success "MariaDB publicada"
+# Paso 4: Publicar imagen de MariaDB (si se construyó)
+if docker images --format '{{.Repository}}:{{.Tag}}' 2>/dev/null | grep -q "${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}" || \
+   podman images --format '{{.Repository}}:{{.Tag}}' 2>/dev/null | grep -q "${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}" 2>/dev/null; then
+    print_step "Publicando MariaDB v${MARIADB_VERSION}..."
+    if [ "$DRY_RUN" = true ]; then
+        print_info "  $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}"
+        print_info "  $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:latest"
+    else
+        $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}
+        $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:latest
+        print_success "MariaDB publicada"
+    fi
 fi
 
 # Paso 5: Publicar imagen del Backend
@@ -173,8 +180,10 @@ fi
 echo -e "${BLUE}========================================${NC}"
 echo ""
 echo "Imágenes:"
-echo "   ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}"
-echo "   ${DOCKER_USER}/mariadb-tfg:latest"
+if [ -f "Dockerfile-db-mariadb" ]; then
+    echo "   ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}"
+    echo "   ${DOCKER_USER}/mariadb-tfg:latest"
+fi
 echo "   ${DOCKER_USER}/spring-backend-tfg:${BACKEND_VERSION}"
 echo "   ${DOCKER_USER}/spring-backend-tfg:latest"
 echo ""
