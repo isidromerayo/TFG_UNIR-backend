@@ -43,6 +43,25 @@
 - Test naming: `ClassNameTest` (unit), `ClassNameIT` (integration)
 - JaCoCo excludes: `model/`, `dto/`, `config/` (pom.xml exclusions - do not add new ones)
 
+## Release Flow (Docker images)
+
+```bash
+# 1. Preparar release (elimina -SNAPSHOT, crea tag vX.Y.Z, sube a next SNAPSHOT)
+mvn release:prepare
+
+# 2. Compilar desde el tag
+git checkout vX.Y.Z && ./mvnw clean package -DskipTests
+
+# 3. Publicar imágenes (valida que NO sea SNAPSHOT)
+./scripts/publish-images.sh
+
+# 4. Verificar lo que se publicaría sin ejecutar
+./scripts/publish-images.sh --dry-run
+
+# 5. Volver a main y subir tags
+git checkout main && git push origin main --tags
+```
+
 ## Tooling
 - JUnit 5 + Mockito + AssertJ
 - `@DataJpaTest`, `@WebMvcTest`, `@SpringBootTest` + Testcontainers
