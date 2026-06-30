@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script para publicar imágenes en Docker Hub
+# Script para publicar la imagen del backend en Docker Hub
 # Uso: ./publish-images.sh [--dry-run] [--skip-login]
 #
 # Solo publica versiones que NO sean SNAPSHOT.
@@ -16,7 +16,6 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 # Configuración
-MARIADB_VERSION="0.1.0"
 DOCKER_USER="isidromerayo"
 
 # Flags
@@ -60,7 +59,7 @@ print_info() {
 }
 
 echo -e "${BLUE}========================================${NC}"
-echo -e "${BLUE}Publicar Imágenes en Docker Hub${NC}"
+echo -e "${BLUE}Publicar imagen del Backend en Docker Hub${NC}"
 echo -e "${BLUE}========================================${NC}"
 echo ""
 
@@ -85,7 +84,6 @@ if echo "$BACKEND_VERSION" | grep -qi "SNAPSHOT"; then
 fi
 
 print_info "Versión del backend: ${BACKEND_VERSION}"
-print_info "Versión de MariaDB: ${MARIADB_VERSION}"
 echo ""
 
 if [ "$DRY_RUN" = true ]; then
@@ -105,21 +103,7 @@ fi
 print_info "Usando: $CONTAINER_CMD"
 echo ""
 
-# Paso 1: Construir imagen de MariaDB (si existe Dockerfile-db-mariadb)
-if [ -f "Dockerfile-db-mariadb" ]; then
-    print_step "Construyendo imagen de MariaDB v${MARIADB_VERSION}..."
-    MARIA_TAGS="-t ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION} -t ${DOCKER_USER}/mariadb-tfg:latest"
-    if [ "$DRY_RUN" = true ]; then
-        print_info "  $CONTAINER_CMD build -f Dockerfile-db-mariadb $MARIA_TAGS ."
-    else
-        $CONTAINER_CMD build -f Dockerfile-db-mariadb $MARIA_TAGS .
-        print_success "Imagen de MariaDB construida"
-    fi
-else
-    print_info "Dockerfile-db-mariadb no encontrado, saltando imagen de MariaDB"
-fi
-
-# Paso 2: Construir imagen del Backend
+# Paso 1: Construir imagen del Backend
 print_step "Construyendo imagen del Backend v${BACKEND_VERSION}..."
 BACKEND_TAGS="-t ${DOCKER_USER}/spring-backend-tfg:${BACKEND_VERSION} -t ${DOCKER_USER}/spring-backend-tfg:latest"
 if [ "$DRY_RUN" = true ]; then
@@ -129,7 +113,7 @@ else
     print_success "Imagen del Backend construida"
 fi
 
-# Paso 3: Verificar login en Docker Hub
+# Paso 2: Verificar login en Docker Hub
 if [ "$SKIP_LOGIN" = false ] && [ "$DRY_RUN" = false ]; then
     print_step "Verificando autenticación en Docker Hub..."
     if ! $CONTAINER_CMD login docker.io --get-login &>/dev/null; then
@@ -144,21 +128,7 @@ if [ "$SKIP_LOGIN" = false ] && [ "$DRY_RUN" = false ]; then
     print_success "Autenticado en Docker Hub"
 fi
 
-# Paso 4: Publicar imagen de MariaDB (si se construyó)
-if docker images --format '{{.Repository}}:{{.Tag}}' 2>/dev/null | grep -q "${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}" || \
-   podman images --format '{{.Repository}}:{{.Tag}}' 2>/dev/null | grep -q "${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}" 2>/dev/null; then
-    print_step "Publicando MariaDB v${MARIADB_VERSION}..."
-    if [ "$DRY_RUN" = true ]; then
-        print_info "  $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}"
-        print_info "  $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:latest"
-    else
-        $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}
-        $CONTAINER_CMD push ${DOCKER_USER}/mariadb-tfg:latest
-        print_success "MariaDB publicada"
-    fi
-fi
-
-# Paso 5: Publicar imagen del Backend
+# Paso 3: Publicar imagen del Backend
 print_step "Publicando Backend v${BACKEND_VERSION}..."
 if [ "$DRY_RUN" = true ]; then
     print_info "  $CONTAINER_CMD push ${DOCKER_USER}/spring-backend-tfg:${BACKEND_VERSION}"
@@ -175,19 +145,15 @@ echo -e "${BLUE}========================================${NC}"
 if [ "$DRY_RUN" = true ]; then
     echo -e "${YELLOW}⚠  DRY RUN — NADA SE PUBLICÓ${NC}"
 else
-    echo -e "${GREEN}✓ IMÁGENES PUBLICADAS EXITOSAMENTE${NC}"
+    echo -e "${GREEN}✓ IMAGEN PUBLICADA EXITOSAMENTE${NC}"
 fi
 echo -e "${BLUE}========================================${NC}"
 echo ""
-echo "Imágenes:"
-if [ -f "Dockerfile-db-mariadb" ]; then
-    echo "   ${DOCKER_USER}/mariadb-tfg:${MARIADB_VERSION}"
-    echo "   ${DOCKER_USER}/mariadb-tfg:latest"
-fi
+echo "Imagen:"
 echo "   ${DOCKER_USER}/spring-backend-tfg:${BACKEND_VERSION}"
 echo "   ${DOCKER_USER}/spring-backend-tfg:latest"
 echo ""
-echo "Para usar las nuevas imágenes:"
+echo "Para usar la nueva imagen:"
 echo "  docker compose pull"
 echo "  docker compose up -d"
 echo ""
