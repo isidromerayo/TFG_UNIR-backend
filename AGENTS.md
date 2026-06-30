@@ -52,13 +52,16 @@ mvn release:prepare
 # 2. Compilar desde el tag
 git checkout vX.Y.Z && ./mvnw clean package -DskipTests
 
-# 3. Publicar imágenes (valida que NO sea SNAPSHOT)
+# 3. Publicar backend (valida que NO sea SNAPSHOT)
 ./scripts/publish-images.sh
 
 # 4. Verificar lo que se publicaría sin ejecutar
 ./scripts/publish-images.sh --dry-run
 
-# 5. Volver a main y subir tags
+# 5. (Opcional) Publicar BD si hay cambios estructurales
+./scripts/publish-db-image.sh 1.1
+
+# 6. Volver a main y subir tags
 git checkout main && git push origin main --tags
 ```
 
