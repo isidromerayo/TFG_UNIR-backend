@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Script para publicar la imagen del backend en Docker Hub
-# Uso: ./publish-images.sh [--dry-run] [--skip-login]
+# Uso: ./publish-images.sh [--version X.Y.Z] [--dry-run] [--skip-login]
 #
 # Solo publica versiones que NO sean SNAPSHOT.
-# La versión se extrae automáticamente del pom.xml.
+# Por defecto la versión se extrae automáticamente del pom.xml.
 
 set -e
 
@@ -21,19 +21,31 @@ DOCKER_USER="isidromerayo"
 # Flags
 DRY_RUN=false
 SKIP_LOGIN=false
+CUSTOM_VERSION=""
 
 # Procesar argumentos
-for arg in "$@"; do
-  case "$arg" in
+while [ $# -gt 0 ]; do
+  case "$1" in
     --dry-run)
       DRY_RUN=true
+      shift
       ;;
     --skip-login)
       SKIP_LOGIN=true
+      shift
+      ;;
+    --version)
+      if [ -z "$2" ]; then
+        echo "Error: --version requiere un valor"
+        echo "Uso: $0 [--version X.Y.Z] [--dry-run] [--skip-login]"
+        exit 1
+      fi
+      CUSTOM_VERSION="$2"
+      shift 2
       ;;
     *)
-      print_error "Argumento desconocido: $arg"
-      echo "Uso: $0 [--dry-run] [--skip-login]"
+      echo "Error: Argumento desconocido: $1"
+      echo "Uso: $0 [--version X.Y.Z] [--dry-run] [--skip-login]"
       exit 1
       ;;
   esac
@@ -41,6 +53,11 @@ done
 
 # Extraer versión del proyecto del pom.xml (segundo <version>, tras el del parent)
 BACKEND_VERSION=$(grep -o '<version>[^<]*</version>' pom.xml | sed -n '2p' | sed 's|<version>||;s|</version>||')
+
+# Sobrescribir si se especificó --version
+if [ -n "$CUSTOM_VERSION" ]; then
+    BACKEND_VERSION="$CUSTOM_VERSION"
+fi
 
 print_step() {
     echo -e "${YELLOW}>>> $1${NC}"
