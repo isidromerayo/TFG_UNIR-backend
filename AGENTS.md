@@ -59,29 +59,10 @@ git checkout vX.Y.Z && ./mvnw clean package -DskipTests
 ./scripts/publish-images.sh --dry-run
 
 # 5. (Opcional) Publicar BD si hay cambios estructurales
-POSTGRES_PASSWORD=<password> ./scripts/publish-db-image.sh 1.1
+./scripts/publish-db-image.sh 1.1
 
 # 6. Volver a main y subir tags
 git checkout main && git push origin main --tags
-```
-
-## Documentation Workflow
-
-When making changes, update the affected docs **before commit**:
-
-| Change type | Files to update |
-|-------------|-----------------|
-| New/modified REST endpoint | `README.md` (API section), Swagger annotations |
-| New script in `scripts/` | `scripts/README.md` |
-| Docker/Dockerfile change | `docs/docker/DOCKER_IMAGES_GUIDE.md`, `docker-compose.yml` |
-| Security change | `docs/security/` relevant file, `AGENTS.md` Known Vulnerabilities |
-| Dependency upgrade | `pom.xml` versions, `AGENTS.md` Stack section |
-| New feature/bugfix | `README.md` if user-facing |
-
-**Quick check before commit:**
-```bash
-# Verify docs mention new script/feature
-grep -r "new-feature-name" docs/ scripts/README.md README.md
 ```
 
 ## Tooling

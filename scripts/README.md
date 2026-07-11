@@ -4,73 +4,26 @@ Scripts de utilidad para el backend TFG UNIR.
 
 ## Scripts Disponibles
 
-### 🐳 Publicación de Imágenes Docker
+### 🔐 Seguridad y BCrypt
 
 #### `publish-images.sh`
-Script para construir y publicar la imagen del backend en Docker Hub. Solo publica versiones que **no** sean SNAPSHOT.
+Script para construir y publicar imágenes en Docker Hub.
 
 **Uso:**
 ```bash
-# Publicar con versión extraída del pom.xml
 ./scripts/publish-images.sh
-
-# Solo mostrar qué haría (sin ejecutar)
-./scripts/publish-images.sh --dry-run
-
-# Especificar versión manualmente
-./scripts/publish-images.sh --version 0.6.2
-
-# Omitir login en Docker Hub
-./scripts/publish-images.sh --skip-login
 ```
 
-**Flags:**
-| Flag | Descripción |
-|------|-------------|
-| `--version X.Y.Z` | Sobrescribe la versión detectada del pom.xml |
-| `--dry-run` | Muestra los comandos sin ejecutarlos |
-| `--skip-login` | Omite la verificación de login en Docker Hub |
-
 **Qué hace:**
-1. Extrae la versión del `pom.xml` (valida formato semver)
-2. Rechaza versiones SNAPSHOT
-3. Construye la imagen del backend con `--build-arg VERSION`
-4. Etiqueta con `:version` y `:latest`
-5. Publica en Docker Hub
+1. Construye imagen de MariaDB v0.1.0
+2. Construye imagen de Backend v0.3.0
+3. Etiqueta con :latest
+4. Verifica autenticación en Docker Hub
+5. Publica todas las imágenes
 
 **Requisitos:**
 - Backend compilado (`./mvnw clean package`)
 - Autenticado en Docker Hub (`docker login` o `podman login`)
-
-#### `publish-db-image.sh`
-Script para construir y publicar la imagen de PostgreSQL en Docker Hub.
-
-**Uso:**
-```bash
-# Publicar con versión por defecto (1.0)
-POSTGRES_PASSWORD=<tu_password> ./scripts/publish-db-image.sh
-
-# Versión específica
-POSTGRES_PASSWORD=<tu_password> ./scripts/publish-db-image.sh 1.1
-
-# Solo mostrar qué haría
-POSTGRES_PASSWORD=<tu_password> ./scripts/publish-db-image.sh --dry-run
-```
-
-**Variables de entorno requeridas:**
-| Variable | Descripción | Default |
-|----------|-------------|---------|
-| `POSTGRES_PASSWORD` | Contraseña de PostgreSQL (**obligatoria**) | - |
-| `POSTGRES_DB` | Nombre de la base de datos | `tfg_unir` |
-| `POSTGRES_USER` | Usuario de PostgreSQL | `user_tfg` |
-
-**Qué hace:**
-1. Valida que `POSTGRES_PASSWORD` esté definido
-2. Construye la imagen de PostgreSQL con credenciales como `--build-arg`
-3. Etiqueta con `:version` y `:latest`
-4. Publica en Docker Hub
-
-> **⚠️ Seguridad**: Las credenciales **nunca** se hardcodean en el Dockerfile. Se pasan como variables de entorno y `--build-arg` en tiempo de build.
 
 #### `build-and-test-bcrypt.sh`
 Script automatizado completo para construir y probar la migración a BCrypt.
@@ -154,81 +107,98 @@ Script para gestionar contenedores con Podman Pod (alternativa a docker-compose)
 ## Estructura de Directorios
 
 ```
-scripts/
-├── README.md                    # Este archivo
-├── publish-images.sh            # Publicar imagen del backend
-├── publish-db-image.sh          # Publicar imagen de PostgreSQL
-├── build-and-test-bcrypt.sh     # Build y test BCrypt
-├── test-login.sh                # Pruebas de login
-└── podman-pod.sh                # Gestión Podman Pod
+TFG_UNIR-backend/
+├── scripts/
+│   ├── README.md                    # Este archivo
+│   ├── build-and-test-bcrypt.sh     # Build y test BCrypt
+│   ├── test-login.sh                # Pruebas de login
+│   └── podman-pod.sh                # Gestión Podman Pod
+├── docs/
+│   └── security/
+│       ├── QUICK_START_BCRYPT.md           # Inicio rápido
+│       ├── BCRYPT_MIGRATION_SUMMARY.md     # Resumen completo
+│       ├── BUILD_AND_TEST_BCRYPT.md        # Guía detallada
+│       ├── PR_SNYK_TIMING_ATTACK.md        # PR timing attack
+│       └── SNYK_SECURITY_ISSUE.md          # Issue Snyk
+└── ...
 ```
 
 ## Quick Start
 
-### Publicar imágenes del backend
+Para empezar rápidamente con BCrypt:
 
 ```bash
-# 1. Compilar
-./mvnw clean package -DskipTests
+# 1. Ejecutar script automatizado
+./scripts/build-and-test-bcrypt.sh
 
-# 2. Verificar qué se publicaría
-./scripts/publish-images.sh --dry-run
+# 2. Si todo pasa, probar login
+./scripts/test-login.sh
 
-# 3. Publicar
-./scripts/publish-images.sh
-```
-
-### Publicar imagen de PostgreSQL
-
-```bash
-# Requiere POSTGRES_PASSWORD como variable de entorno
-POSTGRES_PASSWORD=mi_password_secreto ./scripts/publish-db-image.sh 1.0
-```
-
-### Probar login
-
-```bash
-./scripts/test-login.sh maria@localhost 1234
+# 3. Probar desde frontend
+cd ../TFG_UNIR-angular
+pnpm start
+# Login: maria@localhost / 1234
 ```
 
 ## Documentación
 
 Para más información, consulta:
 
-- **Release Flow**: Ver `AGENTS.md` sección "Release Flow (Docker images)"
-- **Guía Docker**: `docs/docker/DOCKER_IMAGES_GUIDE.md`
-- **Quick Start BCrypt**: `docs/security/QUICK_START_BCRYPT.md`
+- **Quick Start**: `docs/security/QUICK_START_BCRYPT.md`
+- **Resumen Completo**: `docs/security/BCRYPT_MIGRATION_SUMMARY.md`
+- **Guía Detallada**: `docs/security/BUILD_AND_TEST_BCRYPT.md`
 
 ## Troubleshooting
 
-### publish-db-image.sh falla con "POSTGRES_PASSWORD no está definido"
+### Script falla con "Dockerfile-db no encontrado"
 
-Define la variable de entorno antes de ejecutar:
+Ejecuta el script desde el directorio correcto:
 ```bash
-POSTGRES_PASSWORD=tu_password ./scripts/publish-db-image.sh
-```
-
-### publish-images.sh falla con "No se publican imágenes SNAPSHOT"
-
-La versión detectada del `pom.xml` contiene `-SNAPSHOT`. Ejecuta primero:
-```bash
-mvn release:prepare
-```
-
-### Script falla con "Backend no compilado"
-
-Compila el backend primero:
-```bash
-./mvnw clean package -DskipTests
+cd TFG_UNIR-backend
+./scripts/build-and-test-bcrypt.sh
 ```
 
 ### Usando Podman en lugar de Docker
 
-Si usas Podman y tienes problemas con DNS (`UnknownHostException`):
+Si usas Podman y tienes problemas con DNS (`UnknownHostException: maria_db`):
 
 ```bash
 # Usa el script de Podman Pod en lugar de podman-compose
 ./scripts/podman-pod.sh start
+
+# Ver guía completa
+cat docs/PODMAN_GUIDE.md
+```
+
+### Login falla con credenciales correctas
+
+Reinicia con volúmenes limpios:
+
+**Docker:**
+```bash
+docker compose down -v
+docker compose up -d
+```
+
+**Podman:**
+```bash
+./scripts/podman-pod.sh stop
+podman volume rm tfg_unir-backend_data
+./scripts/podman-pod.sh start
+```
+
+### Backend no inicia
+
+Verifica logs:
+
+**Docker:**
+```bash
+docker compose logs -f api_service
+```
+
+**Podman:**
+```bash
+./scripts/podman-pod.sh logs api
 ```
 
 ## Contribuir

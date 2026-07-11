@@ -2,32 +2,10 @@
 
 ## Introducción
 
-Este proyecto proporciona imágenes Docker para el backend y la base de datos PostgreSQL:
+Este proyecto proporciona dos formas de obtener las imágenes Docker necesarias:
 
 1. **Descargar desde Docker Hub** (recomendado) - Imágenes pre-construidas
 2. **Construir localmente** - Para desarrollo o personalización
-
-### Release Flow
-
-```bash
-# 1. Preparar release (elimina -SNAPSHOT, crea tag vX.Y.Z)
-mvn release:prepare
-
-# 2. Compilar desde el tag
-git checkout vX.Y.Z && ./mvnw clean package -DskipTests
-
-# 3. Publicar backend (valida que NO sea SNAPSHOT)
-./scripts/publish-images.sh
-
-# 4. Verificar lo que se publicaría sin ejecutar
-./scripts/publish-images.sh --dry-run
-
-# 5. (Opcional) Publicar BD si hay cambios estructurales
-POSTGRES_PASSWORD=<password> ./scripts/publish-db-image.sh 1.1
-
-# 6. Volver a main y subir tags
-git checkout main && git push origin main --tags
-```
 
 ---
 
@@ -43,12 +21,12 @@ git checkout main && git push origin main --tags
 
 ```bash
 # Con Docker
-docker pull isidromerayo/postgres-tfg:1.0
-docker pull isidromerayo/spring-backend-tfg:0.6.2
+docker pull isidromerayo/mariadb-tfg:0.1.0
+docker pull isidromerayo/spring-backend-tfg:0.4.0
 
 # Con Podman
-podman pull docker.io/isidromerayo/postgres-tfg:1.0
-podman pull docker.io/isidromerayo/spring-backend-tfg:0.6.2
+podman pull docker.io/isidromerayo/mariadb-tfg:0.1.0
+podman pull docker.io/isidromerayo/spring-backend-tfg:0.4.0
 ```
 
 ### Usar con Docker Compose
@@ -57,12 +35,12 @@ El archivo `docker-compose.yml` ya está configurado para usar estas imágenes:
 
 ```yaml
 services:
-  postgres_db:
-    image: "isidromerayo/postgres-tfg:1.0"
+  maria_db:
+    image: "isidromerayo/mariadb-tfg:0.1.0"
     # ...
 
   api_service:
-    image: "isidromerayo/spring-backend-tfg:0.6.2"
+    image: "isidromerayo/spring-backend-tfg:0.4.0"
     # ...
 ```
 
@@ -106,36 +84,32 @@ cd TFG_UNIR-backend
 
 Esto genera `target/backend.jar` (~60MB)
 
-#### 2. Construir Imagen de PostgreSQL
+#### 2. Construir Imagen de MariaDB
 
 **Con Docker:**
 ```bash
-POSTGRES_PASSWORD=mi_password docker build -f Dockerfile-db-postgresql \
-    --build-arg POSTGRES_PASSWORD=mi_password \
-    -t isidromerayo/postgres-tfg:1.0 .
-docker tag isidromerayo/postgres-tfg:1.0 isidromerayo/postgres-tfg:latest
+docker build -f Dockerfile-db -t isidromerayo/mariadb-tfg:0.1.0 .
+docker tag isidromerayo/mariadb-tfg:0.1.0 isidromerayo/mariadb-tfg:latest
 ```
 
 **Con Podman:**
 ```bash
-POSTGRES_PASSWORD=mi_password podman build -f Dockerfile-db-postgresql \
-    --build-arg POSTGRES_PASSWORD=mi_password \
-    -t localhost/isidromerayo/postgres-tfg:1.0 .
-podman tag localhost/isidromerayo/postgres-tfg:1.0 localhost/isidromerayo/postgres-tfg:latest
+podman build -f Dockerfile-db -t localhost/isidromerayo/mariadb-tfg:0.1.0 .
+podman tag localhost/isidromerayo/mariadb-tfg:0.1.0 localhost/isidromerayo/mariadb-tfg:latest
 ```
 
 #### 3. Construir Imagen del Backend
 
 **Con Docker:**
 ```bash
-docker build --build-arg VERSION=0.6.2 -t isidromerayo/spring-backend-tfg:0.6.2 .
-docker tag isidromerayo/spring-backend-tfg:0.6.2 isidromerayo/spring-backend-tfg:latest
+docker build -t isidromerayo/spring-backend-tfg:0.4.0 .
+docker tag isidromerayo/spring-backend-tfg:0.4.0 isidromerayo/spring-backend-tfg:latest
 ```
 
 **Con Podman:**
 ```bash
-podman build --build-arg VERSION=0.6.2 -t localhost/isidromerayo/spring-backend-tfg:0.6.2 .
-podman tag localhost/isidromerayo/spring-backend-tfg:0.6.2 localhost/isidromerayo/spring-backend-tfg:latest
+podman build -t localhost/isidromerayo/spring-backend-tfg:0.4.0 .
+podman tag localhost/isidromerayo/spring-backend-tfg:0.4.0 localhost/isidromerayo/spring-backend-tfg:latest
 ```
 
 #### 4. Verificar Imágenes Construidas
@@ -152,9 +126,9 @@ podman images | grep isidromerayo
 
 Deberías ver:
 ```
-isidromerayo/postgres-tfg          1.0      ...    ...    ...
-isidromerayo/postgres-tfg          latest   ...    ...    ...
-isidromerayo/spring-backend-tfg   0.6.2    ...    ...    ...
+isidromerayo/mariadb-tfg          0.1.0    ...    ...    ...
+isidromerayo/mariadb-tfg          latest   ...    ...    ...
+isidromerayo/spring-backend-tfg   0.4.0    ...    ...    ...
 isidromerayo/spring-backend-tfg   latest   ...    ...    ...
 ```
 
@@ -198,53 +172,62 @@ Luego ejecuta:
 
 ---
 
-## Publicar Imágenes en Docker Hub
+## Publicar Imágenes en Docker Hub (Opcional)
+
+Si quieres publicar tus propias versiones en Docker Hub:
 
 ### Requisitos
 
 - Cuenta en [Docker Hub](https://hub.docker.com/)
-- Autenticación configurada (`docker login` o `podman login`)
-- Backend compilado (`./mvnw clean package -DskipTests`)
+- Autenticación configurada
 
-### Publicar imagen del backend
+### Pasos
+
+#### 1. Autenticarse
+
+**Con Docker:**
+```bash
+docker login
+```
+
+**Con Podman:**
+```bash
+podman login docker.io
+```
+
+Te pedirá:
+- **Username**: tu usuario de Docker Hub
+- **Password**: tu contraseña o token de acceso
+
+#### 2. Construir y Publicar
+
+Usa el script automatizado:
 
 ```bash
-# Verificar qué se publicaría (sin ejecutar)
-./scripts/publish-images.sh --dry-run
-
-# Publicar
 ./scripts/publish-images.sh
 ```
 
-El script:
-- Extrae la versión del `pom.xml`
-- Rechaza versiones SNAPSHOT
-- Construye con `--build-arg VERSION`
-- Publica con tags `:version` y `:latest`
+Este script:
+1. Verifica que el backend esté compilado
+2. Construye ambas imágenes
+3. Las etiqueta con versión y `:latest`
+4. Verifica autenticación
+5. Publica en Docker Hub
 
-### Publicar imagen de PostgreSQL
-
-```bash
-# Requiere POSTGRES_PASSWORD como variable de entorno
-POSTGRES_PASSWORD=mi_password ./scripts/publish-db-image.sh 1.0
-```
-
-### Publicación manual
+#### 3. Publicación Manual
 
 Si prefieres hacerlo manualmente:
 
 ```bash
-# Backend
-docker build --build-arg VERSION=0.6.2 -t isidromerayo/spring-backend-tfg:0.6.2 .
-docker push isidromerayo/spring-backend-tfg:0.6.2
-docker push isidromerayo/spring-backend-tfg:latest
+# Construir imágenes (ver sección anterior)
 
-# PostgreSQL
-docker build -f Dockerfile-db-postgresql \
-    --build-arg POSTGRES_PASSWORD=mi_password \
-    -t isidromerayo/postgres-tfg:1.0 .
-docker push isidromerayo/postgres-tfg:1.0
-docker push isidromerayo/postgres-tfg:latest
+# Publicar MariaDB
+docker push isidromerayo/mariadb-tfg:0.1.0
+docker push isidromerayo/mariadb-tfg:latest
+
+# Publicar Backend
+docker push isidromerayo/spring-backend-tfg:0.4.0
+docker push isidromerayo/spring-backend-tfg:latest
 ```
 
 ---
@@ -264,19 +247,22 @@ docker push isidromerayo/postgres-tfg:latest
 
 ## Versiones Disponibles
 
-### PostgreSQL
+### MariaDB
 
-| Tag | Descripción |
-|-----|-------------|
-| `1.0` | PostgreSQL 17, imagen base para el proyecto |
-| `latest` | Referencia a la última versión |
+| Tag | Descripción | Tamaño |
+|-----|-------------|--------|
+| `0.1.0` | Versión estable con BCrypt | ~400MB |
+| `latest` | Última versión (actualmente 0.1.0) | ~400MB |
+| `0.0.4` | ⚠️ Versión antigua sin BCrypt | ~400MB |
 
 ### Backend
 
-| Tag | Descripción |
-|-----|-------------|
-| `0.6.2` | **Última versión** (Spring Boot 3.5.16) |
-| `latest` | Referencia a la última versión |
+| Tag | Descripción | Tamaño |
+|-----|-------------|--------|
+| `0.4.0` | **Última versión** (Spring Boot 3.5) | ~450MB |
+| `latest` | Referencia a la última versión (`0.4.0`) | ~450MB |
+| `0.3.0` | Versión estable anterior (Spring Boot 3.4) | ~450MB |
+| `0.2.2` | ⚠️ Versión antigua sin BCrypt | ~450MB |
 
 ---
 
@@ -343,8 +329,8 @@ Resultado esperado:
 ```bash
 # Construir localmente
 ./mvnw clean package -DskipTests
-docker build -f Dockerfile-db-postgresql --build-arg POSTGRES_PASSWORD=xxx -t isidromerayo/postgres-tfg:1.0 .
-docker build --build-arg VERSION=0.6.2 -t isidromerayo/spring-backend-tfg:0.6.2 .
+docker build -f Dockerfile-db -t isidromerayo/mariadb-tfg:0.1.0 .
+docker build -t isidromerayo/spring-backend-tfg:0.4.0 .
 ```
 
 ### Error: "unauthorized: incorrect username or password"
@@ -449,21 +435,20 @@ docker compose up -d
 
 ## Referencias
 
-- [Dockerfile-db-postgresql](../../Dockerfile-db-postgresql) - Dockerfile de PostgreSQL
-- [Dockerfile](../../Dockerfile) - Dockerfile del Backend
-- [docker-compose.yml](../../docker-compose.yml) - Configuración Docker Compose
-- [scripts/publish-images.sh](../../scripts/publish-images.sh) - Publicar imagen del backend
-- [scripts/publish-db-image.sh](../../scripts/publish-db-image.sh) - Publicar imagen de PostgreSQL
-- [AGENTS.md](../../AGENTS.md) - Release Flow
+- [Dockerfile-db](../Dockerfile-db) - Dockerfile de MariaDB
+- [Dockerfile](../Dockerfile) - Dockerfile del Backend
+- [docker-compose.yml](../docker-compose.yml) - Configuración Docker Compose
+- [CHANGELOG_IMAGES.md](../CHANGELOG_IMAGES.md) - Changelog de versiones
+- [scripts/publish-images.sh](../scripts/publish-images.sh) - Script de publicación
 
 ---
 
 ## Soporte
 
 ### Documentación
-- [AGENTS.md](../../AGENTS.md) - Release Flow y reglas del proyecto
-- [scripts/README.md](../../scripts/README.md) - Documentación de scripts
-- [docs/security/](../security/) - Documentación de seguridad
+- [SECURITY_BCRYPT.md](../SECURITY_BCRYPT.md) - Guía de seguridad
+- [docs/PODMAN_GUIDE.md](PODMAN_GUIDE.md) - Guía de Podman
+- [docs/security/](security/) - Documentación de seguridad
 
 ### Comunidad
 - GitHub Issues - Reportar problemas
