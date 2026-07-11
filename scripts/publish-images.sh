@@ -54,6 +54,16 @@ done
 # Extraer versión del proyecto del pom.xml (segundo <version>, tras el del parent)
 BACKEND_VERSION=$(grep -o '<version>[^<]*</version>' pom.xml | sed -n '2p' | sed 's|<version>||;s|</version>||')
 
+# Validar que la versión extraída no está vacía y tiene formato semver
+if [ -z "$BACKEND_VERSION" ]; then
+    print_error "No se pudo extraer la versión del pom.xml"
+    exit 1
+fi
+if ! echo "$BACKEND_VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+'; then
+    print_error "Versión extraída no tiene formato semver válido: ${BACKEND_VERSION}"
+    exit 1
+fi
+
 # Sobrescribir si se especificó --version
 if [ -n "$CUSTOM_VERSION" ]; then
     BACKEND_VERSION="$CUSTOM_VERSION"

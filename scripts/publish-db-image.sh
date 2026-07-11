@@ -20,6 +20,9 @@ DOCKER_USER="isidromerayo"
 DB_VERSION="1.0"
 DRY_RUN=false
 SKIP_LOGIN=false
+DB_NAME="tfg_unir"
+DB_USER="user_tfg"
+DB_PASSWORD=""
 
 # Procesar argumentos
 for arg in "$@"; do
@@ -29,6 +32,10 @@ for arg in "$@"; do
       ;;
     --skip-login)
       SKIP_LOGIN=true
+      ;;
+    --password)
+      echo "Error: --password no está soportado. Usa la variable de entorno POSTGRES_PASSWORD."
+      exit 1
       ;;
     --*)
       echo "Error: Argumento desconocido: $arg"
@@ -40,6 +47,17 @@ for arg in "$@"; do
       ;;
   esac
 done
+
+# Credenciales desde variables de entorno (obligatoria para build)
+DB_PASSWORD="${POSTGRES_PASSWORD:-}"
+if [ -z "$DB_PASSWORD" ]; then
+    echo "Error: POSTGRES_PASSWORD no está definido."
+    echo "Define la variable de entorno antes de ejecutar:"
+    echo "  POSTGRES_PASSWORD=<tu_password> ./publish-db-image.sh"
+    exit 1
+fi
+DB_NAME="${POSTGRES_DB:-tfg_unir}"
+DB_USER="${POSTGRES_USER:-user_tfg}"
 
 DOCKERFILE="Dockerfile-db-postgresql"
 IMAGE_NAME="${DOCKER_USER}/postgres-tfg"
@@ -81,11 +99,12 @@ echo ""
 
 # Construir
 print_step "Construyendo imagen PostgreSQL v${DB_VERSION}..."
+BUILD_ARGS="--build-arg POSTGRES_PASSWORD=${DB_PASSWORD} --build-arg POSTGRES_DB=${DB_NAME} --build-arg POSTGRES_USER=${DB_USER}"
 TAGS="-t ${IMAGE_NAME}:${DB_VERSION} -t ${IMAGE_NAME}:latest"
 if [ "$DRY_RUN" = true ]; then
-    print_info "  $CONTAINER_CMD build -f $DOCKERFILE $TAGS ."
+    print_info "  $CONTAINER_CMD build -f $DOCKERFILE $BUILD_ARGS $TAGS ."
 else
-    $CONTAINER_CMD build -f $DOCKERFILE $TAGS .
+    $CONTAINER_CMD build -f $DOCKERFILE $BUILD_ARGS $TAGS .
     print_success "Imagen PostgreSQL construida"
 fi
 
