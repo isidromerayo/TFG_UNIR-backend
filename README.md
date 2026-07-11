@@ -344,88 +344,31 @@ deploy:
 Para usar una instancia limpia de PostgreSQL:
 
 ```bash
-docker run --name postgres-tfg -e POSTGRES_PASSWORD=mypass -e POSTGRES_DB=tfg_unir -e POSTGRES_USER=user_tfg -p 5432:5432 -d postgres:latest
+docker run --name postgres-tfg -e POSTGRES_PASSWORD=mypass -e POSTGRES_DB=tfg_unir -e POSTGRES_USER=user_tfg -p 5432:5432 -d postgres:17
 ```
 
-Esta imagen incluye:
-- Base de datos `tfg_unir` creada
-- Usuario `user_tfg` con contraseña `tfg_un1r_PWD`
-- Datos de prueba precargados
-
-##### Construir imagen personalizada de PostgreSQL (Opcional)
-
-El proyecto incluye un `Dockerfile-db-postgresql` para crear una imagen personalizada si fuera necesario:
-
-**1. Verificar prerequisitos**
-
-Asegúrate de que existen los scripts SQL en `../recursos/db/postgresql/`:
-- `01-create.sql`
-- `02-create.sql`
-- `03-create.sql`
-
-**2. Construir la imagen**
+##### Construir imagen personalizada de PostgreSQL
 
 ```bash
 cd backend
 
-# Construir imagen personalizada
-docker build -f Dockerfile-db-postgresql -t isidromerayo/postgres-tfg:latest .
+# Construir imagen (requiere POSTGRES_PASSWORD)
+POSTGRES_PASSWORD=mi_password docker build -f Dockerfile-db-postgresql \
+    --build-arg POSTGRES_PASSWORD=mi_password \
+    -t isidromerayo/postgres-tfg:1.0 .
 ```
 
-**3. Probar la imagen localmente**
+##### Publicar imágenes en Docker Hub
 
 ```bash
-# Ejecutar contenedor
-docker run --name postgres-test -p 5432:5432 -d isidromerayo/postgres-tfg:latest
+# Backend (extrae versión del pom.xml, rechaza SNAPSHOT)
+./scripts/publish-images.sh
 
-# Verificar que funciona
-docker logs postgres-test
-
-# Conectar a la base de datos
-psql -h localhost -U user_tfg -d tfg_unir
+# PostgreSQL (requiere POSTGRES_PASSWORD)
+POSTGRES_PASSWORD=mi_password ./scripts/publish-db-image.sh 1.0
 ```
 
-**4. Publicar en Docker Hub**
-
-```bash
-# Login (si no lo has hecho)
-docker login
-
-# Push de la versión específica
-docker push isidromerayo/mariadb-tfg:0.0.4
-
-# Push del tag latest
-docker push isidromerayo/mariadb-tfg:latest
-```
-
-##### Configuración del Dockerfile-db
-
-El `Dockerfile-db` configura:
-
-```dockerfile
-FROM mariadb:latest
-
-ENV MARIADB_ROOT_PASSWORD=mypass
-ENV MYSQL_DATABASE=tfg_unir
-ENV MYSQL_USER=user_tfg
-ENV MYSQL_PASSWORD=tfg_un1r_PWD
-
-EXPOSE 3306
-```
-
-> **⚠️ Nota de seguridad**: Las credenciales están hardcodeadas para desarrollo. En producción, usa variables de entorno o secrets.
-
-##### Carga de datos inicial
-
-Cuando usas `docker-compose`, los scripts SQL se montan automáticamente:
-
-```yaml
-volumes:
-  - ../recursos/db/create.mariadb.sql:/docker-entrypoint-initdb.d/create.mariadb.sql
-  - ../recursos/db/dump.mariadb.sql:/docker-entrypoint-initdb.d/dump.mariadb.sql
-```
-
-MariaDB ejecuta automáticamente los scripts en `/docker-entrypoint-initdb.d/` al iniciar por primera vez.
+Ver guía completa: [docs/docker/DOCKER_IMAGES_GUIDE.md](docs/docker/DOCKER_IMAGES_GUIDE.md)
 
 #### BBDD: H2 para test
 
@@ -466,13 +409,14 @@ https://javatodev.com/docker-compose-for-spring-boot-with-mariadb/
 
 #### 🐳 docker compose
 
-Con docker compose se montará un contenedor con MariaDB (datos precargados) y otro con la aplicación de Spring Boot 3 con el API.
+Con docker compose se montará un contenedor con PostgreSQL (datos precargados) y otro con la aplicación de Spring Boot con el API.
 
 ##### Prerequisitos
 
-1. **Archivos SQL**: Deben existir en `../recursos/db/`:
-   - `create.mariadb.sql` - Script de creación de esquema
-   - `dump.mariadb.sql` - Datos iniciales
+1. **Archivos SQL**: Deben existir en `../recursos/db/postgresql/`:
+   - `01-create.sql` - Creación de esquema
+   - `02-create.sql` - Tablas
+   - `03-create.sql` - Datos iniciales
 
 2. **Configuración del backend**: El `application.properties` debe soportar variables de entorno:
    ```properties
@@ -523,103 +467,19 @@ Para detener las instancias de los contenedores `docker compose stop`.
 
 #### 📤 Publicar imágenes en Docker Hub
 
-Esta sección documenta el proceso completo para publicar imágenes del backend en Docker Hub.
-
-##### Flujo completo con Docker
-
-**1. Construir la imagen**
-
-Primero, asegúrate de tener el JAR actualizado:
+##### Usar scripts automatizados
 
 ```bash
-cd backend
-./mvnw clean install
+# Publicar backend (extrae versión del pom.xml)
+./scripts/publish-images.sh
+
+# Publicar PostgreSQL (requiere variable de entorno)
+POSTGRES_PASSWORD=mi_password ./scripts/publish-db-image.sh 1.0
 ```
 
-**2. Crear la imagen Docker**
+##### Flujo completo de release
 
-```bash
-# Construir con versión específica
-docker build -t isidromerayo/spring-backend-tfg:1.0.0 .
-
-# También crear tag 'latest' para la versión más reciente
-docker tag isidromerayo/spring-backend-tfg:1.0.0 isidromerayo/spring-backend-tfg:latest
-```
-
-**3. Login en Docker Hub**
-
-```bash
-docker login
-
-# Introducir credenciales cuando se soliciten
-# Username: isidromerayo
-# Password: [tu token de acceso]
-```
-
-> **💡 Tip**: Se recomienda usar un Personal Access Token en lugar de la contraseña. Créalo en: https://hub.docker.com/settings/security
-
-**4. Publicar la imagen**
-
-```bash
-# Push de la versión específica
-docker push isidromerayo/spring-backend-tfg:1.0.0
-
-# Push del tag latest
-docker push isidromerayo/spring-backend-tfg:latest
-```
-
-**5. Verificar la publicación**
-
-Visita: https://hub.docker.com/r/isidromerayo/spring-backend-tfg/tags
-
-##### Flujo completo con Podman
-
-**1. Construir la imagen**
-
-```bash
-cd backend
-./mvnw clean install
-```
-
-**2. Crear la imagen Podman**
-
-```bash
-# Construir con versión específica
-podman build -t isidromerayo/spring-backend-tfg:1.0.0 .
-
-# También crear tag 'latest'
-podman tag isidromerayo/spring-backend-tfg:1.0.0 isidromerayo/spring-backend-tfg:latest
-```
-
-**3. Login en Docker Hub**
-
-```bash
-podman login docker.io
-
-# Introducir credenciales cuando se soliciten
-# Username: isidromerayo
-# Password: [tu token de acceso]
-```
-
-**4. Publicar la imagen**
-
-```bash
-# Push de la versión específica
-podman push isidromerayo/spring-backend-tfg:1.0.0
-
-# Push del tag latest
-podman push isidromerayo/spring-backend-tfg:latest
-```
-
-**5. Verificar la publicación**
-
-```bash
-# Listar imágenes locales
-podman images | grep spring-backend-tfg
-
-# Verificar en Docker Hub
-# https://hub.docker.com/r/isidromerayo/spring-backend-tfg/tags
-```
+Ver [AGENTS.md - Release Flow](AGENTS.md) para el proceso completo.
 
 ##### Guía de versionado
 
@@ -632,56 +492,23 @@ Seguimos [Semantic Versioning](https://semver.org/):
 
 **Ejemplos:**
 ```bash
-# Primera versión estable
-docker build -t isidromerayo/spring-backend-tfg:1.0.0 .
+# El script detecta la versión del pom.xml automáticamente
+./scripts/publish-images.sh
 
-# Corrección de bug
-docker build -t isidromerayo/spring-backend-tfg:1.0.1 .
-
-# Nueva funcionalidad
-docker build -t isidromerayo/spring-backend-tfg:1.1.0 .
-
-# Cambio breaking
-docker build -t isidromerayo/spring-backend-tfg:2.0.0 .
+# O especificar manualmente
+./scripts/publish-images.sh --version 1.0.0
 ```
 
-##### Script de publicación automatizado
+##### Script de publicación
 
-Puedes crear un script `publish-image.sh` para automatizar el proceso:
+Usa los scripts incluidos en el proyecto:
 
 ```bash
-#!/bin/bash
-set -e
+# Backend
+./scripts/publish-images.sh
 
-VERSION=$1
-if [ -z "$VERSION" ]; then
-    echo "Uso: ./publish-image.sh <version>"
-    echo "Ejemplo: ./publish-image.sh 1.0.0"
-    exit 1
-fi
-
-IMAGE_NAME="isidromerayo/spring-backend-tfg"
-
-echo "🔨 Compilando aplicación..."
-./mvnw clean install
-
-echo "🐳 Construyendo imagen Docker..."
-docker build -t ${IMAGE_NAME}:${VERSION} .
-docker tag ${IMAGE_NAME}:${VERSION} ${IMAGE_NAME}:latest
-
-echo "📤 Publicando en Docker Hub..."
-docker push ${IMAGE_NAME}:${VERSION}
-docker push ${IMAGE_NAME}:latest
-
-echo "✅ Imagen publicada correctamente:"
-echo "   - ${IMAGE_NAME}:${VERSION}"
-echo "   - ${IMAGE_NAME}:latest"
-```
-
-Uso:
-```bash
-chmod +x publish-image.sh
-./publish-image.sh 1.0.0
+# PostgreSQL
+POSTGRES_PASSWORD=mi_password ./scripts/publish-db-image.sh 1.0
 ```
 
 ##### Troubleshooting
@@ -752,11 +579,11 @@ podman --version
 
 Todos los comandos Docker funcionan con Podman reemplazando `docker` por `podman`:
 
-##### Ejecutar MariaDB con Podman
+##### Ejecutar PostgreSQL con Podman
 
 ```bash
-# Equivalente a: docker run --name mariadb-tfg -p 3306:3306 -d isidromerayo/mariadb-tfg
-podman run --name mariadb-tfg -p 3306:3306 -d isidromerayo/mariadb-tfg
+# Equivalente a: docker run --name postgres-tfg -p 5432:5432 -d postgres:17
+podman run --name postgres-tfg -p 5432:5432 -d postgres:17
 ```
 
 ##### Construir imagen del backend con Podman
@@ -823,7 +650,7 @@ podman run -d --pod backend-pod --name postgres_db \
   -e POSTGRES_PASSWORD=mypass \
   -e POSTGRES_DB=tfg_unir \
   -e POSTGRES_USER=user_tfg \
-  postgres:latest
+  postgres:17
 ```
 
 **3. Ejecutar el backend en el pod**
