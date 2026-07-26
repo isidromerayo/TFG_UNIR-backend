@@ -133,9 +133,9 @@ function logs_pod() {
                 print_info "Logs del backend API:"
                 podman logs --tail 50 $API_SERVICE_CONTAINER
                 ;;
-            db|mariadb)
-                print_info "Logs de MariaDB:"
-                podman logs --tail 50 $MARIA_DB_CONTAINER
+            db|postgres)
+                print_info "Logs de PostgreSQL:"
+                podman logs --tail 50 $POSTGRES_DB_CONTAINER
                 ;;
             *)
                 print_error "Servicio desconocido: $2"
@@ -156,7 +156,7 @@ function show_usage() {
     echo "  status   - Ver el estado del backend"
     echo "  logs     - Ver logs del backend API"
     echo "  logs api - Ver logs del backend API"
-    echo "  logs db  - Ver logs de MariaDB"
+    echo "  logs db  - Ver logs de PostgreSQL"
     echo ""
     echo "Ejemplos:"
     echo "  $0 start"

@@ -154,7 +154,7 @@ boolean matches = passwordEncoder.matches(password, storedHash);
 
 ### Configuración
 - `../../docker-compose.yml` - Configuración Docker
-- `../../Dockerfile-db` - Imagen MariaDB
+- `../../Dockerfile-db-postgresql` - Imagen PostgreSQL
 
 ## 🆘 Soporte
 

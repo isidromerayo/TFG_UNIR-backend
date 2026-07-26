@@ -58,7 +58,6 @@ Guías de Docker, Podman y contenedores.
 ### `/database/`
 Documentación sobre bases de datos y migraciones.
 
-- **[MARIADB_MYSQL_GUIDE.md](database/MARIADB_MYSQL_GUIDE.md)** - Guía de MariaDB/MySQL
 - **[PR_POSTGRESQL_MIGRATION.md](database/PR_POSTGRESQL_MIGRATION.md)** - Migración a PostgreSQL
 
 ### `/migration/`

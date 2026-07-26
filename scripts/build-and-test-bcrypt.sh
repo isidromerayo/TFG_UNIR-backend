@@ -1,8 +1,12 @@
 #!/bin/bash
 
-# Script para construir y probar la nueva imagen de MariaDB con BCrypt
-# Autor: Generado automáticamente
-# Fecha: 2024-12-09
+# DEPRECATED: Este script era para MariaDB con BCrypt (2024).
+# La migración a PostgreSQL ya completó este script ya no es funcional.
+# Se mantiene como referencia histórica.
+
+echo "⚠️  DEPRECATED: Este script es legacy (MariaDB). La migración a PostgreSQL ya completó."
+echo "   Usa scripts/podman-pod.sh o docker-compose.yml para PostgreSQL."
+exit 1
 
 set -e  # Exit on error
 

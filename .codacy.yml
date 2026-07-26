@@ -30,7 +30,7 @@ engines:
     exclude_paths:
       - 'src/test/**'
   
-  # Desactivar análisis SQL Server (no aplica a H2/MariaDB)
+  # Desactivar análisis SQL Server (no aplica a H2/PostgreSQL)
   tsqllint:
     enabled: false
   
