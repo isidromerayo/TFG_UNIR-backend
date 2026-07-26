@@ -31,11 +31,18 @@
 
 ## Non-Negotiable Rules
 1. **TDD mandatory** - failing test before production code
-2. **No direct commits to main** - use feature branches
+2. **Always create a branch** - never work directly on `main`:
+   - `feature/` — new functionality
+   - `fix/` — bug fixes
+   - `fix/remove-` — removing legacy code/dependencies
+   - `security/` — vulnerability fixes (third-party or project)
+   - `docs/` — documentation-only changes
+   - `refactor/` — code restructuring
+   - `chore/` — maintenance (deps, CI, config)
 3. **SpotBugs must pass** before commit
 4. **Never log secrets** (passwords, tokens)
 5. **Validate inputs** with Jakarta annotations (`@Valid`, `@NotBlank`, `@Email`)
-6. **Update docs** - review and update README/docs when changing features or config
+6. **Update docs before PR** - review and update affected documentation (see Documentation Workflow)
 
 ## Code Conventions
 - Constructor injection with `final` fields
@@ -77,12 +84,13 @@ When making changes, update the affected docs **before commit**:
 | Security change | `docs/security/` relevant file, `AGENTS.md` Known Vulnerabilities |
 | Dependency upgrade | `pom.xml` versions, `AGENTS.md` Stack section |
 | New feature/bugfix | `README.md` if user-facing |
+| Removing legacy code | Update all references to removed files/commands |
 
-**Quick check before commit:**
-```bash
-# Verify docs mention new script/feature
-grep -r "new-feature-name" docs/ scripts/README.md README.md
-```
+**Pre-PR checklist:**
+- [ ] All affected documentation updated
+- [ ] `grep -r "removed-feature" docs/ scripts/ README.md` returns no stale references
+- [ ] No broken links to deleted files
+- [ ] `AGENTS.md` Stack section updated if dependencies changed
 
 ## Tooling
 - JUnit 5 + Mockito + AssertJ
@@ -103,4 +111,4 @@ These CVEs are flagged by the CPE matcher but do **not** affect the project:
 `springboot-tdd`, `springboot-security`, `springboot-patterns`, `xp-tdd-practices`, `testing-standards`, `action-tdd`, `task-validate`, `task-testing-review`
 
 ---
-**Updated:** 2026-06-28
+**Updated:** 2026-07-26
