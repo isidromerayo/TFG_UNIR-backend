@@ -25,7 +25,9 @@ TFG_UNIR-backend/
 │
 ├── 📂 scripts/                     # Scripts ejecutables
 │   ├── README.md                   # Documentación de scripts
-│   ├── build-and-test-bcrypt.sh    # 🔐 Build y test BCrypt (principal)
+│   ├── publish-images.sh           # 🐳 Publicar imagen del backend
+│   ├── publish-db-image.sh         # 🐳 Publicar imagen de PostgreSQL
+│   ├── build-and-test-bcrypt.sh    # 🔐 Build y test BCrypt
 │   ├── test-login.sh               # 🔐 Pruebas de login
 │   └── podman-pod.sh               # 🐳 Gestión de contenedores Podman
 │
@@ -49,7 +51,6 @@ TFG_UNIR-backend/
 │   │   ├── PODMAN_GUIDE.md
 │   │   └── releases/               # Releases de imágenes
 │   ├── database/                   # 🗄️ Bases de datos
-│   │   ├── MARIADB_MYSQL_GUIDE.md
 │   │   └── PR_POSTGRESQL_MIGRATION.md
 │   ├── migration/                  # 🔄 Migraciones de versión
 │   │   ├── SPRING_BOOT_3.5_MIGRATION.md
@@ -65,8 +66,10 @@ TFG_UNIR-backend/
 │   ├── PASSWORDS_INFO.md           # 🔐 Info de contraseñas
 │   ├── CHANGELOG_PASSWORDS.md      # 🔐 Changelog de contraseñas
 │   ├── verify-passwords.py         # 🔐 Script de verificación
-│   ├── dump.mariadb.sql            # Datos iniciales (con BCrypt)
-│   └── create.mariadb.sql          # Esquema de BD
+│   └── postgresql/                 # Scripts SQL para PostgreSQL
+│       ├── 01-create.sql
+│       ├── 02-create.sql
+│       └── 03-create.sql
 │
 ├── 📂 target/                      # Archivos compilados
 │   ├── site/jacoco/                # Reportes de cobertura combinados
@@ -75,7 +78,7 @@ TFG_UNIR-backend/
 │
 ├── 🐳 docker-compose.yml           # Configuración Docker Compose
 ├── 🐳 Dockerfile                   # Imagen del backend
-├── 🐳 Dockerfile-db                # Imagen de MariaDB
+├── 🐳 Dockerfile-db-postgresql     # Imagen de PostgreSQL
 │
 └── 📦 pom.xml                      # Configuración Maven
 ```
@@ -137,16 +140,18 @@ docs/quality/SONARQUBE_ISSUES.md → Issues detectados
 
 ### 🔧 Scripts
 - **Índice**: [scripts/README.md](scripts/README.md)
+- **Publicar backend**: `scripts/publish-images.sh`
+- **Publicar PostgreSQL**: `scripts/publish-db-image.sh`
 - **BCrypt**: `scripts/build-and-test-bcrypt.sh`
 - **Login**: `scripts/test-login.sh`
 - **Podman Pod**: `scripts/podman-pod.sh`
 
 ### 🐳 Contenedores
+- **Guía Docker**: [docs/docker/DOCKER_IMAGES_GUIDE.md](docs/docker/DOCKER_IMAGES_GUIDE.md)
 - **Guía Podman**: [docs/docker/PODMAN_GUIDE.md](docs/docker/PODMAN_GUIDE.md)
-- **Guía Docker**: [docs/docker/DOCKER_WORKFLOW.md](docs/docker/DOCKER_WORKFLOW.md)
 - **Docker Compose**: `docker-compose.yml`
 - **Dockerfile Backend**: `Dockerfile`
-- **Dockerfile MariaDB**: `Dockerfile-db`
+- **Dockerfile PostgreSQL**: `Dockerfile-db-postgresql`
 
 ### 📊 Calidad
 - **Cobertura**: [docs/quality/COVERAGE_ANALYSIS.md](docs/quality/COVERAGE_ANALYSIS.md)
@@ -163,10 +168,8 @@ docs/quality/SONARQUBE_ISSUES.md → Issues detectados
 - **Contraseñas**: [recursos/db/PASSWORDS_INFO.md](recursos/db/PASSWORDS_INFO.md)
 - **Changelog**: [recursos/db/CHANGELOG_PASSWORDS.md](recursos/db/CHANGELOG_PASSWORDS.md)
 - **Verificación**: `recursos/db/verify-passwords.py`
-- **Datos**: `recursos/db/dump.mariadb.sql`
-- **Esquema**: `recursos/db/create.mariadb.sql`
-- **MariaDB/MySQL**: [docs/database/MARIADB_MYSQL_GUIDE.md](docs/database/MARIADB_MYSQL_GUIDE.md)
-- **PostgreSQL**: [docs/database/PR_POSTGRESQL_MIGRATION.md](docs/database/PR_POSTGRESQL_MIGRATION.md)
+- **PostgreSQL**: `recursos/db/postgresql/`
+- **Migración**: [docs/database/PR_POSTGRESQL_MIGRATION.md](docs/database/PR_POSTGRESQL_MIGRATION.md)
 
 ## 🎯 Casos de Uso Comunes
 

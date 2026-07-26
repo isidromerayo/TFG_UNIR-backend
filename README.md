@@ -203,7 +203,7 @@ $ psql --version
 psql (PostgreSQL) 15.x
 ```
 
-> ℹ️ **Soporte Legacy**: Si necesitas utilizar **MariaDB** o **MySQL**, consulta la [Guía de Uso de MariaDB/MySQL](docs/MARIADB_MYSQL_GUIDE.md).
+> ℹ️ **Base de datos**: PostgreSQL es la única base de datos soportada.
 
 ##### Crear base de datos y usuario
 
@@ -395,7 +395,7 @@ http://localhost:8080/swagger-ui.html
 
 #### Docker Spring Boot 
 
-Construir imagen de aplicación con el jar generado del backend (con el `spring.datasource.url=jdbc:mariadb://app_db:3306/tfg_unir` en el application.properties) hay que ejecutar un maven para generar
+Construir imagen de aplicación con el jar generado del backend (con el `spring.datasource.url=jdbc:postgresql://app_db:5432/tfg_unir` en el application.properties) hay que ejecutar un maven para generar
 
 
 ```
@@ -405,7 +405,6 @@ docker build -t isidromerayo/spring-backend-tfg:VERSION-X.Y.Z .
 ```
 
 https://spring.io/guides/topicals/spring-boot-docker/
-https://javatodev.com/docker-compose-for-spring-boot-with-mariadb/
 
 #### 🐳 docker compose
 
@@ -616,7 +615,7 @@ cd backend
 # Ver logs del API
 ./scripts/podman-pod.sh logs
 
-# Ver logs de MariaDB
+# Ver logs de PostgreSQL
 ./scripts/podman-pod.sh logs db
 
 # Detener el backend
@@ -628,7 +627,7 @@ cd backend
 
 El script automáticamente:
 - Crea el pod con los puertos necesarios
-- Inicia MariaDB con los datos precargados
+- Inicia PostgreSQL con los datos precargados
 - Inicia el backend API
 - Verifica que los archivos SQL existen
 
@@ -757,12 +756,12 @@ podman ps
 podman ps -a  # Incluir detenidos
 
 # Ver logs
-podman logs mariadb-tfg
+podman logs postgres-tfg
 podman logs -f api_service  # Seguir logs en tiempo real
 
 # Detener y eliminar contenedores
-podman stop mariadb-tfg
-podman rm mariadb-tfg
+podman stop postgres-tfg
+podman rm postgres-tfg
 
 # Listar imágenes
 podman images
@@ -774,7 +773,7 @@ podman rmi isidromerayo/spring-backend-tfg:X.Y.Z
 podman system prune -a
 
 # Generar YAML de Kubernetes desde contenedor
-podman generate kube mariadb-tfg > mariadb-k8s.yaml
+podman generate kube postgres-tfg > postgres-k8s.yaml
 ```
 
 #### Troubleshooting Podman
@@ -789,7 +788,7 @@ sudo sysctl --system
 **Problema: "cannot find image locally"**
 ```bash
 # Especificar el registry completo
-podman pull docker.io/isidromerayo/mariadb-tfg:latest
+podman pull docker.io/isidromerayo/postgres-tfg:latest
 ```
 
 **Problema: Podman compose no funciona**

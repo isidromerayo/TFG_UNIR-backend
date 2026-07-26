@@ -72,28 +72,10 @@ POSTGRES_PASSWORD=<tu_password> ./scripts/publish-db-image.sh --dry-run
 
 > **⚠️ Seguridad**: Las credenciales **nunca** se hardcodean en el Dockerfile. Se pasan como variables de entorno y `--build-arg` en tiempo de build.
 
-#### `build-and-test-bcrypt.sh`
-Script automatizado completo para construir y probar la migración a BCrypt.
+#### `build-and-test-bcrypt.sh` *(DEPRECATED - legacy MariaDB)*
+Script legacy que verificaba BCrypt en MariaDB. Ya no es funcional tras la migración a PostgreSQL.
 
-**Uso:**
-```bash
-./scripts/build-and-test-bcrypt.sh
-```
-
-**Qué hace:**
-1. Verifica contraseñas BCrypt en dump.mariadb.sql
-2. Construye nueva imagen Docker (isidromerayo/mariadb-tfg:0.0.5-bcrypt)
-3. Reinicia contenedores con volúmenes limpios
-4. Verifica contraseñas hasheadas en la base de datos
-5. Espera a que el backend esté listo
-6. Prueba autenticación con múltiples usuarios
-7. Valida rechazo de credenciales incorrectas
-8. Muestra resumen de resultados
-
-**Requisitos:**
-- Docker o Podman
-- curl
-- jq (opcional, para formato JSON)
+**Uso:** No usar — se mantiene solo como referencia histórica.
 
 #### `test-login.sh`
 Script simple para probar el login con diferentes usuarios.
@@ -139,7 +121,7 @@ Script para gestionar contenedores con Podman Pod (alternativa a docker-compose)
 ./scripts/podman-pod.sh logs
 ./scripts/podman-pod.sh logs api
 
-# Ver logs de MariaDB
+# Ver logs de PostgreSQL
 ./scripts/podman-pod.sh logs db
 ```
 
