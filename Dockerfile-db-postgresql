@@ -1,11 +1,19 @@
 FROM docker.io/postgres:17
 
-ARG POSTGRES_PASSWORD
+# POSTGRES_DB y POSTGRES_USER no son secretos: se pueden fijar como valores
+# por defecto en la imagen. POSTGRES_PASSWORD NO se embebe aquí para evitar
+# que quede expuesta en el historial de capas (docker history).
+# Se debe pasar en runtime via variable de entorno:
+#   docker run -e POSTGRES_PASSWORD=... ...
+# O a través de docker-compose.yml / podman-pod.sh.
+
 ARG POSTGRES_DB=tfg_unir
 ARG POSTGRES_USER=user_tfg
 
-ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 ENV POSTGRES_DB=${POSTGRES_DB}
 ENV POSTGRES_USER=${POSTGRES_USER}
+
+LABEL org.opencontainers.image.title="TFG UNIR PostgreSQL"
+LABEL org.opencontainers.image.description="PostgreSQL database for TFG UNIR"
 
 EXPOSE 5432

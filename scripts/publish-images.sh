@@ -8,22 +8,39 @@
 
 set -e
 
-# Colores para output
+# --- Colores ---
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-# Configuración
+# --- Configuración ---
 DOCKER_USER="isidromerayo"
 
-# Flags
+# --- Flags ---
 DRY_RUN=false
 SKIP_LOGIN=false
 CUSTOM_VERSION=""
 
-# Procesar argumentos
+# --- Funciones de output (definidas antes de cualquier uso) ---
+print_step() {
+    echo -e "${YELLOW}>>> $1${NC}"
+}
+
+print_success() {
+    echo -e "${GREEN}✓ $1${NC}"
+}
+
+print_error() {
+    echo -e "${RED}✗ $1${NC}"
+}
+
+print_info() {
+    echo -e "${BLUE}ℹ $1${NC}"
+}
+
+# --- Procesar argumentos ---
 while [ $# -gt 0 ]; do
   case "$1" in
     --dry-run)
@@ -51,7 +68,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-# Extraer versión del proyecto del pom.xml (segundo <version>, tras el del parent)
+# --- Extraer versión del proyecto del pom.xml (segundo <version>, tras el del parent) ---
 BACKEND_VERSION=$(grep -o '<version>[^<]*</version>' pom.xml | sed -n '2p' | sed 's|<version>||;s|</version>||')
 
 # Validar que la versión extraída no está vacía y tiene formato semver
@@ -68,22 +85,6 @@ fi
 if [ -n "$CUSTOM_VERSION" ]; then
     BACKEND_VERSION="$CUSTOM_VERSION"
 fi
-
-print_step() {
-    echo -e "${YELLOW}>>> $1${NC}"
-}
-
-print_success() {
-    echo -e "${GREEN}✓ $1${NC}"
-}
-
-print_error() {
-    echo -e "${RED}✗ $1${NC}"
-}
-
-print_info() {
-    echo -e "${BLUE}ℹ $1${NC}"
-}
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}Publicar imagen del Backend en Docker Hub${NC}"
