@@ -7,6 +7,9 @@
 #   ./publish-db-image.sh              # usa versión por defecto (1.0)
 #   ./publish-db-image.sh 1.1          # versión específica
 #   ./publish-db-image.sh --dry-run    # solo mostrar qué haría
+#
+# NOTA: POSTGRES_PASSWORD NO se embebe en la imagen (evita exposición en
+# docker history). Se pasa en runtime via docker-compose.yml o podman-pod.sh.
 
 set -e
 
@@ -20,11 +23,14 @@ DOCKER_USER="isidromerayo"
 DB_VERSION="1.0"
 DRY_RUN=false
 SKIP_LOGIN=false
-DB_NAME="tfg_unir"
-DB_USER="user_tfg"
-DB_PASSWORD=""
 
-# Procesar argumentos
+# --- Funciones de output ---
+print_step()   { echo -e "${YELLOW}>>> $1${NC}"; }
+print_success(){ echo -e "${GREEN}✓ $1${NC}"; }
+print_error()  { echo -e "${RED}✗ $1${NC}"; }
+print_info()   { echo -e "${BLUE}ℹ $1${NC}"; }
+
+# --- Procesar argumentos ---
 for arg in "$@"; do
   case "$arg" in
     --dry-run)
@@ -34,11 +40,11 @@ for arg in "$@"; do
       SKIP_LOGIN=true
       ;;
     --password)
-      echo "Error: --password no está soportado. Usa la variable de entorno POSTGRES_PASSWORD."
+      print_error "--password no está soportado. Las credenciales se pasan en runtime."
       exit 1
       ;;
     --*)
-      echo "Error: Argumento desconocido: $arg"
+      print_error "Argumento desconocido: $arg"
       echo "Uso: $0 [<version>] [--dry-run] [--skip-login]"
       exit 1
       ;;
@@ -48,24 +54,13 @@ for arg in "$@"; do
   esac
 done
 
-# Credenciales desde variables de entorno (obligatoria para build)
-DB_PASSWORD="${POSTGRES_PASSWORD:-}"
-if [ -z "$DB_PASSWORD" ]; then
-    echo "Error: POSTGRES_PASSWORD no está definido."
-    echo "Define la variable de entorno antes de ejecutar:"
-    echo "  POSTGRES_PASSWORD=<tu_password> ./publish-db-image.sh"
-    exit 1
-fi
+# Los valores de DB y USER no son secretos: se pueden leer del entorno
+# o usar los valores por defecto del Dockerfile.
 DB_NAME="${POSTGRES_DB:-tfg_unir}"
 DB_USER="${POSTGRES_USER:-user_tfg}"
 
 DOCKERFILE="Dockerfile-db-postgresql"
 IMAGE_NAME="${DOCKER_USER}/postgres-tfg"
-
-print_step() { echo -e "${YELLOW}>>> $1${NC}"; }
-print_success() { echo -e "${GREEN}✓ $1${NC}"; }
-print_error() { echo -e "${RED}✗ $1${NC}"; }
-print_info() { echo -e "${BLUE}ℹ $1${NC}"; }
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}Publicar imagen de PostgreSQL en Docker Hub${NC}"
@@ -79,6 +74,7 @@ if [ ! -f "$DOCKERFILE" ]; then
 fi
 
 print_info "Versión: ${DB_VERSION}"
+print_info "POSTGRES_PASSWORD se pasa en runtime (no embebida en la imagen)"
 echo ""
 
 if [ "$DRY_RUN" = true ]; then
@@ -86,6 +82,7 @@ if [ "$DRY_RUN" = true ]; then
     echo ""
 fi
 
+# --- Detectar Docker o Podman ---
 if command -v docker &> /dev/null && docker info &> /dev/null; then
     CONTAINER_CMD="docker"
 elif command -v podman &> /dev/null; then
@@ -97,9 +94,11 @@ fi
 print_info "Usando: $CONTAINER_CMD"
 echo ""
 
-# Construir
+# --- Construir ---
+# POSTGRES_PASSWORD no se pasa como --build-arg: ya no es ARG en el Dockerfile.
+# POSTGRES_DB y POSTGRES_USER sí son ARGs seguros (no son secretos).
 print_step "Construyendo imagen PostgreSQL v${DB_VERSION}..."
-BUILD_ARGS="--build-arg POSTGRES_PASSWORD=${DB_PASSWORD} --build-arg POSTGRES_DB=${DB_NAME} --build-arg POSTGRES_USER=${DB_USER}"
+BUILD_ARGS="--build-arg POSTGRES_DB=${DB_NAME} --build-arg POSTGRES_USER=${DB_USER}"
 TAGS="-t ${IMAGE_NAME}:${DB_VERSION} -t ${IMAGE_NAME}:latest"
 if [ "$DRY_RUN" = true ]; then
     print_info "  $CONTAINER_CMD build -f $DOCKERFILE $BUILD_ARGS $TAGS ."
@@ -108,7 +107,7 @@ else
     print_success "Imagen PostgreSQL construida"
 fi
 
-# Login
+# --- Login ---
 if [ "$SKIP_LOGIN" = false ] && [ "$DRY_RUN" = false ]; then
     print_step "Verificando autenticación en Docker Hub..."
     if ! $CONTAINER_CMD login docker.io --get-login &>/dev/null; then
@@ -122,7 +121,7 @@ if [ "$SKIP_LOGIN" = false ] && [ "$DRY_RUN" = false ]; then
     print_success "Autenticado en Docker Hub"
 fi
 
-# Publicar
+# --- Publicar ---
 print_step "Publicando PostgreSQL v${DB_VERSION}..."
 if [ "$DRY_RUN" = true ]; then
     print_info "  $CONTAINER_CMD push ${IMAGE_NAME}:${DB_VERSION}"
@@ -133,7 +132,7 @@ else
     print_success "PostgreSQL publicado"
 fi
 
-# Resumen
+# --- Resumen ---
 echo ""
 echo -e "${BLUE}========================================${NC}"
 if [ "$DRY_RUN" = true ]; then
@@ -147,5 +146,7 @@ echo "Imagen:"
 echo "   ${IMAGE_NAME}:${DB_VERSION}"
 echo "   ${IMAGE_NAME}:latest"
 echo ""
-echo "Actualiza docker-compose.yml con la nueva versión si es necesario."
+echo "Recuerda pasar POSTGRES_PASSWORD en runtime:"
+echo "  docker compose up -d   (usa .env o variable de entorno)"
+echo "  ./scripts/podman-pod.sh start"
 echo ""

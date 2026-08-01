@@ -8,7 +8,7 @@ POD_NAME="backend-pod"
 POSTGRES_DB_CONTAINER="postgres_db"
 API_SERVICE_CONTAINER="api_service"
 POSTGRES_DB_IMAGE="docker.io/isidromerayo/postgres-tfg:1.0"
-API_SERVICE_IMAGE="docker.io/isidromerayo/spring-backend-tfg:0.5.0"
+API_SERVICE_IMAGE="docker.io/isidromerayo/spring-backend-tfg:0.6.2"
 VOLUME_NAME="tfg_unir-backend_pg_data"
 
 # Cargar variables de entorno desde archivo .env
@@ -69,9 +69,18 @@ function start_pod() {
         -e POSTGRES_USER=${POSTGRES_USER:-user_tfg} \
         $POSTGRES_DB_IMAGE
     
-    # Esperar a que PostgreSQL esté listo
+    # Esperar a que PostgreSQL esté listo con pg_isready
     print_info "Esperando a que PostgreSQL esté listo..."
-    sleep 10
+    RETRIES=30
+    until podman exec $POSTGRES_DB_CONTAINER pg_isready -U "${POSTGRES_USER:-user_tfg}" -d "${POSTGRES_DB:-tfg_unir}" &>/dev/null; do
+        RETRIES=$((RETRIES - 1))
+        if [ $RETRIES -eq 0 ]; then
+            print_error "PostgreSQL no respondió tras 30 intentos"
+            exit 1
+        fi
+        sleep 2
+    done
+    print_info "PostgreSQL listo"
     
     # Ejecutar el backend
     print_info "Iniciando backend API..."
@@ -133,9 +142,9 @@ function logs_pod() {
                 print_info "Logs del backend API:"
                 podman logs --tail 50 $API_SERVICE_CONTAINER
                 ;;
-            db|mariadb)
-                print_info "Logs de MariaDB:"
-                podman logs --tail 50 $MARIA_DB_CONTAINER
+            db|postgres)
+                print_info "Logs de PostgreSQL:"
+                podman logs --tail 50 $POSTGRES_DB_CONTAINER
                 ;;
             *)
                 print_error "Servicio desconocido: $2"
@@ -156,7 +165,7 @@ function show_usage() {
     echo "  status   - Ver el estado del backend"
     echo "  logs     - Ver logs del backend API"
     echo "  logs api - Ver logs del backend API"
-    echo "  logs db  - Ver logs de MariaDB"
+    echo "  logs db  - Ver logs de PostgreSQL"
     echo ""
     echo "Ejemplos:"
     echo "  $0 start"
