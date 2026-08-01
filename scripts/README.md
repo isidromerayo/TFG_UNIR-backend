@@ -48,29 +48,27 @@ Script para construir y publicar la imagen de PostgreSQL en Docker Hub.
 **Uso:**
 ```bash
 # Publicar con versión por defecto (1.0)
-POSTGRES_PASSWORD=<tu_password> ./scripts/publish-db-image.sh
+./scripts/publish-db-image.sh
 
 # Versión específica
-POSTGRES_PASSWORD=<tu_password> ./scripts/publish-db-image.sh 1.1
+./scripts/publish-db-image.sh 1.1
 
 # Solo mostrar qué haría
-POSTGRES_PASSWORD=<tu_password> ./scripts/publish-db-image.sh --dry-run
+./scripts/publish-db-image.sh --dry-run
 ```
 
-**Variables de entorno requeridas:**
+**Variables de entorno opcionales:**
 | Variable | Descripción | Default |
 |----------|-------------|---------|
-| `POSTGRES_PASSWORD` | Contraseña de PostgreSQL (**obligatoria**) | - |
 | `POSTGRES_DB` | Nombre de la base de datos | `tfg_unir` |
 | `POSTGRES_USER` | Usuario de PostgreSQL | `user_tfg` |
 
-**Qué hace:**
-1. Valida que `POSTGRES_PASSWORD` esté definido
-2. Construye la imagen de PostgreSQL con credenciales como `--build-arg`
-3. Etiqueta con `:version` y `:latest`
-4. Publica en Docker Hub
+> **Seguridad**: `POSTGRES_PASSWORD` **no** se embebe en la imagen para evitar que quede expuesta en el historial de capas (`docker history`). Se pasa en runtime vía `docker-compose.yml` o `podman-pod.sh`.
 
-> **⚠️ Seguridad**: Las credenciales **nunca** se hardcodean en el Dockerfile. Se pasan como variables de entorno y `--build-arg` en tiempo de build.
+**Qué hace:**
+1. Construye la imagen de PostgreSQL con `POSTGRES_DB` y `POSTGRES_USER` como `--build-arg`
+2. Etiqueta con `:version` y `:latest`
+3. Publica en Docker Hub
 
 #### `build-and-test-bcrypt.sh` *(DEPRECATED - legacy MariaDB)*
 Script legacy que verificaba BCrypt en MariaDB. Ya no es funcional tras la migración a PostgreSQL.
@@ -163,8 +161,8 @@ scripts/
 ### Publicar imagen de PostgreSQL
 
 ```bash
-# Requiere POSTGRES_PASSWORD como variable de entorno
-POSTGRES_PASSWORD=mi_password_secreto ./scripts/publish-db-image.sh 1.0
+# La imagen no embebe POSTGRES_PASSWORD (se pasa en runtime)
+./scripts/publish-db-image.sh 1.0
 ```
 
 ### Probar login
@@ -182,13 +180,6 @@ Para más información, consulta:
 - **Quick Start BCrypt**: `docs/security/QUICK_START_BCRYPT.md`
 
 ## Troubleshooting
-
-### publish-db-image.sh falla con "POSTGRES_PASSWORD no está definido"
-
-Define la variable de entorno antes de ejecutar:
-```bash
-POSTGRES_PASSWORD=tu_password ./scripts/publish-db-image.sh
-```
 
 ### publish-images.sh falla con "No se publican imágenes SNAPSHOT"
 
