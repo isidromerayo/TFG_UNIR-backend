@@ -6,12 +6,12 @@ Podman es una alternativa a Docker que no requiere daemon y puede ejecutar conte
 
 ## Problema con podman-compose
 
-⚠️ **IMPORTANTE**: `podman-compose` tiene problemas conocidos con la resolución DNS entre contenedores. El backend no puede resolver el hostname `maria_db` correctamente.
+⚠️ **IMPORTANTE**: `podman-compose` tiene problemas conocidos con la resolución DNS entre contenedores. El backend no puede resolver el hostname `postgres_db` correctamente.
 
 **Error típico:**
 ```
-java.net.UnknownHostException: maria_db
-Socket fail to connect to maria_db
+java.net.UnknownHostException: postgres_db
+Socket fail to connect to postgres_db
 ```
 
 ## Solución: Usar Podman Pod
@@ -47,7 +47,7 @@ La solución recomendada es usar **Podman Pod** en lugar de `podman-compose`. Un
 ./scripts/podman-pod.sh logs
 ./scripts/podman-pod.sh logs api
 
-# Ver logs de MariaDB
+# Ver logs de PostgreSQL
 ./scripts/podman-pod.sh logs db
 ```
 
@@ -83,17 +83,17 @@ curl http://localhost:8080/api/categorias
 │         backend-pod                 │
 │                                     │
 │  ┌──────────────┐  ┌─────────────┐ │
-│  │   maria_db   │  │ api_service │ │
-│  │  (MariaDB)   │  │  (Spring)   │ │
+│  │  postgres_db │  │ api_service │ │
+│  │ (PostgreSQL) │  │  (Spring)   │ │
 │  │              │  │             │ │
 │  │ localhost:   │  │ localhost:  │ │
-│  │   3306       │  │   8080      │ │
+│  │   5432       │  │   8080      │ │
 │  └──────────────┘  └─────────────┘ │
 │                                     │
 │  Shared Network Namespace           │
 └─────────────────────────────────────┘
          │                    │
-    Port 3306            Port 8080
+    Port 5432            Port 8080
          │                    │
     Host Network
 ```
@@ -112,13 +112,13 @@ curl http://localhost:8080/api/categorias
 
 **Con podman-compose (NO FUNCIONA):**
 ```yaml
-SPRING_DATASOURCE_URL: jdbc:mariadb://maria_db:3306/tfg_unir
-# ❌ maria_db no se resuelve
+SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/tfg_unir
+# ❌ postgres_db no se resuelve
 ```
 
 **Con Podman Pod (FUNCIONA):**
 ```bash
-SPRING_DATASOURCE_URL: jdbc:mariadb://localhost:3306/tfg_unir
+SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/tfg_unir
 # ✅ localhost funciona porque comparten namespace
 ```
 
@@ -172,7 +172,7 @@ podman ps
 podman ps --pod --filter pod=backend-pod
 
 # Ejecutar comando en contenedor
-podman exec -it maria_db mariadb -u user_tfg -ptfg_un1r_PWD tfg_unir
+podman exec -it postgres_db psql -U user_tfg -d tfg_unir
 
 # Ver logs de un contenedor
 podman logs -f api_service
@@ -217,7 +217,7 @@ Error: cannot listen on the TCP port: address already in use
 ```bash
 # Ver qué está usando el puerto
 sudo lsof -i :8080
-sudo lsof -i :3306
+sudo lsof -i :5432
 
 # Detener el proceso o cambiar el puerto en el script
 ```
@@ -236,15 +236,15 @@ cd TFG_UNIR-backend
 ./scripts/podman-pod.sh start
 ```
 
-### Problema: MariaDB no inicia
+### Problema: PostgreSQL no inicia
 
 **Solución:**
 ```bash
-# Ver logs de MariaDB
+# Ver logs de PostgreSQL
 ./scripts/podman-pod.sh logs db
 
 # Eliminar volumen y reiniciar
-podman volume rm tfg_unir-backend_data
+podman volume rm tfg_unir-backend_pg_data
 ./scripts/podman-pod.sh start
 ```
 
@@ -252,8 +252,8 @@ podman volume rm tfg_unir-backend_data
 
 **Solución:**
 ```bash
-# Verificar que MariaDB está corriendo
-podman exec maria_db mariadb -u user_tfg -ptfg_un1r_PWD -e "SELECT 1"
+# Verificar que PostgreSQL está corriendo
+podman exec postgres_db pg_isready -U user_tfg -d tfg_unir
 
 # Ver logs del backend
 ./scripts/podman-pod.sh logs api
@@ -276,24 +276,13 @@ Si vienes de Docker, estos son los cambios principales:
 | `docker ps` | `podman ps` |
 | `docker exec` | `podman exec` |
 
-## Uso con BCrypt
-
-Para probar la migración a BCrypt con Podman:
+## Probar login
 
 ```bash
-# 1. Actualizar la versión de la imagen en el script
-# Editar scripts/podman-pod.sh:
-# MARIA_DB_IMAGE="isidromerayo/mariadb-tfg:0.0.5-bcrypt"
-
-# 2. Construir la imagen
-podman build -f Dockerfile-db -t isidromerayo/mariadb-tfg:0.0.5-bcrypt .
-
-# 3. Iniciar con la nueva imagen
-./scripts/podman-pod.sh start
-
-# 4. Probar login
+# Probar autenticación con usuarios de prueba
 ./scripts/test-login.sh
-```
+./scripts/test-login.sh helena@localhost 1234
+``````
 
 ## Referencias
 

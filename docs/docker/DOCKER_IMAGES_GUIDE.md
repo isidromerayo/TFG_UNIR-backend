@@ -108,18 +108,18 @@ Esto genera `target/backend.jar` (~60MB)
 
 #### 2. Construir Imagen de PostgreSQL
 
+La imagen no embebe `POSTGRES_PASSWORD` — se pasa en runtime vía `docker-compose.yml` o `podman-pod.sh`.
+
 **Con Docker:**
 ```bash
-POSTGRES_PASSWORD=mi_password docker build -f Dockerfile-db-postgresql \
-    --build-arg POSTGRES_PASSWORD=mi_password \
+docker build -f Dockerfile-db-postgresql \
     -t isidromerayo/postgres-tfg:1.0 .
 docker tag isidromerayo/postgres-tfg:1.0 isidromerayo/postgres-tfg:latest
 ```
 
 **Con Podman:**
 ```bash
-POSTGRES_PASSWORD=mi_password podman build -f Dockerfile-db-postgresql \
-    --build-arg POSTGRES_PASSWORD=mi_password \
+podman build -f Dockerfile-db-postgresql \
     -t localhost/isidromerayo/postgres-tfg:1.0 .
 podman tag localhost/isidromerayo/postgres-tfg:1.0 localhost/isidromerayo/postgres-tfg:latest
 ```
@@ -168,26 +168,12 @@ Si construiste con Docker, el `docker-compose.yml` funcionará directamente:
 docker compose up -d
 ```
 
-Si construiste con Podman, actualiza `docker-compose.yml`:
-
-```yaml
-services:
-  maria_db:
-    image: "localhost/isidromerayo/mariadb-tfg:0.1.0"
-    # ...
-
-  api_service:
-    image: "localhost/isidromerayo/spring-backend-tfg:0.4.0"
-    # ...
-```
-
 #### Con Podman Pod
 
 Actualiza `scripts/podman-pod.sh`:
 
 ```bash
-MARIA_DB_IMAGE="localhost/isidromerayo/mariadb-tfg:0.1.0"
-API_SERVICE_IMAGE="localhost/isidromerayo/spring-backend-tfg:0.4.0"
+API_SERVICE_IMAGE="localhost/isidromerayo/spring-backend-tfg:0.6.2"
 ```
 
 Luego ejecuta:
@@ -225,8 +211,8 @@ El script:
 ### Publicar imagen de PostgreSQL
 
 ```bash
-# Requiere POSTGRES_PASSWORD como variable de entorno
-POSTGRES_PASSWORD=mi_password ./scripts/publish-db-image.sh 1.0
+# La imagen no embebe POSTGRES_PASSWORD — se pasa en runtime
+./scripts/publish-db-image.sh 1.0
 ```
 
 ### Publicación manual
@@ -239,9 +225,8 @@ docker build --build-arg VERSION=0.6.2 -t isidromerayo/spring-backend-tfg:0.6.2 
 docker push isidromerayo/spring-backend-tfg:0.6.2
 docker push isidromerayo/spring-backend-tfg:latest
 
-# PostgreSQL
+# PostgreSQL (POSTGRES_PASSWORD se pasa en runtime, no en el build)
 docker build -f Dockerfile-db-postgresql \
-    --build-arg POSTGRES_PASSWORD=mi_password \
     -t isidromerayo/postgres-tfg:1.0 .
 docker push isidromerayo/postgres-tfg:1.0
 docker push isidromerayo/postgres-tfg:latest
@@ -282,52 +267,14 @@ docker push isidromerayo/postgres-tfg:latest
 
 ## Verificación de Imágenes
 
-### Verificar Versión de MariaDB
-
-```bash
-# Inspeccionar imagen
-docker inspect isidromerayo/mariadb-tfg:0.1.0 | grep -A 5 "Env"
-
-# Ejecutar y verificar
-docker run --rm isidromerayo/mariadb-tfg:0.1.0 mariadbd --version
-```
-
 ### Verificar Versión del Backend
 
 ```bash
 # Inspeccionar imagen
-docker inspect isidromerayo/spring-backend-tfg:0.4.0 | grep -A 5 "Env"
+docker inspect isidromerayo/spring-backend-tfg:0.6.2 | grep -A 5 "Env"
 
 # Ejecutar y verificar logs
-docker run --rm isidromerayo/spring-backend-tfg:0.4.0 | head -20
-```
-
-### Verificar Contraseñas BCrypt
-
-```bash
-# Iniciar MariaDB
-docker run -d --name test-maria isidromerayo/mariadb-tfg:0.1.0
-
-# Esperar a que inicie
-sleep 10
-
-# Verificar contraseñas
-docker exec test-maria mariadb -u user_tfg -ptfg_un1r_PWD tfg_unir \
-  -e "SELECT id, nombre, LEFT(password, 30) FROM usuarios LIMIT 3"
-
-# Limpiar
-docker rm -f test-maria
-```
-
-Resultado esperado:
-```
-+----+---------------+--------------------------------+
-| id | nombre        | LEFT(password, 30)             |
-+----+---------------+--------------------------------+
-|  1 | María         | $2b$10$JKheLVrM5.jvtYVvd.tfqOL |
-|  2 | Juan Antonio  | $2b$10$JKheLVrM5.jvtYVvd.tfqOL |
-|  3 | Marta         | $2b$10$JKheLVrM5.jvtYVvd.tfqOL |
-+----+---------------+--------------------------------+
+docker run --rm isidromerayo/spring-backend-tfg:0.6.2 | head -20
 ```
 
 ---
@@ -343,7 +290,7 @@ Resultado esperado:
 ```bash
 # Construir localmente
 ./mvnw clean package -DskipTests
-docker build -f Dockerfile-db-postgresql --build-arg POSTGRES_PASSWORD=xxx -t isidromerayo/postgres-tfg:1.0 .
+docker build -f Dockerfile-db-postgresql -t isidromerayo/postgres-tfg:1.0 .
 docker build --build-arg VERSION=0.6.2 -t isidromerayo/spring-backend-tfg:0.6.2 .
 ```
 

@@ -21,11 +21,11 @@ java -jar target/backend.jar
 
 ```bash
 # 1. Compilar el proyecto
-bash -c 'eval "$(vfox activate bash)" && vfox use -g java@21 && ./mvnw clean package -DskipTests'
+./mvnw clean package -DskipTests
 
 # 2. Construir la imagen con la nueva versión
-VERSION="0.2.2"  # Actualizar según corresponda
-podman build -t isidromerayo/spring-backend-tfg:${VERSION} .
+VERSION="0.6.2"  # Actualizar según corresponda
+podman build --build-arg VERSION=${VERSION} -t isidromerayo/spring-backend-tfg:${VERSION} .
 
 # 3. Crear tag latest (opcional, solo para versiones estables)
 podman tag isidromerayo/spring-backend-tfg:${VERSION} isidromerayo/spring-backend-tfg:latest
@@ -38,8 +38,8 @@ podman tag isidromerayo/spring-backend-tfg:${VERSION} isidromerayo/spring-backen
 ./mvnw clean package -DskipTests
 
 # 2. Construir la imagen
-VERSION="0.2.2"
-docker build -t isidromerayo/spring-backend-tfg:${VERSION} .
+VERSION="0.6.2"
+docker build --build-arg VERSION=${VERSION} -t isidromerayo/spring-backend-tfg:${VERSION} .
 
 # 3. Crear tag latest
 docker tag isidromerayo/spring-backend-tfg:${VERSION} isidromerayo/spring-backend-tfg:latest
@@ -78,7 +78,7 @@ curl -I -X OPTIONS http://localhost:8080/api/cursos \
 
 ```bash
 # 1. Actualizar docker-compose.yml con la nueva versión
-# Cambiar: image: "isidromerayo/spring-backend-tfg:0.2.2"
+# Cambiar: image: "isidromerayo/spring-backend-tfg:0.6.2"
 
 # 2. Levantar servicios
 docker compose up -d
@@ -92,9 +92,19 @@ docker compose down
 
 ### 4. Publicación en Docker Hub
 
-**⚠️ IMPORTANTE**: Solo publicar después de verificar que la imagen funciona correctamente localmente.
+**⚠️ IMPORTANTE**: Solo publicar después de verificar que la imagen funciona correctamente localmente. Usa los scripts en `scripts/` en lugar de comandos manuales — gestionan la detección Docker/Podman, validación SNAPSHOT y login automáticamente.
 
-#### Con Podman
+#### Con el script (recomendado)
+
+```bash
+# Verificar qué se publicaría
+./scripts/publish-images.sh --dry-run
+
+# Publicar
+./scripts/publish-images.sh
+```
+
+#### Con Podman (manual)
 
 ```bash
 # 1. Login en Docker Hub (solo la primera vez)
@@ -103,7 +113,7 @@ podman login docker.io
 # Password: [Personal Access Token]
 
 # 2. Push de la versión específica
-VERSION="0.2.2"
+VERSION="0.6.2"
 podman push isidromerayo/spring-backend-tfg:${VERSION}
 
 # 3. Push del tag latest (solo para versiones estables)
@@ -113,7 +123,7 @@ podman push isidromerayo/spring-backend-tfg:latest
 # https://hub.docker.com/r/isidromerayo/spring-backend-tfg/tags
 ```
 
-#### Con Docker
+#### Con Docker (manual)
 
 ```bash
 # 1. Login en Docker Hub
@@ -122,7 +132,7 @@ docker login
 # Password: [Personal Access Token]
 
 # 2. Push de la versión específica
-VERSION="0.2.2"
+VERSION="0.6.2"
 docker push isidromerayo/spring-backend-tfg:${VERSION}
 
 # 3. Push del tag latest
@@ -202,8 +212,8 @@ podman logs api_service
 # o
 docker logs api_service
 
-# Verificar que MariaDB está corriendo
-podman ps | grep maria_db
+# Verificar que PostgreSQL está corriendo
+podman ps | grep postgres_db
 ```
 
 ### Errores CORS en el frontend
