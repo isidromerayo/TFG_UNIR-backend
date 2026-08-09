@@ -1,29 +1,11 @@
-# TFG_UNIR Backend
+# TFG UNIR - Backend
 
-<div align="center">
-
-## 🛠️ Tecnologías y Herramientas
-
-### 🏗️ Build & CI/CD
-[![Java CI](https://img.shields.io/github/actions/workflow/status/isidromerayo/TFG_UNIR-backend/maven.yml?label=Build&logo=github-actions&logoColor=white)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/maven.yml)
-[![Pull Request](https://img.shields.io/github/actions/workflow/status/isidromerayo/TFG_UNIR-backend/pull-request.yml?label=PR%20Checks&logo=github-actions&logoColor=white)](https://github.com/isidromerayo/TFG_UNIR-backend/actions/workflows/pull-request.yml)
-
-### 📊 Calidad de Código - SonarQube
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=alert_status&style=flat-square)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=coverage&style=flat-square)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=sqale_rating&style=flat-square)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=bugs&style=flat-square)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
-
-### 📦 Dependencias
-[![Dependabot](https://img.shields.io/badge/dependabot-enabled-0366d6.svg?logo=dependabot&logoColor=white)](https://github.com/isidromerayo/TFG_UNIR-backend/security/dependabot)
-[![Known Vulnerabilities](https://snyk.io/test/github/isidromerayo/TFG_UNIR-backend/badge.svg)](https://snyk.io/test/github/isidromerayo/TFG_UNIR-backend)
-
-### 📄 Licencia
-[![License](https://img.shields.io/github/license/isidromerayo/TFG_UNIR-backend?color=blue&style=flat-square)](LICENSE)
-[![Java](https://img.shields.io/badge/Java-21-007396?logo=java&logoColor=white)](https://www.oracle.com/java/technologies/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.16-6DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
-
-</div>
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=bugs)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=isidromerayo_TFG_UNIR-backend&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
 
 # Universidad Internacional de La Rioja
 
@@ -34,6 +16,29 @@
 #### TFG: Frameworks frontend JavaScript: Análisis y estudio práctico
 
 ##### Backend
+
+## 📅 Ciclo de Vida de Spring Boot
+
+Spring Boot publica una versión mayor o menor cada **6 meses** (en mayo y noviembre). Cada versión mayor recibe **al menos 3 años de soporte OSS** desde su lanzamiento (las versiones menores, al menos 12 meses). El soporte comercial (VMware Tanzu) extiende este periodo de mantenimiento.
+
+### Estado de las Versiones
+
+| Versión | Estado | Fecha de Lanzamiento | Fin de soporte OSS |
+|---------|--------|----------------------|--------------------|
+| **4.1** | **Activa** | 10 de Junio 2026 | 31 de Julio 2027 |
+| **4.0** | Activa | 30 de Noviembre 2025 | 31 de Diciembre 2026 |
+| **3.5** | **OSS finalizado** | 22 de Mayo 2025 | 30 de Junio 2026 |
+| **3.4** | End of Life (EOL) | 30 de Noviembre 2024 | 31 de Diciembre 2025 |
+
+### Java 21 (LTS)
+
+Java 21 es una versión **LTS**: recibe actualizaciones de seguridad y rendimiento durante años (soporte público hasta **septiembre de 2028** y soporte comercial extendido hasta **septiembre de 2031**). Spring Boot 3.5.x requiere Java 17+ y es totalmente compatible con Java 21.
+
+### Implicaciones para este proyecto
+
+- **Spring Boot 3.5.16** sobre **Java 21 LTS**.
+- El soporte OSS de la línea 3.5 finalizó el **30 de junio de 2026** (solo quedan parches de seguridad bajo soporte comercial).
+- La migración a **Spring Boot 4.0/4.1** es el siguiente paso planificado.
 
 ## 🚀 Desarrollo y Contribución
 
@@ -885,11 +890,3 @@ Este comando:
 **Última actualización**: 2026-06-29 (Release v0.6.2)
 
 Ver más detalles en [SonarCloud](https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend)
-
----
-
-# Badges
-
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=isidromerayo_TFG_UNIR-backend)](https://sonarcloud.io/summary/new_code?id=isidromerayo_TFG_UNIR-backend)
-
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/381fca2f4da04e269a7dbd6a983519e3)](https://app.codacy.com/gh/isidromerayo/TFG_UNIR-backend/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
