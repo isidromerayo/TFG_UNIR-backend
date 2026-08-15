@@ -1,13 +1,16 @@
-package eu.estilolibre.tfgunir.backend.controller;
+package eu.estilolibre.tfgunir.backend.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+/**
+ * Petición de login.
+ */
 @Data
-public class FormUser {
-    
+public class LoginRequest {
+
     @NotBlank(message = "El email no puede estar vacío")
     @Email(message = "El formato del email no es válido")
     private String email;
@@ -16,11 +19,11 @@ public class FormUser {
     @Size(min = 4, message = "La contraseña debe tener al menos 4 caracteres")
     private String password;
 
-    public FormUser() {
+    public LoginRequest() {
     }
 
     @Override
     public String toString() {
-        return "FormUser [email=" + email + "]";
+        return "LoginRequest [email=" + email + "]";
     }
 }

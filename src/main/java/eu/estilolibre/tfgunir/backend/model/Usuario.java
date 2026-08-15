@@ -16,12 +16,14 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "usuarios")
 @lombok.EqualsAndHashCode(exclude = {"misCursosComprados", "avances"})
+@JsonIgnoreProperties({"misCursosComprados", "avances"})
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

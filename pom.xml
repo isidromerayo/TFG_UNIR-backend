@@ -46,9 +46,7 @@
 			**/config/**,
 			**/dto/**,
 			**/*Application.class,
-			**/model/**,
-			**/controller/User.java,
-			**/controller/FormUser.java
+			**/model/**
 		</sonar.coverage.exclusions>
 		<sonar.sources>src/main/java</sonar.sources>
 		<sonar.tests>src/test/java</sonar.tests>
@@ -301,8 +299,6 @@
 						<exclude>**/model/**</exclude>
 						<exclude>**/dto/**</exclude>
 						<exclude>**/*Application.class</exclude>
-						<exclude>eu/estilolibre/tfgunir/backend/controller/User.class</exclude>
-						<exclude>eu/estilolibre/tfgunir/backend/controller/FormUser.class</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

@@ -26,9 +26,10 @@ Se han añadido las propiedades de SonarQube en el `pom.xml` para que las exclus
     
     <!-- Exclusions from Coverage Analysis -->
     <sonar.coverage.exclusions>
-        **/model/**,
-        **/controller/User.java,
-        **/controller/FormUser.java
+        **/config/**,
+        **/dto/**,
+        **/*Application.class,
+        **/model/**
     </sonar.coverage.exclusions>
     
     <!-- Source and Test Directories -->
@@ -50,7 +51,7 @@ Se han añadido las propiedades de SonarQube en el `pom.xml` para que las exclus
 | `sonar.host.url` | `https://sonarcloud.io` | URL del servidor SonarQube |
 | `sonar.coverage.jacoco.xmlReportPaths` | `target/site/jacoco/jacoco.xml` | Ruta al reporte XML de JaCoCo (combinado) |
 | `sonar.java.coveragePlugin` | `jacoco` | Plugin de cobertura a usar |
-| `sonar.coverage.exclusions` | `**/model/**`, `**/controller/User.java`, `**/controller/FormUser.java` | **Archivos excluidos del análisis de cobertura** |
+| `sonar.coverage.exclusions` | `**/config/**`, `**/dto/**`, `**/*Application.class`, `**/model/**` | **Archivos excluidos del análisis de cobertura** |
 | `sonar.sources` | `src/main/java` | Directorio de código fuente |
 | `sonar.tests` | `src/test/java` | Directorio de tests |
 | `sonar.java.source` | `21` | Versión de Java |
@@ -64,9 +65,10 @@ Esta es la propiedad más importante para resolver el problema de cobertura:
 
 ```xml
 <sonar.coverage.exclusions>
-    **/model/**,
-    **/controller/User.java,
-    **/controller/FormUser.java
+    **/config/**,
+    **/dto/**,
+    **/*Application.class,
+    **/model/**
 </sonar.coverage.exclusions>
 ```
 
@@ -129,7 +131,7 @@ Esta es la propiedad más importante para resolver el problema de cobertura:
 
 **Salida esperada**:
 ```
-<sonar.coverage.exclusions>**/model/**,**/controller/User.java,**/controller/FormUser.java</sonar.coverage.exclusions>
+<sonar.coverage.exclusions>**/config/**,**/dto/**,**/*Application.class,**/model/**</sonar.coverage.exclusions>
 <sonar.coverage.jacoco.xmlReportPaths>/path/to/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -148,9 +150,8 @@ Después de ejecutar el análisis:
 1. Ir a: https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend
 2. Navegar a "Code" → "Files"
 3. Verificar que NO aparecen:
-   - `User.java`
-   - `FormUser.java`
-   - Archivos en `model/`
+   - `User.java` / `FormUser.java` (movidos a `dto/`)
+   - Archivos en `model/`, `dto/`, `config/`
 4. Ir a "Measures" → "Coverage"
 5. Verificar que la cobertura es ~85%
 

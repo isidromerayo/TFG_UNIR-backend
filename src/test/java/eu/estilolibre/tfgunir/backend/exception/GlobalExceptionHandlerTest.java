@@ -9,12 +9,14 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.util.Map;
+import eu.estilolibre.tfgunir.backend.dto.ApiError;
 
 class GlobalExceptionHandlerTest {
 
@@ -24,10 +26,13 @@ class GlobalExceptionHandlerTest {
     void handleGenericException_returnsInternalServerError() {
         Exception ex = new RuntimeException("Unexpected error");
 
-        ResponseEntity<Map<String, String>> response = handler.handleGenericException(ex);
+        ResponseEntity<ApiError> response = handler.handleGenericException(ex);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(response.getBody()).containsEntry("message", "Internal server error");
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().status()).isEqualTo(500);
+        assertThat(response.getBody().code()).isEqualTo("INTERNAL_ERROR");
+        assertThat(response.getBody().message()).isEqualTo("Internal server error");
     }
 
     @Test
@@ -39,10 +44,24 @@ class GlobalExceptionHandlerTest {
         MethodArgumentNotValidException ex = mock(MethodArgumentNotValidException.class);
         when(ex.getBindingResult()).thenReturn(bindingResult);
 
-        ResponseEntity<Map<String, Object>> response = handler.handleValidationExceptions(ex);
+        ResponseEntity<ApiError> response = handler.handleValidationExceptions(ex);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody()).containsKey("errors");
+        assertThat(response.getBody().status()).isEqualTo(400);
+        assertThat(response.getBody().code()).isEqualTo("VALIDATION_ERROR");
+        assertThat(response.getBody().errors()).containsEntry("email", "Email inválido");
+    }
+
+    @Test
+    void handleNoResourceFound_returnsNotFound() {
+        NoResourceFoundException ex = new NoResourceFoundException(HttpMethod.GET, "api/usuarios");
+
+        ResponseEntity<ApiError> response = handler.handleNoResourceFound(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().status()).isEqualTo(404);
+        assertThat(response.getBody().code()).isEqualTo("NOT_FOUND");
     }
 }

@@ -119,6 +119,7 @@ boolean matches = passwordEncoder.matches(password, storedHash);
 - [x] Contraseñas hasheadas en BD (dump.mariadb.sql)
 - [x] Scripts de testing automatizados
 - [x] Documentación completa
+- [x] `/api/usuarios` oculto (Spring Data REST `exported = false`)
 
 ### ⏳ Pendiente
 
@@ -126,6 +127,10 @@ boolean matches = passwordEncoder.matches(password, storedHash);
 - [ ] Publicar imagen Docker nueva
 - [ ] Actualizar README principal
 - [ ] Crear PR con cambios
+
+### ⚠️ Gaps conocidos
+
+- **JWT emitido pero no validado**: `TokenService` emite tokens en `POST /api/auth`, pero `WebSecurityConfig` permite `anyRequest()` sin filtro que valide el `Authorization` header. Los tokens no se exigen en ninguna petición. Ver README principal (sección API REST).
 
 ## 🔗 Referencias Externas
 

@@ -108,9 +108,9 @@ Este repositorio versiona *skills* (guías y patrones en Markdown) para que los 
 ```
 
 **Cobertura actual**: 85% (objetivo: ≥80%)
-- Tests unitarios: 11 tests
-- Tests de integración: 4 tests
-- Total: 15 tests
+- Tests unitarios: 34 tests
+- Tests de integración: 15 tests
+- Total: 49 tests
 
 ### 📦 Perfiles de Maven
 
@@ -174,6 +174,86 @@ open target/site/jacoco-it/index.html   # Solo tests de integración
 # Con API Key del NVD
 ./mvnw -Pdependency-check verify -Dnvd.api.key=${NVD_API_KEY}
 ```
+
+### 🔌 API REST
+
+La API se sirve bajo la base `/api` y está documentada automáticamente con Swagger/OpenAPI:
+
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **Especificación OpenAPI (JSON)**: http://localhost:8080/v3/api-docs
+
+#### Formato de errores
+
+Todos los errores usan un formato uniforme (`ApiError`):
+
+```json
+{
+  "status": 401,
+  "code": "UNAUTHORIZED",
+  "message": "no autorizado",
+  "errors": { "email": "El email no puede estar vacío" }
+}
+```
+
+| Campo | Descripción |
+|-------|-------------|
+| `status` | Código HTTP |
+| `code` | Código de negocio (`UNAUTHORIZED`, `VALIDATION_ERROR`, `NOT_FOUND`, `INTERNAL_ERROR`, ...) |
+| `message` | Mensaje legible |
+| `errors` | (Opcional) Errores de validación por campo |
+
+#### Autenticación
+
+**`POST /api/auth`** — Login y generación de token JWT.
+
+Petición:
+
+```json
+{
+  "email": "c@example.com",
+  "password": "1234"
+}
+```
+
+Respuestas:
+
+- `200` → `{ "id": 1, "username": "c@example.com", "token": "<jwt>", "fullname": "..." }`
+- `400` → validación de entrada fallida
+- `401` → credenciales inválidas o usuario inactivo
+
+```bash
+curl -X POST http://localhost:8080/api/auth \
+  -H "Content-Type: application/json" \
+  -d '{"email":"c@example.com","password":"1234"}'
+```
+
+#### Catálogo (Spring Data REST)
+
+Los recursos de catálogo se exponen automáticamente mediante Spring Data REST en formato **HAL** (`_embedded`):
+
+- `GET /api` — raíz con enlaces a todos los recursos
+- `GET /api/cursos` — listado de cursos (con paginación: `?page=0&size=10`, ordenación: `?sort=titulo,asc`)
+- `GET /api/cursos/{id}` — detalle de curso
+- `GET /api/cursos/search/selectMorePointsTop3` — top 3 mejor valorados
+- `GET /api/cursos/search/selectLastUpdatesTop3` — top 3 más recientes
+- `GET /api/cursos/search/selectMorePoints` — cursos ordenados por valoración
+- `GET /api/cursos/search/selectLastUpdates` — cursos ordenados por actualización
+- `GET /api/cursos/search/findByTituloContaining?titulo=java` — búsqueda por título
+- `GET /api/categorias` — categorías
+- `GET /api/valoraciones` — valoraciones
+
+> ⚠️ **`/api/usuarios` NO está expuesto** (devuelve `404`). La gestión de usuarios no es pública por seguridad.
+
+#### Cambios de contrato (refactor API)
+
+- El recurso `GET /api/cursos` ya **no incluye** el enlace ni los datos de `alumnos` (matrículas). La asociación se considera interna.
+- Los cuerpos de error de `401`, `404`, `400` y `500` usan ahora el formato `ApiError` uniforme (antes variaban según el endpoint).
+- Las rutas desconocidas devuelven `404` (antes `500`).
+
+#### Gaps conocidos
+
+- **JWT emitido pero no validado por el servidor**: la API permite `anyRequest()` sin exigir token (`WebSecurityConfig`). Los tokens se emiten en login para que los frontends los usen, pero no hay filtro que los valide en las peticiones.
+- **CRUD completo abierto en recursos de catálogo**: `cursos`, `categorias` y `valoraciones` permiten `POST`, `PUT`, `PATCH` y `DELETE` además de lectura. No se ha restringido a solo lectura.
 
 ### 🔐 Autenticación
 
