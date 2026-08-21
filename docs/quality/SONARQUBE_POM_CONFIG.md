@@ -150,8 +150,8 @@ Después de ejecutar el análisis:
 1. Ir a: https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend
 2. Navegar a "Code" → "Files"
 3. Verificar que NO aparecen:
-   - `User.java` / `FormUser.java` (movidos a `dto/`)
    - Archivos en `model/`, `dto/`, `config/`
+   - `BackendApplication.java`
 4. Ir a "Measures" → "Coverage"
 5. Verificar que la cobertura es ~85%
 

@@ -107,10 +107,10 @@ Este repositorio versiona *skills* (guías y patrones en Markdown) para que los 
 # Reporte en: target/site/jacoco/index.html
 ```
 
-**Cobertura actual**: 85% (objetivo: ≥80%)
-- Tests unitarios: 34 tests
-- Tests de integración: 15 tests
-- Total: 49 tests
+**Cobertura actual**: 99% de instrucciones (objetivo: ≥80%)
+- Tests unitarios: 51 tests
+- Tests de integración: 22 tests
+- Total: 73 tests
 
 ### 📦 Perfiles de Maven
 
@@ -227,6 +227,50 @@ curl -X POST http://localhost:8080/api/auth \
   -d '{"email":"c@example.com","password":"1234"}'
 ```
 
+#### Usuarios
+
+Gestión de registro y cursos comprados. El listado global `GET /api/usuarios` sigue **sin exponerse** (`404`).
+
+- **`POST /api/usuarios`** — Registro de un nuevo usuario.
+
+  Petición:
+
+  ```json
+  {
+    "nombre": "Ana",
+    "apellidos": "Pérez",
+    "email": "ana@example.com",
+    "password": "secreto"
+  }
+  ```
+
+  Respuestas:
+
+  - `201` → `{ "id": 1, "nombre": "Ana", "apellidos": "Pérez", "email": "ana@example.com", "estado": "P" }`
+  - `400` → validación de entrada fallida
+  - `409` → ya existe un usuario con ese email
+
+- **`GET /api/usuarios/{id}/cursos`** — Cursos comprados por un usuario.
+
+  Respuestas:
+
+  - `200` → lista de `CursoResponse`
+  - `404` → usuario no encontrado
+
+- **`POST /api/usuarios/{id}/misCursosComprados`** — Añade cursos comprados al usuario a partir de una lista de URIs (`text/uri-list`).
+
+  Ejemplo de cuerpo:
+
+  ```text
+  http://localhost:8080/api/cursos/1
+  http://localhost:8080/api/cursos/2
+  ```
+
+  Respuestas:
+
+  - `201` → cursos añadidos correctamente
+  - `404` → usuario o curso no encontrado
+
 #### Catálogo (Spring Data REST)
 
 Los recursos de catálogo se exponen automáticamente mediante Spring Data REST en formato **HAL** (`_embedded`):
@@ -242,10 +286,11 @@ Los recursos de catálogo se exponen automáticamente mediante Spring Data REST 
 - `GET /api/categorias` — categorías
 - `GET /api/valoraciones` — valoraciones
 
-> ⚠️ **`/api/usuarios` NO está expuesto** (devuelve `404`). La gestión de usuarios no es pública por seguridad.
+> ⚠️ **`GET /api/usuarios` NO está expuesto** (devuelve `404`). Solo se publican las operaciones de registro y gestión de cursos comprados.
 
 #### Cambios de contrato (refactor API)
 
+- Nuevos endpoints bajo `/api/usuarios` para registro y gestión de cursos comprados.
 - El recurso `GET /api/cursos` ya **no incluye** el enlace ni los datos de `alumnos` (matrículas). La asociación se considera interna.
 - Los cuerpos de error de `401`, `404`, `400` y `500` usan ahora el formato `ApiError` uniforme (antes variaban según el endpoint).
 - Las rutas desconocidas devuelven `404` (antes `500`).
@@ -961,12 +1006,12 @@ Este comando:
 
 | Métrica | Valor | Objetivo | Estado |
 |---------|-------|----------|--------|
-| **Cobertura** | 85% | ≥ 80% | ✅ |
-| **Tests** | 15 (11 UT + 4 IT) | - | ✅ |
+| **Cobertura** | 99% | ≥ 80% | ✅ |
+| **Tests** | 73 (51 UT + 22 IT) | - | ✅ |
 | **Reliability Rating** | A | A | ✅ |
 | **Security Rating** | A | A | ✅ |
 | **Quality Gate** | Passed | Passed | ✅ |
 
-**Última actualización**: 2026-06-29 (Release v0.6.2)
+**Última actualización**: 2026-08-21 (refactor/rest-api)
 
 Ver más detalles en [SonarCloud](https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend)
