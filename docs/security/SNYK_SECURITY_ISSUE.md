@@ -11,7 +11,7 @@
 
 **Archivo**: `src/main/java/eu/estilolibre/tfgunir/backend/controller/LoginController.java`  
 **Línea**: 48  
-**Método**: `auth(FormUser login)`
+**Método**: `auth(LoginRequest login)`
 
 ---
 
@@ -113,7 +113,7 @@ public class LoginController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> auth(@RequestBody FormUser login) {
+    public ResponseEntity<?> auth(@RequestBody LoginRequest login) {
         List<Usuario> result = repository.findByEmail(login.getEmail());
 
         if (result.isEmpty()) {
@@ -130,13 +130,14 @@ public class LoginController {
             
             String token = tokenService.crearToken(usuario.getEmail());
             
-            User user = new User();
-            user.setUsername(usuario.getEmail());
-            user.setFullname(usuario.getNombre() + " " + usuario.getApellidos());
-            user.setId(usuario.getId());
-            user.setToken(token);
+            AuthResponse response = new AuthResponse(
+                usuario.getId(),
+                usuario.getEmail(),
+                token,
+                usuario.getNombre() + " " + usuario.getApellidos()
+            );
             
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(response);
         }
 
         return ResponseEntity

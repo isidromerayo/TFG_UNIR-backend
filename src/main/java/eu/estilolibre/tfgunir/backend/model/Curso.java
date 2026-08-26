@@ -22,6 +22,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Data
@@ -53,6 +54,7 @@ public class Curso {
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private Categoria categoria;
     @ManyToMany(mappedBy = "misCursosComprados")
+    @JsonIgnore
     private Set<Usuario> alumnos;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id", referencedColumnName = "id")

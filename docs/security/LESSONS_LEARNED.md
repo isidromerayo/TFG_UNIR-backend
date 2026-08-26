@@ -141,7 +141,7 @@ podman volume rm tfg_unir-backend_data
 @RequestMapping("/api/auth")
 public class LoginController {
     @PostMapping("")  // Ruta completa: /api/auth
-    public ResponseEntity<?> auth(@RequestBody FormUser login) {
+    public ResponseEntity<?> auth(@RequestBody LoginRequest login) {
         // ...
     }
 }

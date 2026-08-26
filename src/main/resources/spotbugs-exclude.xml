@@ -7,9 +7,9 @@
         <Bug pattern="USBR_UNNECESSARY_STORE_BEFORE_RETURN"/>
     </Match>
     
-    <!-- Excluir warnings de USBR en clases con @Data de Lombok -->
+    <!-- Excluir warnings de USBR en clases con @Data de Lombok (DTOs) -->
     <Match>
-        <Class name="~.*\.controller\.FormUser"/>
+        <Class name="~.*\.dto\..*"/>
         <Bug pattern="USBR_UNNECESSARY_STORE_BEFORE_RETURN"/>
     </Match>
 </FindBugsFilter>

@@ -35,6 +35,13 @@ class OpenApiDocumentationIT {
     }
 
     @Test
+    void apiDocsContainsApiInfoTitle() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/v3/api-docs", String.class);
+
+        assertThat(response.getBody()).contains("TFG UNIR Backend API");
+    }
+
+    @Test
     void swaggerUiReturnsOk() {
         ResponseEntity<String> response = restTemplate.getForEntity("/swagger-ui.html", String.class);
 

@@ -44,5 +44,4 @@ coverage:
   exclude_paths:
     - 'src/test/**'
     - '**/model/**'
-    - '**/controller/User.java'
-    - '**/controller/FormUser.java'
+    - '**/dto/**'

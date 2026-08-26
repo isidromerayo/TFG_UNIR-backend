@@ -202,7 +202,7 @@ sonar.jacoco.reportPaths=target/jacoco-merged.exec
 - [x] Reporte HTML combinado en `target/site/jacoco/`
 - [x] Reporte combinado muestra cobertura máxima de ambos
 - [x] Exclusiones configuradas para paquete `model`
-- [x] Exclusiones configuradas para DTOs (`User`, `FormUser`)
+- [x] Exclusiones configuradas para DTOs (`dto/`) y configuración (`config/`)
 - [x] **Objetivo de cobertura alcanzado: 85% > 80%**
 
 ---

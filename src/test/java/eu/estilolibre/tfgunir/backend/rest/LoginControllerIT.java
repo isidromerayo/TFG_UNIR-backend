@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 
-import eu.estilolibre.tfgunir.backend.controller.FormUser;
+import eu.estilolibre.tfgunir.backend.dto.LoginRequest;
 import io.restassured.RestAssured;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -25,7 +25,7 @@ class LoginControllerIT {
 
     @Test
     void shouldLoginSuccessfullyWithValidCredentials() {
-        FormUser user = new FormUser();
+        LoginRequest user = new LoginRequest();
         user.setEmail("admin@gmail.com");
         user.setPassword("admin");
 
@@ -41,7 +41,7 @@ class LoginControllerIT {
 
     @Test
     void shouldFailLoginWithInvalidCredentials() {
-        FormUser user = new FormUser();
+        LoginRequest user = new LoginRequest();
         user.setEmail("invalid@gmail.com");
         user.setPassword("invalid");
 
@@ -56,7 +56,7 @@ class LoginControllerIT {
 
     @Test
     void shouldFailLoginWithNonexistentUser() {
-        FormUser user = new FormUser();
+        LoginRequest user = new LoginRequest();
         user.setEmail("nonexistent@gmail.com");
         user.setPassword("password123");
 
@@ -72,7 +72,7 @@ class LoginControllerIT {
 
     @Test
     void shouldFailLoginWithWrongPassword() {
-        FormUser user = new FormUser();
+        LoginRequest user = new LoginRequest();
         user.setEmail("admin@gmail.com");
         user.setPassword("wrongpassword");
 
@@ -88,7 +88,7 @@ class LoginControllerIT {
 
     @Test
     void shouldReturnTokenWithCorrectStructure() {
-        FormUser user = new FormUser();
+        LoginRequest user = new LoginRequest();
         user.setEmail("admin@gmail.com");
         user.setPassword("admin");
 
@@ -107,7 +107,7 @@ class LoginControllerIT {
 
     @Test
     void shouldReturnCorrectUserDataOnSuccessfulLogin() {
-        FormUser user = new FormUser();
+        LoginRequest user = new LoginRequest();
         user.setEmail("admin@gmail.com");
         user.setPassword("admin");
 

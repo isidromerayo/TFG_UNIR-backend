@@ -58,9 +58,9 @@ assertTrue(valoracion.getPuntuacion() > 0);
 
 ### 2-4. Métodos vacíos sin explicación
 **Archivos**:
-- `src/main/java/eu/estilolibre/tfgunir/backend/controller/FormUser.java`
-- `src/main/java/eu/estilolibre/tfgunir/backend/controller/User.java`
 - `src/test/java/eu/estilolibre/tfgunir/backend/security/TokenServiceTest.java`
+- ~~`src/main/java/eu/estilolibre/tfgunir/backend/controller/FormUser.java`~~ (eliminado)
+- ~~`src/main/java/eu/estilolibre/tfgunir/backend/controller/User.java`~~ (eliminado)
 
 **Regla**: java:S1186  
 **Mensaje**: Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.
@@ -205,7 +205,7 @@ void testSomething() {
 **Mensaje**: Complete the task associated to this TODO comment.
 
 **Solución**:
-- Completar la tarea pendiente
+- ✅ Resuelto: se eliminó el TODO y se completó la refactorización del controlador.
 - O crear un issue/ticket y referenciar: `// TODO: Issue #123 - Implementar validación`
 - O eliminar el TODO si ya no es necesario
 
@@ -216,7 +216,7 @@ void testSomething() {
 ### Fase 1: Issues Críticos (BLOCKER + CRITICAL)
 1. ✅ Añadir assertions al test en `TokenServiceTest.java`
 2. ✅ Corregir comparación con null en `ValoracionRepositoryTests.java`
-3. ✅ Completar o documentar métodos vacíos en `FormUser.java`, `User.java`
+3. ✅ Eliminar `FormUser.java` y `User.java` (sustituidos por DTOs/records en `dto/`)
 
 ### Fase 2: Issues Importantes (MAJOR)
 4. ✅ Optimizar logging en `TokenService.java`

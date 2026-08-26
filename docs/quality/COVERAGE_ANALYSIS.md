@@ -40,7 +40,7 @@ Ver `JACOCO_CONFIGURATION.md` para detalles de la configuración.
 
 **Exclusiones configuradas**:
 - ✅ Entidades JPA (`model/*`) - POJOs con Lombok
-- ✅ DTOs simples (`User`, `FormUser`) - Sin lógica de negocio
+- ✅ DTOs simples (`dto/*`: `ApiError`, `AuthResponse`, `LoginRequest`, `UsuarioRegistroRequest`, `UsuarioResponse`, `CursoResponse`, `InstructorResponse`) - Sin lógica de negocio
 
 ---
 
@@ -112,8 +112,8 @@ Ver `JACOCO_CONFIGURATION.md` para detalles de la configuración.
   - ✅ Tests unitarios: Constructor (6 instrucciones)
   - ✅ Tests integración: `login()`, `registro()` (88 instrucciones)
   - 🟡 Ramas sin cubrir: 2/6 (casos de error específicos)
-- ~~`User`~~: **Excluido de cobertura** (DTO simple sin lógica)
-- ~~`FormUser`~~: **Excluido de cobertura** (DTO simple sin lógica)
+- ~~`User`~~ / ~~`FormUser`~~: **Eliminados** (sustituidos por `AuthResponse` y `LoginRequest` en `dto/`)
+- DTOs en `dto/`: **Excluidos de cobertura** (sin lógica de negocio)
 
 **Análisis**: `LoginController` tiene excelente cobertura gracias a los tests de integración. Los DTOs están excluidos por ser POJOs sin lógica de negocio, validados implícitamente en tests de integración.
 
@@ -165,9 +165,8 @@ Ver `JACOCO_CONFIGURATION.md` para detalles de la configuración.
 
 ### ✅ Excluidos (No requieren tests)
 
-- ~~**User**~~: DTO simple excluido de cobertura
-- ~~**FormUser**~~: DTO simple excluido de cobertura
-- **Justificación**: POJOs sin lógica de negocio, validados implícitamente en tests de integración
+- DTOs del paquete `dto/` (`ApiError`, `AuthResponse`, `LoginRequest`, `UsuarioRegistroRequest`, `UsuarioResponse`, `CursoResponse`, `InstructorResponse`): excluidos de cobertura
+- **Justificación**: POJOs / records sin lógica de negocio, validados implícitamente en tests de integración
 
 ---
 
@@ -194,8 +193,7 @@ Tests implementados:
 **Estado**: ✅ **Completado**
 
 Exclusiones configuradas:
-- ✅ `User.class` - DTO simple
-- ✅ `FormUser.class` - DTO simple
+- ✅ `dto/*` - DTOs simples / records
 - ✅ `model/*` - Entidades JPA con Lombok
 
 **Resultado**: Cobertura de 56% a 85% (objetivo 80% alcanzado)
@@ -252,7 +250,7 @@ Exclusiones configuradas:
 
 **Tests actuales**: 15 (11 unitarios + 4 integración)  
 **Objetivo SonarQube**: ✅ **85% > 80% requerido**  
-**Clases analizadas**: 9 (excluidas 2 DTOs + entidades model)
+**Clases analizadas**: 9 (excluidos DTOs + entidades model)
 
 ---
 
@@ -293,9 +291,8 @@ Según `pom.xml`, JaCoCo excluye:
 <!-- Entidades JPA - POJOs con Lombok -->
 <exclude>eu/estilolibre/tfgunir/backend/model/*</exclude>
 
-<!-- DTOs simples sin lógica de negocio -->
-<exclude>eu/estilolibre/tfgunir/backend/controller/User.class</exclude>
-<exclude>eu/estilolibre/tfgunir/backend/controller/FormUser.class</exclude>
+<!-- DTOs simples / records sin lógica de negocio -->
+<exclude>eu/estilolibre/tfgunir/backend/dto/*</exclude>
 ```
 
 **Justificación**:
@@ -316,7 +313,7 @@ Según `pom.xml`, JaCoCo excluye:
 
 ### Inmediatas 🔴
 1. Añadir tests para validar configuración CORS en `WebConfig`
-2. Implementar tests de serialización para DTOs (`User`, `FormUser`)
+2. Implementar tests de serialización para DTOs (`AuthResponse`, `LoginRequest`, etc.)
 3. Añadir tests para casos edge en `LoginController` (ramas faltantes)
 
 ### A Medio Plazo 🟡
