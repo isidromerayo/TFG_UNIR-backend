@@ -93,6 +93,12 @@ Ejecutado el 08/09/2026 con la misma herramienta sobre Spring Boot 4.0.8 (Tomcat
 
 **Total: de ~70 hallazgos (9 dependencias) a 3 hallazgos (2 dependencias), todos falsos positivos:**
 
+**Complemento Snyk (check de PR):** Snyk detectó además 2 CVEs medias en Jackson 3
+`tools.jackson.core:jackson-databind` 3.1.5 (CVE-2026-19032, Unsafe Reflection,
+CVSS 6.9; y CVE-2026-83557, Deserialization, CVSS 6.3), no presentes en el
+escaneo NVD de dependency-check. Remediados con override a **3.1.6**
+(`jackson-bom.version`), versión corregida según Snyk.
+
 | Hallazgo post-migración | Motivo del descarte |
 |--------------------------|---------------------|
 | `spring-boot-data-rest` CVE-2026-47849, CVE-2026-47850 | El CPE matcher asocia el módulo `spring-boot-data-rest` 4.0.8 con los rangos de "Spring Data REST 4.0.0–4.4.15". La librería real (`spring-data-rest-webmvc/core` **5.0.7**, gestionada por Boot 4.0.8) está fuera de los rangos vulnerables (5.0.0–5.0.6), ya parcheada. |

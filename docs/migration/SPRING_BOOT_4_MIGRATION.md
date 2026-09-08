@@ -197,6 +197,22 @@ De ~70 hallazgos (9 dependencias) a **3 hallazgos, todos falsos positivos**
 | CVE-2026-47849/47850 en `spring-boot-data-rest-4.0.8.jar` | El CPE matcher matchea el módulo de Boot (4.0.8) contra los rangos de "Spring Data REST 4.0.0–4.4.15". La librería real (`spring-data-rest-webmvc/core` 5.0.7) está fuera de los rangos vulnerables y parcheada. |
 | CVE-2022-31691 en `spring-boot-devtools-4.0.8.jar` | El CVE afecta a las extensiones de IDE (Spring Tools 4 / VSCode), no a devtools. Además es dev-only y se excluye del jar empaquetado. |
 
+### 9. Override de Jackson 3: 3.1.5 → 3.1.6 (detectado por Snyk)
+
+- **Problema:** el check Snyk de la PR marcó fallo con 2 CVEs medias en
+  `tools.jackson.core:jackson-databind` **3.1.5** (gestionado por Boot 4.0.8):
+  CVE-2026-19032 (Unsafe Reflection, CVSS 6.9) y CVE-2026-83557
+  (Deserialization of Untrusted Data, CVSS 6.3), introducidas vía
+  `springdoc-openapi-starter-common`.
+- **Causa:** el BOM de Boot 4.0.8 fija `jackson-bom.version` en 3.1.5; el fix
+  (3.1.6) es posterior a la release.
+- **Solución:** override de la propiedad (patrón igual que Tomcat):
+
+```xml
+<!-- Boot 4.0.8 gestiona Jackson 3.1.5, vulnerable a CVE-2026-19032/CVE-2026-83557 (Snyk); fix en 3.1.6 -->
+<jackson-bom.version>3.1.6</jackson-bom.version>
+```
+
 ---
 
 ## 🧪 Verificación
@@ -211,7 +227,7 @@ De ~70 hallazgos (9 dependencias) a **3 hallazgos, todos falsos positivos**
 Versiones finales del classpath: Tomcat **11.0.25**, Spring Framework **7.0.9**,
 Spring Security **7.0.7**, Spring Data JPA **4.0.7**, Hibernate **7.2.24.Final**,
 PostgreSQL JDBC **42.7.13**, log4j-api **2.25.5**, springdoc **3.1.1**,
-rest-assured **6.0.1**, Jackson 3 (**3.1.5**) + transitivo Jackson 2 (**2.21.5**).
+rest-assured **6.0.1**, Jackson 3 (**3.1.6**) + transitivo Jackson 2 (**2.21.5**).
 
 ---
 

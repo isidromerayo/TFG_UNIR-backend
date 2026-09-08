@@ -24,6 +24,8 @@
 		<!-- Dependencies Versions -->
 		<!-- Boot 4.0.8 gestiona Tomcat 11.0.24, vulnerable a CVE-2026-65637 et al.; fix en 11.0.25 -->
 		<tomcat.version>11.0.25</tomcat.version>
+		<!-- Boot 4.0.8 gestiona Jackson 3.1.5, vulnerable a CVE-2026-19032/CVE-2026-83557 (Snyk); fix en 3.1.6 -->
+		<jackson-bom.version>3.1.6</jackson-bom.version>
 		<jjwt.version>0.13.0</jjwt.version>
 		<commons-lang3.version>3.20.0</commons-lang3.version>
 		<springdoc-openapi-starter-webmvc-ui.version>3.1.1</springdoc-openapi-starter-webmvc-ui.version>

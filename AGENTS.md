@@ -3,7 +3,7 @@
 ## Stack
 - Java 21 + Spring Boot 4.0.8 + Maven 3.9.9 (`./mvnw`) — migrado desde 3.5.16 (EOL OSS) el 2026-09-08
 - Spring Framework 7.0.x, Spring Security 7.0.x, Tomcat 11.0.25 (override: Boot 4.0.8 gestiona 11.0.24, vulnerable)
-- Jackson 3 (`tools.jackson.*`); Jackson 2 solo transitivo (jjwt)
+- Jackson 3 (`tools.jackson.*`) **3.1.6** (override de 3.1.5: CVE-2026-19032/83557, Snyk); Jackson 2 solo transitivo (jjwt)
 - Test slices modulares: `spring-boot-data-jpa-test`, `spring-boot-jdbc-test`, `spring-boot-resttestclient` + `spring-boot-restclient`
 - rest-assured 6.0.1 vía `rest-assured-bom` (Boot 4 ya no lo gestiona), springdoc-openapi 3.1.1
 - H2 (tests), PostgreSQL (prod)
