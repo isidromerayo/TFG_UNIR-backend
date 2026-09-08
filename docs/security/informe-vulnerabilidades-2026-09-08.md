@@ -76,10 +76,33 @@ En la práctica, el escaneo CI solo cubre CISA KEV con caché web parcial. Depen
 | 1 | `security/migrate-spring-boot-4` | Informe (este documento), migración a Spring Boot 4.0.8, fix `rest-assured` (BOM propio), adaptación de código/config, actualización de AGENTS.md y README |
 | 2 | `chore/owasp-ci-nvd` | Workflow OWASP bloqueante |
 
-## 7. Seguimiento posterior
+## 7. Resultado del re-scan tras la migración
 
+Ejecutado el 08/09/2026 con la misma herramienta sobre Spring Boot 4.0.8 (Tomcat fijado a 11.0.25):
+
+| Dependencia | Antes | Después | CVEs después |
+|-------------|-------|---------|--------------|
+| `tomcat-embed-core` | 10.1.55 (19 CVEs) | **11.0.25** | 0 |
+| `spring-core` | 6.2.19 (10 CVEs) | **7.0.9** | 0 |
+| `spring-security-core` | 6.5.11 (4 CVEs) | **7.0.7** | 0 |
+| `spring-data-jpa` | 3.5.13 (1 CVE) | **4.0.7** | 0 |
+| `postgresql` | 42.7.11 (1 CVE) | **42.7.13** | 0 |
+| `log4j-api` | 2.24.3 (3 CVEs) | **2.25.5** | 0 |
+| `jackson-databind` | 2.21.4 (1 CVE) | **2.21.5** (+ Jackson 3 `tools.jackson` 3.1.5) | 0 |
+| `swagger-ui` | 5.32.2 | **5.32.14** | FP (ya documentado) |
+
+**Total: de ~70 hallazgos (9 dependencias) a 3 hallazgos (2 dependencias), todos falsos positivos:**
+
+| Hallazgo post-migración | Motivo del descarte |
+|--------------------------|---------------------|
+| `spring-boot-data-rest` CVE-2026-47849, CVE-2026-47850 | El CPE matcher asocia el módulo `spring-boot-data-rest` 4.0.8 con los rangos de "Spring Data REST 4.0.0–4.4.15". La librería real (`spring-data-rest-webmvc/core` **5.0.7**, gestionada por Boot 4.0.8) está fuera de los rangos vulnerables (5.0.0–5.0.6), ya parcheada. |
+| `spring-boot-devtools` CVE-2022-31691 | El CVE afecta a las extensiones de IDE (Spring Tools 4 para Eclipse/VSCode), no a `spring-boot-devtools`. Además devtools es dev-only y se excluye del jar empaquetado. |
+
+## 8. Seguimiento posterior
+
+- [x] Re-escanear tras la migración para confirmar la remediación (hecho: ver §7)
+- [x] Triaje de CVE-2026-49844 sobre `log4j-api` (resuelto: la migración lleva 2.25.5, versión corregida)
+- [x] Supresión/documentación de los 3 falsos positivos post-migración
 - [ ] Configurar secret `NVD_API_KEY` en GitHub (mantenedor)
 - [ ] Tras merge: verificar que el workflow OWASP ejecuta el escaneo NVD completo y genera el reporte
-- [ ] Re-escanear tras la migración para confirmar la remediación (Tomcat 11.x, Spring Framework 7.0.x, Spring Security 7.0.x son líneas parcheadas)
-- [ ] Triaje de CVE-2026-49844 sobre `log4j-api` tras el bump de versión
 - [ ] **Bump a Spring Boot 4.1.x antes del 31/12/2026** (fin de soporte OSS de la línea 4.0)
