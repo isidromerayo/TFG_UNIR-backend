@@ -65,6 +65,7 @@ Documentación sobre migraciones de versión y reorganizaciones.
 
 - **[REORGANIZATION_SUMMARY.md](migration/REORGANIZATION_SUMMARY.md)** - Resumen de reorganización
 - **[SPRING_BOOT_3.5_MIGRATION.md](migration/SPRING_BOOT_3.5_MIGRATION.md)** - Migración a Spring Boot 3.5
+- **[SPRING_BOOT_4_MIGRATION.md](migration/SPRING_BOOT_4_MIGRATION.md)** - Migración a Spring Boot 4.0.8
 - **[MIGRATION_EXECUTION_GUIDE.md](migration/MIGRATION_EXECUTION_GUIDE.md)** - Guía de ejecución
 - **[SPRING_BOOT_LIFECYCLE.md](migration/SPRING_BOOT_LIFECYCLE.md)** - Ciclo de vida Spring Boot
 - **[/plan/](migration/plan/)** - Planes de migración detallados
