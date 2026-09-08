@@ -263,7 +263,7 @@ docker push isidromerayo/postgres-tfg:latest
 | `0.6.2` | Spring Boot 3.5.16 |
 | `latest` | Referencia a la última versión |
 
-> La próxima release (0.6.3) incluirá la migración a **Spring Boot 4.0.8**
+> La próxima release (0.7.0) incluirá la migración a **Spring Boot 4.0.8**
 > (ver `docs/security/informe-vulnerabilidades-2026-09-08.md`).
 
 ---

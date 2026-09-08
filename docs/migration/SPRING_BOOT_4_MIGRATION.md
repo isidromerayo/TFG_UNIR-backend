@@ -78,7 +78,7 @@ de remediación y re-scan post-migración.
 - **AGENTS.md**: Stack (4.0.8, Jackson 3, test slices modulares), Known
   Vulnerabilities con re-scan y nuevos falsos positivos.
 - **README.md**: stack tecnológico, versiones y referencias a la línea 3.5.
-- **docs/docker/DOCKER_IMAGES_GUIDE.md**: nota de la próxima release 0.6.3.
+- **docs/docker/DOCKER_IMAGES_GUIDE.md**: nota de la próxima release 0.7.0.
 
 ### 5. Workflow OWASP bloqueante
 
