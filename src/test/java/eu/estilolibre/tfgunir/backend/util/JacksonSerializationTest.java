@@ -11,8 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import eu.estilolibre.tfgunir.backend.model.Curso;
 import eu.estilolibre.tfgunir.backend.model.Instructor;
@@ -26,7 +25,7 @@ class JacksonSerializationTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void serializarUsuario_debeExcluirPassword() throws JsonProcessingException {
+    void serializarUsuario_debeExcluirPassword() {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
         usuario.setNombre("Juan");
@@ -44,7 +43,7 @@ class JacksonSerializationTest {
     }
 
     @Test
-    void serializarCurso_debeIncluirCamposCorrectos() throws JsonProcessingException {
+    void serializarCurso_debeIncluirCamposCorrectos() {
         Curso curso = new Curso();
         curso.setId(1L);
         curso.setTitulo("Spring Boot Avanzado");
@@ -62,7 +61,7 @@ class JacksonSerializationTest {
     }
 
     @Test
-    void serializarInstructor_debeExcluirHibernateHandler() throws JsonProcessingException {
+    void serializarInstructor_debeExcluirHibernateHandler() {
         Instructor instructor = new Instructor();
         instructor.setId(1L);
         instructor.setNombre("Carlos");
@@ -77,7 +76,7 @@ class JacksonSerializationTest {
     }
 
     @Test
-    void deserializarCurso_debeCrearObjetoCorrecto() throws JsonProcessingException {
+    void deserializarCurso_debeCrearObjetoCorrecto() {
         String json = """
                 {
                     "id": 1,
@@ -96,7 +95,7 @@ class JacksonSerializationTest {
     }
 
     @Test
-    void fechas_debenSerializarseCorrectamente() throws JsonProcessingException {
+    void fechas_debenSerializarseCorrectamente() {
         Curso curso = new Curso();
         curso.setId(1L);
         curso.setTitulo("Test");

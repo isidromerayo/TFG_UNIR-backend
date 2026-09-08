@@ -1,11 +1,15 @@
 # AGENTS.md - TFG UNIR Backend
 
 ## Stack
-- Java 21 + Spring Boot 3.5.16 + Maven 3.9.9 (`./mvnw`)
+- Java 21 + Spring Boot 4.0.8 + Maven 3.9.9 (`./mvnw`) — migrado desde 3.5.16 (EOL OSS) el 2026-09-08
+- Spring Framework 7.0.x, Spring Security 7.0.x, Tomcat 11.0.25 (override: Boot 4.0.8 gestiona 11.0.24, vulnerable)
+- Jackson 3 (`tools.jackson.*`) **3.1.6** (override de 3.1.5: CVE-2026-19032/83557, Snyk); Jackson 2 solo transitivo (jjwt)
+- Test slices modulares: `spring-boot-data-jpa-test`, `spring-boot-jdbc-test`, `spring-boot-resttestclient` + `spring-boot-restclient`
+- rest-assured 6.0.1 vía `rest-assured-bom` (Boot 4 ya no lo gestiona), springdoc-openapi 3.1.1
 - H2 (tests), PostgreSQL (prod)
 - JWT auth, CSRF disabled, stateless API
 - Logging: `java.util.logging.Logger` (not SLF4J)
-- Security plugins: SpotBugs 4.10.2 + FindSecBugs 1.14.0 + fb-contrib 7.7.4
+- Security plugins: SpotBugs 4.10.2 + FindSecBugs 1.14.0 + sb-contrib 7.7.4
 
 ## Package Layout
 `src/main/java/eu/estilolibre/tfgunir/backend/`
@@ -99,16 +103,21 @@ When making changes, update the affected docs **before commit**:
 - SonarQube: https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend
 
 ## Known Vulnerabilities
-No Tomcat CVEs — Spring Boot 3.5.16 ships `tomcat-embed-core-10.1.55` (all previous CVEs fixed).
+Estado tras migración a Spring Boot 4.0.8 (2026-09-08): **0 vulnerabilidades reales** en el classpath
+(re-scan NVD completo en `docs/security/informe-vulnerabilidades-2026-09-08.md`).
+Pendiente: **bump a Spring Boot 4.1.x antes del 31/12/2026** (fin de soporte OSS de la línea 4.0).
 Run OWASP scan periodically: `./mvnw -Pdependency-check dependency-check:check -Dnvd.api.key=$NVD_API_KEY`
+(En CI requiere el secret `NVD_API_KEY`; el workflow debe ejecutar el escaneo NVD completo.)
 
 ### Dependency-Check False Positives
 These CVEs are flagged by the CPE matcher but do **not** affect the project:
-- **CVE-2026-34479, CVE-2026-34477** on `log4j-api-2.24.3.jar` — both require `log4j-core` (not present). The project only has `log4j-api` (interfaces) and `log4j-to-slf4j` (routing bridge). These CVEs target the Log4j 1→2 bridge XML layout and SocketAppender SSL — none of which are used.
-- **All CVEs on `swagger-ui-5.32.2.jar` (DOMPurify@3.3.2)** — Swagger UI is a dev-only client-side tool served via `springdoc-openapi`. DOMPurify runs in the browser, sanitizing user-supplied HTML before rendering. The backend never passes user HTML through DOMPurify, so these CVEs are not exploitable server-side. No remediation required.
+- **CVE-2026-47849, CVE-2026-47850** on `spring-boot-data-rest-4.0.8.jar` — the CPE matcher matches the Boot module version (4.0.8) against "Spring Data REST 4.0.0–4.4.15" ranges. The real libraries (`spring-data-rest-webmvc`/`spring-data-rest-core` **5.0.7**, managed by Boot 4.0.8) are outside the vulnerable ranges (5.0.0–5.0.6) and already patched.
+- **CVE-2022-31691** on `spring-boot-devtools-4.0.8.jar` — this CVE targets the Spring Tools 4 Eclipse/VSCode extensions, not `spring-boot-devtools`. Devtools is dev-only and excluded from the repackaged jar.
+- **CVE-2026-34479, CVE-2026-34477** on `log4j-api-2.24.3.jar` — both require `log4j-core` (not present). The project only has `log4j-api` (interfaces) and `log4j-to-slf4j` (routing bridge). These CVEs target the Log4j 1→2 bridge XML layout and SocketAppender SSL — none of which are used. *(Ya no aplican: la migración trae `log4j-api` 2.25.5.)*
+- **All CVEs on `swagger-ui-5.32.2.jar` (DOMPurify@3.3.2)** — Swagger UI is a dev-only client-side tool served via `springdoc-openapi`. DOMPurify runs in the browser, sanitizing user-supplied HTML before rendering. The backend never passes user HTML through DOMPurify, so these CVEs are not exploitable server-side. No remediation required. *(Actual: `swagger-ui` 5.32.14.)*
 
 ## Skills
 `springboot-tdd`, `springboot-security`, `springboot-patterns`, `xp-tdd-practices`, `testing-standards`, `action-tdd`, `task-validate`, `task-testing-review`
 
 ---
-**Updated:** 2026-07-26
+**Updated:** 2026-09-08

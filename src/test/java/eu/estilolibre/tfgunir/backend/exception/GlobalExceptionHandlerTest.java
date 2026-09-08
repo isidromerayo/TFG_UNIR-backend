@@ -56,7 +56,7 @@ class GlobalExceptionHandlerTest {
 
     @Test
     void handleNoResourceFound_returnsNotFound() {
-        NoResourceFoundException ex = new NoResourceFoundException(HttpMethod.GET, "api/usuarios");
+        NoResourceFoundException ex = new NoResourceFoundException(HttpMethod.GET, "api/usuarios", "api/usuarios");
 
         ResponseEntity<ApiError> response = handler.handleNoResourceFound(ex);
 
