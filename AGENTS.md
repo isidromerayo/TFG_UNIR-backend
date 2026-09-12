@@ -1,7 +1,7 @@
 # AGENTS.md - TFG UNIR Backend
 
 ## Stack
-- Java 21 + Spring Boot 4.0.8 + Maven 3.9.9 (`./mvnw`) — migrado desde 3.5.16 (EOL OSS) el 2026-09-08
+- Java 21 + Spring Boot 4.0.8 + Maven 3.9.16 (`./mvnw`) — migrado desde 3.5.16 (EOL OSS) el 2026-09-08
 - Spring Framework 7.0.x, Spring Security 7.0.x, Tomcat 11.0.25 (override: Boot 4.0.8 gestiona 11.0.24, vulnerable)
 - Jackson 3 (`tools.jackson.*`) **3.1.6** (override de 3.1.5: CVE-2026-19032/83557, Snyk); Jackson 2 solo transitivo (jjwt)
 - Test slices modulares: `spring-boot-data-jpa-test`, `spring-boot-jdbc-test`, `spring-boot-resttestclient` + `spring-boot-restclient`
@@ -117,7 +117,8 @@ These CVEs are flagged by the CPE matcher but do **not** affect the project:
 - **All CVEs on `swagger-ui-5.32.2.jar` (DOMPurify@3.3.2)** — Swagger UI is a dev-only client-side tool served via `springdoc-openapi`. DOMPurify runs in the browser, sanitizing user-supplied HTML before rendering. The backend never passes user HTML through DOMPurify, so these CVEs are not exploitable server-side. No remediation required. *(Actual: `swagger-ui` 5.32.14.)*
 
 ## Skills
-`springboot-tdd`, `springboot-security`, `springboot-patterns`, `xp-tdd-practices`, `testing-standards`, `action-tdd`, `task-validate`, `task-testing-review`
+Repositorio: `springboot-tdd`, `springboot-security`, `springboot-patterns`, `java-spring-development`, `xp-tdd-practices`, `testing-standards`, `action-tdd`, `task-validate`, `task-testing-review`
+Globales (`~/.agents/skills`): `codely-git-conventional_commit` (commits), `codely-doc-create`, `codely-plan-create-gitlab`, `codely-plan_phase-implement-gitlab`, `find-skills`
 
 ---
-**Updated:** 2026-09-08
+**Updated:** 2026-09-12
