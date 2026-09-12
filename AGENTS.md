@@ -9,7 +9,7 @@
 - H2 (tests), PostgreSQL (prod)
 - JWT auth, CSRF disabled, stateless API
 - Logging: `java.util.logging.Logger` (not SLF4J)
-- Security plugins: SpotBugs 4.10.2 + FindSecBugs 1.14.0 + sb-contrib 7.7.4
+- Security plugins: SpotBugs 4.10.4 + FindSecBugs 1.14.0 + sb-contrib 7.7.4
 
 ## Package Layout
 `src/main/java/eu/estilolibre/tfgunir/backend/`
