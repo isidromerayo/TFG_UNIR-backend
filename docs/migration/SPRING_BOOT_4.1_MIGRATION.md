@@ -12,27 +12,30 @@
 
 ## 📊 Resumen Ejecutivo
 
-Migración de riesgo **bajo** — sin breaking changes en código de producción ni de tests.
-La única corrección necesaria fue en scripts y documentación (`-DskipTests` → `-Dmaven.test.skip=true`).
+Este documento registra el proceso de migración de Spring Boot 4.0.8 a 4.1.1.
+Los cambios se dividen en dos grupos: los **contemplados en el plan inicial** y
+los **descubiertos durante la ejecución** (problema → causa raíz → solución).
 
-Resultado final: **51 tests unitarios + 22 tests de integración en verde**, SpotBugs limpio,
-sin cambios en ningún archivo Java de producción o test.
+Resultado final: **51 tests unitarios + 22 tests de integración en verde**,
+SpotBugs limpio y OWASP scan con **0 vulnerabilidades reales**.
 
 ---
 
-## ✅ Cambios realizados
+## ✅ Cambios contemplados en el plan inicial
 
-### 1. Actualización del Parent (`pom.xml`)
+### 1. Actualización del Parent
 
 ```xml
 <!-- ANTES -->
 <parent>
+    <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>4.0.8</version>
 </parent>
 
 <!-- DESPUÉS -->
 <parent>
+    <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>4.1.1</version>
 </parent>
@@ -44,8 +47,8 @@ Boot 4.1.1 **no actualiza** Tomcat ni Jackson respecto a Boot 4.0.8:
 
 | Override | Boot 4.1.1 gestiona | Override mantenido | Motivo |
 |---|---|---|---|
-| `tomcat.version=11.0.25` | 11.0.24 | ✅ | CVE-2026-73180/68763/68569 (fix en 11.0.25) |
-| `jackson-bom.version=3.1.6` | 3.1.5 | ✅ | CVE-2026-19032/83557 (fix en 3.1.6) |
+| `tomcat.version=11.0.25` | 11.0.24 | ✅ | CVE-2026-73180 (Low), CVE-2026-68763 (Important DoS), CVE-2026-68569 (Important auth bypass) |
+| `jackson-bom.version=3.1.6` | 3.1.5 | ✅ | CVE-2026-19032 (CVSS 6.9), CVE-2026-83557 (CVSS 6.3) |
 | `git-commit-id-plugin.version=10.0.1` | 9.2.0 | ✅ | Ya tenemos versión más nueva |
 
 Comentarios de los overrides actualizados con los nuevos CVEs de Tomcat.
@@ -66,22 +69,35 @@ Archivos actualizados (8 ficheros):
 - `docs/migration/MIGRATION_EXECUTION_GUIDE.md`
 - `README.md`
 
+### 4. Documentación actualizada
+
+- `AGENTS.md`: Stack section → `Spring Boot 4.1.1`, `Spring Security 7.1.1`, `Hibernate 7.4.5.Final`
+- `AGENTS.md`: Known Vulnerabilities → actualizado con OWASP scan post-migración
+- `README.md`: versión de Spring Boot y Hibernate actualizadas
+- `docs/migration/SPRING_BOOT_LIFECYCLE.md`: 4.1 como versión actual, 4.0 como migrado
+- `docs/migration/SPRING_BOOT_4.1_MIGRATION.md`: registro de ejecución
+- `docs/migration/plan/SPRING_BOOT_4.1_MIGRATION_PLAN.md`: plan detallado
+
+### 5. OWASP dependency-check scan
+
+`./mvnw -Pdependency-check dependency-check:check -Dnvd.api.key=$NVD_API_KEY`:
+**0 vulnerabilidades reales** en el classpath.
+
 ---
 
 ## 🔧 Cambios descubiertos durante la ejecución
 
-### Ninguno
+### 1. `@Temporal` deprecated en Hibernate 7.4.5.Final
 
-A diferencia de la migración 3.5 → 4.0 (que requirió adaptar springdoc, test slices modulares,
-`TestRestTemplate`, rest-assured BOM y Jackson 2→3), la migración 4.0.8 → 4.1.1 fue completamente
-transparente para el código Java:
+- **Problema:** warings de Hibernate sobre `@Temporal` deprecated (3 modelos: `Curso`, `Instructor`, `Valoracion`)
+- **Causa:** Hibernate 7.x (JPA 3.1) infiere correctamente el tipo de fecha sin `@Temporal`
+- **Solución:** eliminar `@Temporal` y la importación `jakarta.persistence.Temporal` y `TemporalType` de los 3 modelos
 
-- Spring Security 7.0 → 7.1: **sin breaking changes** para este proyecto
-  (la configuración `WebSecurityConfig` con `SecurityFilterChain` + `@EnableMethodSecurity`
-  es compatible sin modificaciones)
-- Hibernate 7.2.x → 7.4.5.Final: **sin breaking changes** (solo warning pre-existente
-  sobre `@Temporal` deprecated — no nuevo, no requiere acción)
-- rest-assured 6.0.1 + TestRestTemplate: **sin cambios necesarios**
+### 2. `CascadeType` eliminado por error en `Curso.java`
+
+- **Problema:** compilación rota — `CascadeType` no encontrado en `@OneToMany`
+- **Causa:** en el primer intento de limpieza de imports, eliminé `CascadeType` que se usaba en el modelo `Curso`
+- **Solución:** recuperar `CascadeType` en los imports
 
 ---
 
@@ -94,6 +110,7 @@ transparente para el código Java:
 | `./mvnw test` | ✅ 51/51 |
 | `./mvnw clean verify -Pintegration-tests` | ✅ 51 unit + 22 IT |
 | `./mvnw compile spotbugs:check` | ✅ limpio (SpotBugs 4.10.4 + FindSecBugs 1.14.0) |
+| `./mvnw -Pdependency-check dependency-check:check` | ✅ 0 reales (2 FPs documentados) |
 
 Versiones finales del classpath: Tomcat **11.0.25** (override), Spring Framework **7.0.9**,
 Spring Security **7.1.1**, Hibernate **7.4.5.Final**, Jackson 3 (**3.1.6**, override),
@@ -103,6 +120,5 @@ springdoc **3.1.1**, rest-assured **6.0.1**.
 
 ## 📅 Seguimiento pendiente
 
-- [ ] OWASP dependency-check scan post-migración con `NVD_API_KEY`
-- [ ] Actualizar `AGENTS.md` Known Vulnerabilities con resultados del scan y nuevos falsos positivos
-- [ ] Crear `docs/security/informe-vulnerabilidades-<fecha>.md` con el informe del nuevo scan
+- [ ] Configurar el secret `NVD_API_KEY` en GitHub (maintainer)
+- [ ] Actualizar workflow CI para ejecutar OWASP scan con `NVD_API_KEY`
