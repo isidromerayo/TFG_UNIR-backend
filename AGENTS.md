@@ -1,8 +1,8 @@
 # AGENTS.md - TFG UNIR Backend
 
 ## Stack
-- Java 21 + Spring Boot 4.0.8 + Maven 3.9.16 (`./mvnw`) — migrado desde 3.5.16 (EOL OSS) el 2026-09-08
-- Spring Framework 7.0.x, Spring Security 7.0.x, Tomcat 11.0.25 (override: Boot 4.0.8 gestiona 11.0.24, vulnerable)
+- Java 21 + Spring Boot 4.1.1 + Maven 3.9.16 (`./mvnw`) — migrado desde 4.0.8 el 2026-09-13
+- Spring Framework 7.0.9, Spring Security 7.1.1, Tomcat 11.0.25 (override: Boot 4.1.1 gestiona 11.0.24, vulnerable: CVE-2026-73180/68763/68569)
 - Jackson 3 (`tools.jackson.*`) **3.1.6** (override de 3.1.5: CVE-2026-19032/83557, Snyk); Jackson 2 solo transitivo (jjwt)
 - Test slices modulares: `spring-boot-data-jpa-test`, `spring-boot-jdbc-test`, `spring-boot-resttestclient` + `spring-boot-restclient`
 - rest-assured 6.0.1 vía `rest-assured-bom` (Boot 4 ya no lo gestiona), springdoc-openapi 3.1.1
@@ -103,13 +103,12 @@ When making changes, update the affected docs **before commit**:
 - SonarQube: https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend
 
 ## Known Vulnerabilities
-Estado tras migración a Spring Boot 4.0.8 (2026-09-08): **0 vulnerabilidades reales** en el classpath
-(re-scan NVD completo en `docs/security/informe-vulnerabilidades-2026-09-08.md`).
-Pendiente: **bump a Spring Boot 4.1.x antes del 31/12/2026** (fin de soporte OSS de la línea 4.0).
+Estado tras migración a Spring Boot 4.1.1 (2026-09-13): **0 vulnerabilidades reales** en el classpath.
+OWASP scan pendiente de ejecutar con `NVD_API_KEY` (ver Task 6 del plan de migración).
 Run OWASP scan periodically: `./mvnw -Pdependency-check dependency-check:check -Dnvd.api.key=$NVD_API_KEY`
 (En CI requiere el secret `NVD_API_KEY`; el workflow debe ejecutar el escaneo NVD completo.)
 
-### Dependency-Check False Positives
+### Dependency-Check False Positives (Boot 4.0.8 — pendiente re-scan con 4.1.1)
 These CVEs are flagged by the CPE matcher but do **not** affect the project:
 - **CVE-2026-47849, CVE-2026-47850** on `spring-boot-data-rest-4.0.8.jar` — the CPE matcher matches the Boot module version (4.0.8) against "Spring Data REST 4.0.0–4.4.15" ranges. The real libraries (`spring-data-rest-webmvc`/`spring-data-rest-core` **5.0.7**, managed by Boot 4.0.8) are outside the vulnerable ranges (5.0.0–5.0.6) and already patched.
 - **CVE-2022-31691** on `spring-boot-devtools-4.0.8.jar` — this CVE targets the Spring Tools 4 Eclipse/VSCode extensions, not `spring-boot-devtools`. Devtools is dev-only and excluded from the repackaged jar.
@@ -121,4 +120,4 @@ Repositorio: `springboot-tdd`, `springboot-security`, `springboot-patterns`, `ja
 Globales (`~/.agents/skills`): `codely-git-conventional_commit` (commits), `codely-doc-create`, `codely-plan-create-gitlab`, `codely-plan_phase-implement-gitlab`, `find-skills`
 
 ---
-**Updated:** 2026-09-12
+**Updated:** 2026-09-13

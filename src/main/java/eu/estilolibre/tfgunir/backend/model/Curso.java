@@ -10,8 +10,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,10 +43,8 @@ public class Curso {
     private BigDecimal precio;
     private String etiquetas;
     @Column(name="fecha_creacion")
-    @Temporal(TemporalType.DATE)
     private Date fechaCreacion;
     @Column(name="fecha_actualizacion")
-    @Temporal(TemporalType.DATE)
     private Date fechaActualizacion;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")

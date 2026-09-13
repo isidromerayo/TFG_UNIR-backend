@@ -36,9 +36,9 @@ Java 21 es una versión **LTS**: recibe actualizaciones de seguridad y rendimien
 
 ### Implicaciones para este proyecto
 
-- **Spring Boot 4.0.8** sobre **Java 21 LTS** (migrado desde 3.5.16 el 08/09/2026).
+- **Spring Boot 4.1.1** sobre **Java 21 LTS** (migrado desde 4.0.8 el 13/09/2026).
 - El soporte OSS de la línea 3.5 finalizó el **30 de junio de 2026**; la migración a 4.0 remedió ~70 CVEs de librerías (ver [informe de vulnerabilidades](docs/security/informe-vulnerabilidades-2026-09-08.md)).
-- Próximo paso: bump a **Spring Boot 4.1.x antes del 31/12/2026** (fin de soporte OSS de la línea 4.0).
+- La línea 4.0 finaliza soporte OSS el **31 de diciembre de 2026** — migración a 4.1.1 completada el 13/09/2026.
 
 ## 🚀 Desarrollo y Contribución
 
@@ -76,9 +76,9 @@ Este repositorio versiona *skills* (guías y patrones en Markdown) para que los 
 ### 🛠️ Stack tecnológico
 
 - **Java 21**
-- **Spring Boot 4.0.8**
+- **Spring Boot 4.1.1**
 - **Spring Framework 7.0.9**
-- **Hibernate 7.2.24.Final**
+- **Hibernate 7.4.5.Final**
 - **Spring Data JPA** - Persistencia
 - **Spring Security 7.0.7** - Autenticación y autorización
 - **PostgreSQL 15+** - Base de datos producción
@@ -319,7 +319,7 @@ La base de datos incluye usuarios de prueba precargados. Ejemplos:
 
 > 📋 **Lista completa de usuarios**: Ver el [README del monorepo](https://github.com/isidromerayo/TFG_UNIR-monorepo#-usuarios-de-prueba) para la lista completa de usuarios activos y pendientes.
 
-Es necesaria una versión de Java 21, para utilizar Spring Boot 4.0.x
+Es necesaria una versión de Java 21, para utilizar Spring Boot 4.1.x
 
 ```
 cd backend
