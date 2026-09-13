@@ -191,8 +191,8 @@ cd TFG_UNIR-backend
 # Ejecutar solo tests unitarios
 ./mvnw test
 
-# Ejecutar solo tests de integración
-./mvnw -DskipUTs -Pintegration-tests verify
+# Ejecutar tests de integración (UT + IT)
+./mvnw clean verify -Pintegration-tests
 ```
 
 ### 2. Verificar Cobertura de Código

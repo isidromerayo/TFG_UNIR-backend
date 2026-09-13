@@ -115,12 +115,12 @@ Este comando ejecuta:
 
 Genera solo: `target/site/jacoco-ut/`
 
-### Solo Tests de Integración
+### Tests de Integración (UT + IT)
 ```bash
-./mvnw clean -DskipUTs -Pintegration-tests verify
+./mvnw clean -Pintegration-tests verify
 ```
 
-Genera solo: `target/site/jacoco-it/`
+Genera: `target/site/jacoco-ut/`, `target/site/jacoco-it/` y `target/site/jacoco/` (combinado)
 
 ---
 

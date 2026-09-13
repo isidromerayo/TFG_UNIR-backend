@@ -44,11 +44,11 @@ git checkout main && git push origin main --tags
 ```bash
 # Con Docker
 docker pull isidromerayo/postgres-tfg:1.0
-docker pull isidromerayo/spring-backend-tfg:0.6.2
+docker pull isidromerayo/spring-backend-tfg:0.7.1
 
 # Con Podman
 podman pull docker.io/isidromerayo/postgres-tfg:1.0
-podman pull docker.io/isidromerayo/spring-backend-tfg:0.6.2
+podman pull docker.io/isidromerayo/spring-backend-tfg:0.7.1
 ```
 
 ### Usar con Docker Compose
@@ -62,7 +62,7 @@ services:
     # ...
 
   api_service:
-    image: "isidromerayo/spring-backend-tfg:0.6.2"
+    image: "isidromerayo/spring-backend-tfg:0.7.1"
     # ...
 ```
 
@@ -128,14 +128,14 @@ podman tag localhost/isidromerayo/postgres-tfg:1.0 localhost/isidromerayo/postgr
 
 **Con Docker:**
 ```bash
-docker build --build-arg VERSION=0.6.2 -t isidromerayo/spring-backend-tfg:0.6.2 .
-docker tag isidromerayo/spring-backend-tfg:0.6.2 isidromerayo/spring-backend-tfg:latest
+docker build --build-arg VERSION=0.7.1 -t isidromerayo/spring-backend-tfg:0.7.1 .
+docker tag isidromerayo/spring-backend-tfg:0.7.1 isidromerayo/spring-backend-tfg:latest
 ```
 
 **Con Podman:**
 ```bash
-podman build --build-arg VERSION=0.6.2 -t localhost/isidromerayo/spring-backend-tfg:0.6.2 .
-podman tag localhost/isidromerayo/spring-backend-tfg:0.6.2 localhost/isidromerayo/spring-backend-tfg:latest
+podman build --build-arg VERSION=0.7.1 -t localhost/isidromerayo/spring-backend-tfg:0.7.1 .
+podman tag localhost/isidromerayo/spring-backend-tfg:0.7.1 localhost/isidromerayo/spring-backend-tfg:latest
 ```
 
 #### 4. Verificar Imágenes Construidas
@@ -154,7 +154,7 @@ Deberías ver:
 ```
 isidromerayo/postgres-tfg          1.0      ...    ...    ...
 isidromerayo/postgres-tfg          latest   ...    ...    ...
-isidromerayo/spring-backend-tfg   0.6.2    ...    ...    ...
+isidromerayo/spring-backend-tfg   0.7.1    ...    ...    ...
 isidromerayo/spring-backend-tfg   latest   ...    ...    ...
 ```
 
@@ -173,7 +173,7 @@ docker compose up -d
 Actualiza `scripts/podman-pod.sh`:
 
 ```bash
-API_SERVICE_IMAGE="localhost/isidromerayo/spring-backend-tfg:0.6.2"
+API_SERVICE_IMAGE="localhost/isidromerayo/spring-backend-tfg:0.7.1"
 ```
 
 Luego ejecuta:
@@ -221,8 +221,8 @@ Si prefieres hacerlo manualmente:
 
 ```bash
 # Backend
-docker build --build-arg VERSION=0.6.2 -t isidromerayo/spring-backend-tfg:0.6.2 .
-docker push isidromerayo/spring-backend-tfg:0.6.2
+docker build --build-arg VERSION=0.7.1 -t isidromerayo/spring-backend-tfg:0.7.1 .
+docker push isidromerayo/spring-backend-tfg:0.7.1
 docker push isidromerayo/spring-backend-tfg:latest
 
 # PostgreSQL (POSTGRES_PASSWORD se pasa en runtime, no en el build)
@@ -260,11 +260,8 @@ docker push isidromerayo/postgres-tfg:latest
 
 | Tag | Descripción |
 |-----|-------------|
-| `0.6.2` | Spring Boot 3.5.16 |
+| `0.7.1` | Spring Boot 4.1.1 |
 | `latest` | Referencia a la última versión |
-
-> La próxima release (0.7.0) incluirá la migración a **Spring Boot 4.0.8**
-> (ver `docs/security/informe-vulnerabilidades-2026-09-08.md`).
 
 ---
 
@@ -274,10 +271,10 @@ docker push isidromerayo/postgres-tfg:latest
 
 ```bash
 # Inspeccionar imagen
-docker inspect isidromerayo/spring-backend-tfg:0.6.2 | grep -A 5 "Env"
+docker inspect isidromerayo/spring-backend-tfg:0.7.1 | grep -A 5 "Env"
 
 # Ejecutar y verificar logs
-docker run --rm isidromerayo/spring-backend-tfg:0.6.2 | head -20
+docker run --rm isidromerayo/spring-backend-tfg:0.7.1 | head -20
 ```
 
 ---
@@ -294,7 +291,7 @@ docker run --rm isidromerayo/spring-backend-tfg:0.6.2 | head -20
 # Construir localmente
 ./mvnw clean package -Dmaven.test.skip=true
 docker build -f Dockerfile-db-postgresql -t isidromerayo/postgres-tfg:1.0 .
-docker build --build-arg VERSION=0.6.2 -t isidromerayo/spring-backend-tfg:0.6.2 .
+docker build --build-arg VERSION=0.7.1 -t isidromerayo/spring-backend-tfg:0.7.1 .
 ```
 
 ### Error: "unauthorized: incorrect username or password"
