@@ -35,7 +35,7 @@ public class Usuario {
     @JsonIgnore
     @Column(nullable = false)
     private String password;
-    @Column(name = "estado", length = 1, columnDefinition = "char(1) default 'P'")
+    @Column(name = "estado", length = 1)
     private String estado;
     @ManyToMany(cascade = {
             CascadeType.PERSIST,

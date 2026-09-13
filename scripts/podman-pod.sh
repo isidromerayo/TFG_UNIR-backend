@@ -66,7 +66,7 @@ function start_db() {
 
     # Crear el pod (solo expone 5432, el 8080 lo usará Spring Boot local)
     print_info "Creando pod $POD_NAME..."
-    podman pod create --name $POD_NAME -p 8080:8080 -p 5432:5432
+    podman pod create --name $POD_NAME -p 5432:5432
 
     # Ejecutar PostgreSQL
     print_info "Iniciando PostgreSQL..."
