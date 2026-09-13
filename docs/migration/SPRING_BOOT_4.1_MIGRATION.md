@@ -120,5 +120,5 @@ springdoc **3.1.1**, rest-assured **6.0.1**.
 
 ## 📅 Seguimiento pendiente
 
-- [ ] Configurar el secret `NVD_API_KEY` en GitHub (maintainer)
-- [ ] Actualizar workflow CI para ejecutar OWASP scan con `NVD_API_KEY`
+- [x] Configurar el secret `NVD_API_KEY` en GitHub (maintainer) — configurado el 2026-09-08, verificado en CI el 2026-09-13
+- [x] Actualizar workflow CI para ejecutar OWASP scan con `NVD_API_KEY` — el workflow `owasp-dependency-check-maven.yml` ya ejecuta el scan completo (verificado en PR #147)

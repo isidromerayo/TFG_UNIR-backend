@@ -118,9 +118,9 @@ anterior a la regla; por eso cada migración requiere este audit completo.
 
 ## Known Vulnerabilities
 Estado tras migración a Spring Boot 4.1.1 (2026-09-13): **0 vulnerabilidades reales** en el classpath.
-OWASP scan pendiente de ejecutar con `NVD_API_KEY` (ver Task 6 del plan de migración).
+OWASP scan ejecutado con `NVD_API_KEY` (secret configurado en GitHub, verificado en CI — PR #147).
 Run OWASP scan periodically: `./mvnw -Pdependency-check dependency-check:check -Dnvd.api.key=$NVD_API_KEY`
-(En CI requiere el secret `NVD_API_KEY`; el workflow debe ejecutar el escaneo NVD completo.)
+(El workflow `owasp-dependency-check-maven.yml` ejecuta el escaneo NVD completo en cada push/PR a main.)
 
 ### Dependency-Check False Positives (Boot 4.1.1 — escaneo 2026-09-13)
 These CVEs are flagged by the CPE matcher but do **not** affect the project:
