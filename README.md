@@ -80,7 +80,7 @@ Este repositorio versiona *skills* (guías y patrones en Markdown) para que los 
 - **Spring Framework 7.0.9**
 - **Hibernate 7.4.5.Final**
 - **Spring Data JPA** - Persistencia
-- **Spring Security 7.0.7** - Autenticación y autorización
+- **Spring Security 7.1.1** - Autenticación y autorización
 - **PostgreSQL 15+** - Base de datos producción
 - **H2** - Base de datos testing
 - **JWT** - Tokens de autenticación
@@ -481,6 +481,9 @@ docker run --name postgres-tfg -e POSTGRES_PASSWORD=mypass -e POSTGRES_DB=tfg_un
 
 ```bash
 cd backend
+
+# Compilar el backend primero
+./mvnw clean package -Dmaven.test.skip=true
 
 # Construir imagen (requiere POSTGRES_PASSWORD)
 POSTGRES_PASSWORD=mi_password docker build -f Dockerfile-db-postgresql \
@@ -1012,6 +1015,6 @@ Este comando:
 | **Security Rating** | A | A | ✅ |
 | **Quality Gate** | Passed | Passed | ✅ |
 
-**Última actualización**: 2026-08-21 (refactor/rest-api)
+**Última actualización**: 2026-09-13 (migración Spring Boot 4.0.8 → 4.1.1)
 
 Ver más detalles en [SonarCloud](https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend)
