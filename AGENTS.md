@@ -86,7 +86,7 @@ When making changes, update the affected docs **before commit**:
 | New script in `scripts/` | `scripts/README.md` |
 | Docker/Dockerfile change | `docs/docker/DOCKER_IMAGES_GUIDE.md`, `docker-compose.yml` |
 | Security change | `docs/security/` relevant file, `AGENTS.md` Known Vulnerabilities |
-| Dependency upgrade | `pom.xml` versions, `AGENTS.md` Stack section |
+| Dependency upgrade | `pom.xml` versions, `AGENTS.md` Stack section, `README.md` (stack, comandos), `docs/docker/DOCKER_IMAGES_GUIDE.md` si afecta a imágenes |
 | New feature/bugfix | `README.md` if user-facing |
 | Removing legacy code | Update all references to removed files/commands |
 
@@ -95,6 +95,20 @@ When making changes, update the affected docs **before commit**:
 - [ ] `grep -r "removed-feature" docs/ scripts/ README.md` returns no stale references
 - [ ] No broken links to deleted files
 - [ ] `AGENTS.md` Stack section updated if dependencies changed
+- [ ] Stale-reference scan: `grep -rn "skipUTs\|maria_db\|app_db\|Spring Boot 3" README.md docs/ STRUCTURE.md` — sin resultados fuera de docs marcados como legacy/históricos
+
+### Documentation Audit (migraciones de Spring Boot)
+
+Tras cada migración de versión mayor/menor de Spring Boot, ejecutar una **revisión de
+consistencia global** (no basta con actualizar solo lo que el cambio toca directamente):
+
+1. `grep -rn "Spring Boot 3\|Boot 4\.0\|skipUTs\|maria_db\|app_db\|3306" README.md docs/ STRUCTURE.md AGENTS.md` — las referencias a versiones anteriores solo pueden quedar en docs históricos (`docs/migration/`, changelogs) o guías marcadas explícitamente como legacy
+2. Verificar que los comandos documentados existen en el `pom.xml` (ej: flags como `-DskipUTs` pueden no existir; failsafe/surefire también honran `skipTests`)
+3. Verificar que las salidas de ejemplo (nombres de contenedores, puertos, tablas de tags de imágenes) coinciden con `docker-compose.yml` y `scripts/`
+4. Verificar que la tabla de tags de `docs/docker/DOCKER_IMAGES_GUIDE.md` refleja la versión de Boot actual
+
+Lección aprendida (2026-09-13): las reglas per-tipo-de-cambio no detectan contenido stale
+anterior a la regla; por eso cada migración requiere este audit completo.
 
 ## Tooling
 - JUnit 5 + Mockito + AssertJ
