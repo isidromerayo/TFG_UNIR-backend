@@ -153,7 +153,7 @@ Todos en `src/test/resources/data.sql`:
 
 **Análisis**:
 - Son recomendaciones de SQL Server
-- Este proyecto usa **H2/MariaDB**, no SQL Server
+- Este proyecto usa **H2/PostgreSQL**, no SQL Server
 - **No aplican** estas recomendaciones
 
 **Solución recomendada**:
@@ -189,7 +189,7 @@ Todos en `src/test/resources/data.sql`:
 
 ❌ **SQL Server Best Practices**
 - Configurar Codacy para desactivar reglas de SQL Server
-- Este proyecto usa H2/MariaDB
+- Este proyecto usa H2/PostgreSQL
 
 ---
 

@@ -84,14 +84,14 @@ Este proyecto implementa múltiples capas de seguridad:
 
 ### Stack de Seguridad
 
-- **Framework**: Spring Boot 3.4.12 con Spring Security
+- **Framework**: Spring Boot 4.1.1 con Spring Security 7.1.1
 - **Autenticación**: JWT (JSON Web Tokens) v0.13.0
 - **Java**: OpenJDK 21 (LTS)
-- **Base de datos**: MariaDB con credenciales configurables
+- **Base de datos**: PostgreSQL con credenciales configurables
 
 ### Análisis Automatizado
 
-- **Análisis estático**: SpotBugs 4.9.8 con plugins de seguridad (find-sec-bugs, fb-contrib)
+- **Análisis estático**: SpotBugs 4.10.4 con plugins de seguridad (find-sec-bugs, fb-contrib)
 - **Análisis de calidad**: SonarCloud con Quality Gate (85% cobertura)
 - **Análisis de dependencias**: OWASP Dependency Check 12.1.8
 - **CI/CD**: GitHub Actions con análisis automático en cada PR

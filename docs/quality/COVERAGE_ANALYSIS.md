@@ -355,8 +355,8 @@ grep "LoginController" target/site/jacoco/jacoco.csv     # Combinado
 # Solo tests unitarios
 ./mvnw clean test
 
-# Solo tests de integración
-./mvnw clean -DskipUTs -Pintegration-tests verify
+# Tests de integración (UT + IT, reporte combinado)
+./mvnw clean -Pintegration-tests verify
 
 # Verificar archivos generados
 ls -lh target/*.exec

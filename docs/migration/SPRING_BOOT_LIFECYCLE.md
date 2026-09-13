@@ -24,9 +24,9 @@ Esta fue la versión utilizada en el proyecto hasta septiembre de 2026 (`3.5.16`
     *   Al ser la última versión menor de la generación 3.x, Spring Boot 3.5 goza de un periodo de soporte extendido significativamente más largo (similar a las versiones LTS).
 *   **Estado en el Proyecto:** ✅ Migrado a Spring Boot 4.0.8 (Septiembre 2026).
 
-### Spring Boot 4.0 (Versión Actual) ✅
+### Spring Boot 4.0 (Versión Anterior) ✅
 
-Esta es la versión actualmente utilizada en el proyecto (`4.0.8`).
+Esta fue la versión utilizada en el proyecto hasta septiembre de 2026 (`4.0.8`).
 
 *   **Fecha de Lanzamiento:** 30 de Noviembre de 2025.
 *   **Fin de Soporte Open Source (OSS):** 31 de Diciembre de 2026.
@@ -36,13 +36,20 @@ Esta es la versión actualmente utilizada en el proyecto (`4.0.8`).
     *   ✅ Remediar ~70 CVEs de librerías (Tomcat 11.0.25, Spring Framework 7.0.9, Spring Security 7.0.7, etc.).
     *   ✅ Spring Framework 7, Spring Security 7, Hibernate 7, Tomcat 11.
     *   ✅ Jackson 3 (`tools.jackson`) como stack JSON principal.
+*   **Estado en el Proyecto:** ✅ Migrado a Spring Boot 4.1.1 (Septiembre 2026).
 
-### Spring Boot 4.1 (Versión Objetivo) ⏳
+### Spring Boot 4.1 (Versión Actual) ✅
+
+Esta es la versión actualmente utilizada en el proyecto (`4.1.1`).
 
 *   **Fecha de Lanzamiento:** 30 de Junio de 2026.
 *   **Fin de Soporte Open Source (OSS):** 31 de Julio de 2027.
 *   **Soporte Extendido (Comercial):** Hasta el 31 de Julio de 2028.
-*   **Estado en el Proyecto:** ⏳ Pendiente — bump planificado **antes del 31/12/2026** (fin de soporte OSS de la línea 4.0). Registrado en `docs/migration/SPRING_BOOT_4_MIGRATION.md` y en AGENTS.md.
+*   **Ventajas de la Actualización:**
+    *   ✅ Soporte OSS activo durante todo 2027 (4.0 EOL 31/12/2026).
+    *   ✅ Spring Security 7.1.1 y Hibernate 7.4.5.Final.
+    *   ✅ 0 vulnerabilidades reales en el classpath (overrides Tomcat 11.0.25, Jackson 3.1.6 mantenidos).
+*   **Estado en el Proyecto:** ✅ Migrado el 13/09/2026. Registrado en `docs/migration/plan/SPRING_BOOT_4.1_MIGRATION_PLAN.md`.
 
 ## Resumen de Fechas Clave
 
@@ -50,8 +57,8 @@ Esta es la versión actualmente utilizada en el proyecto (`4.0.8`).
 | :--- | :--- | :--- | :--- | :--- |
 | **3.4** | Nov 2024 | ~Nov 2025 | TBD | ❌ Fuera de soporte |
 | **3.5** | Mayo 2025 | Junio 2026 | Junio 2032 | ❌ EOL OSS (migrado) |
-| **4.0** | Nov 2025 | Diciembre 2026 | Diciembre 2027 | ✅ Actual |
-| **4.1** | Junio 2026 | Julio 2027 | Julio 2028 | ⏳ Objetivo |
+| **4.0** | Nov 2025 | Diciembre 2026 | Diciembre 2027 | ❌ EOL OSS (migrado) |
+| **4.1** | Junio 2026 | Julio 2027 | Julio 2028 | ✅ Actual |
 
 ## Cambios en la Migración a 4.0.8
 
@@ -85,9 +92,9 @@ Registro completo en `docs/migration/SPRING_BOOT_4_MIGRATION.md` (septiembre 202
 
 ## Recomendación
 
-El proyecto ha sido **exitosamente migrado a Spring Boot 4.0.8** (Septiembre 2026), asegurando:
-- ✅ Recepción de parches de seguridad hasta Diciembre 2026 (OSS)
-- ✅ Soporte extendido hasta Diciembre 2027 (comercial)
-- ✅ Compatibilidad con el ecosistema Spring actual (Framework 7, Security 7)
-- ✅ ~70 CVEs de librerías remediados (ver informe de vulnerabilidades)
-- ⏳ Próximo paso: bump a 4.1.x antes del 31/12/2026
+El proyecto ha sido **exitosamente migrado a Spring Boot 4.1.1** (Septiembre 2026), asegurando:
+- ✅ Recepción de parches de seguridad hasta Julio 2027 (OSS)
+- ✅ Soporte extendido hasta Julio 2028 (comercial)
+- ✅ Compatibilidad con el ecosistema Spring actual (Framework 7.0.9, Security 7.1.1, Hibernate 7.4.5)
+- ✅ ~70 CVEs de librerías remediados en la migración 4.0 (ver informe de vulnerabilidades)
+- ✅ 0 vulnerabilidades reales en el classpath (overrides Tomcat 11.0.25, Jackson 3.1.6)

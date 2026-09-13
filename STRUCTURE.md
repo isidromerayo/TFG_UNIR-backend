@@ -199,8 +199,8 @@ open target/site/jacoco/index.html
 # Solo unitarios
 ./mvnw test
 
-# Solo integración
-./mvnw -DskipUTs -Pintegration-tests verify
+# Integración (ejecuta UT + IT)
+./mvnw clean verify -Pintegration-tests
 
 # Todos
 ./mvnw clean verify -Pintegration-tests

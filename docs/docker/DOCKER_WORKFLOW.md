@@ -11,7 +11,7 @@ Este documento describe el flujo de trabajo completo para desarrollo, construcci
 ./mvnw spring-boot:run
 
 # O con Java directamente
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 java -jar target/backend.jar
 ```
 
@@ -21,7 +21,7 @@ java -jar target/backend.jar
 
 ```bash
 # 1. Compilar el proyecto
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 
 # 2. Construir la imagen con la nueva versión
 VERSION="0.6.2"  # Actualizar según corresponda
@@ -35,7 +35,7 @@ podman tag isidromerayo/spring-backend-tfg:${VERSION} isidromerayo/spring-backen
 
 ```bash
 # 1. Compilar el proyecto
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 
 # 2. Construir la imagen
 VERSION="0.6.2"
@@ -201,7 +201,7 @@ Seguimos [Semantic Versioning](https://semver.org/):
 ls -lh target/backend.jar
 
 # Limpiar y recompilar
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 ```
 
 ### El contenedor no arranca

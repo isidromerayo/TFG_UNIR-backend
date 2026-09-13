@@ -79,7 +79,7 @@ SPRING_DATASOURCE_URL: jdbc:mariadb://localhost:3306/tfg_unir
 podman build -f Dockerfile-db -t localhost/isidromerayo/mariadb-tfg:0.0.5-bcrypt .
 
 # Construir imagen del backend
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 podman build -t localhost/isidromerayo/spring-backend-tfg:0.2.3-bcrypt .
 ```
 
@@ -341,7 +341,7 @@ podman exec maria_db mariadb -h localhost -u user_tfg -ptfg_un1r_PWD tfg_unir \
 
 ```bash
 # Compilar sin tests
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 
 # Compilar con tests
 ./mvnw clean verify -Pintegration-tests

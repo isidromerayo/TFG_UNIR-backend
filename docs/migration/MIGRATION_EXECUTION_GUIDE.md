@@ -191,8 +191,8 @@ cd TFG_UNIR-backend
 # Ejecutar solo tests unitarios
 ./mvnw test
 
-# Ejecutar solo tests de integración
-./mvnw -DskipUTs -Pintegration-tests verify
+# Ejecutar tests de integración (UT + IT)
+./mvnw clean verify -Pintegration-tests
 ```
 
 ### 2. Verificar Cobertura de Código
@@ -324,7 +324,7 @@ El proyecto incluye un [`docker-compose.yml`](../docker-compose.yml) que levanta
 cd TFG_UNIR-backend
 
 # 1. Construir imagen del backend (si has hecho cambios)
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 docker compose build api_service
 
 # 2. Levantar todos los servicios (MariaDB + Backend)

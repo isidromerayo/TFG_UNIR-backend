@@ -73,7 +73,7 @@ podman build -f Dockerfile-db -t isidromerayo/mariadb-tfg:0.0.5-bcrypt .
 ### Publicar Nuevas Versiones
 ```bash
 # Compilar backend
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 
 # Publicar imágenes
 ./scripts/publish-images.sh

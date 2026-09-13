@@ -36,9 +36,9 @@ Java 21 es una versión **LTS**: recibe actualizaciones de seguridad y rendimien
 
 ### Implicaciones para este proyecto
 
-- **Spring Boot 4.0.8** sobre **Java 21 LTS** (migrado desde 3.5.16 el 08/09/2026).
+- **Spring Boot 4.1.1** sobre **Java 21 LTS** (migrado desde 4.0.8 el 13/09/2026).
 - El soporte OSS de la línea 3.5 finalizó el **30 de junio de 2026**; la migración a 4.0 remedió ~70 CVEs de librerías (ver [informe de vulnerabilidades](docs/security/informe-vulnerabilidades-2026-09-08.md)).
-- Próximo paso: bump a **Spring Boot 4.1.x antes del 31/12/2026** (fin de soporte OSS de la línea 4.0).
+- La línea 4.0 finaliza soporte OSS el **31 de diciembre de 2026** — migración a 4.1.1 completada el 13/09/2026.
 
 ## 🚀 Desarrollo y Contribución
 
@@ -76,11 +76,11 @@ Este repositorio versiona *skills* (guías y patrones en Markdown) para que los 
 ### 🛠️ Stack tecnológico
 
 - **Java 21**
-- **Spring Boot 4.0.8**
+- **Spring Boot 4.1.1**
 - **Spring Framework 7.0.9**
-- **Hibernate 7.2.24.Final**
+- **Hibernate 7.4.5.Final**
 - **Spring Data JPA** - Persistencia
-- **Spring Security 7.0.7** - Autenticación y autorización
+- **Spring Security 7.1.1** - Autenticación y autorización
 - **PostgreSQL 15+** - Base de datos producción
 - **H2** - Base de datos testing
 - **JWT** - Tokens de autenticación
@@ -96,10 +96,7 @@ Este repositorio versiona *skills* (guías y patrones en Markdown) para que los 
 # Tests unitarios
 ./mvnw test
 
-# Tests de integración
-./mvnw -DskipUTs -Pintegration-tests verify
-
-# Todos los tests (unitarios + integración)
+# Tests de integración (IT con failsafe; UT ya ejecutadas en `test`)
 ./mvnw clean verify -Pintegration-tests
 
 # Tests con cobertura de código
@@ -319,7 +316,7 @@ La base de datos incluye usuarios de prueba precargados. Ejemplos:
 
 > 📋 **Lista completa de usuarios**: Ver el [README del monorepo](https://github.com/isidromerayo/TFG_UNIR-monorepo#-usuarios-de-prueba) para la lista completa de usuarios activos y pendientes.
 
-Es necesaria una versión de Java 21, para utilizar Spring Boot 4.0.x
+Es necesaria una versión de Java 21, para utilizar Spring Boot 4.1.x
 
 ```
 cd backend
@@ -425,7 +422,7 @@ Antes de levantar los servicios, asegúrate de que tienes el JAR de la aplicaci�
 
 ```bash
 # Compilar la aplicación (requiere Java 21)
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 
 # Levantar servicios con docker compose
 docker compose up -d --build
@@ -482,6 +479,9 @@ docker run --name postgres-tfg -e POSTGRES_PASSWORD=mypass -e POSTGRES_DB=tfg_un
 ```bash
 cd backend
 
+# Compilar el backend primero
+./mvnw clean package -Dmaven.test.skip=true
+
 # Construir imagen (requiere POSTGRES_PASSWORD)
 POSTGRES_PASSWORD=mi_password docker build -f Dockerfile-db-postgresql \
     --build-arg POSTGRES_PASSWORD=mi_password \
@@ -503,9 +503,9 @@ Ver guía completa: [docs/docker/DOCKER_IMAGES_GUIDE.md](docs/docker/DOCKER_IMAG
 #### BBDD: H2 para test
 
 
-#### Lanzar aplicación con Spring Boot 3 o superior
+#### Lanzar aplicación con Spring Boot 4.x
 
-Es necesario disponer de BBDD
+Es necesario disponer de BBDD (PostgreSQL en localhost:5432, ver sección anterior)
 
 Lanzar aplicación desde consola
 
@@ -525,13 +525,12 @@ http://localhost:8080/swagger-ui.html
 
 #### Docker Spring Boot 
 
-Construir imagen de aplicación con el jar generado del backend (con el `spring.datasource.url=jdbc:postgresql://app_db:5432/tfg_unir` en el application.properties) hay que ejecutar un maven para generar
-
+Construir imagen de aplicación con el jar generado del backend. La configuración de la base de datos se inyecta vía variable de entorno (`SPRING_DATASOURCE_URL`, con valor por defecto `jdbc:postgresql://localhost:5432/tfg_unir` en `application.properties`):
 
 ```
 cd backend
 ./mvnw clean install
-docker build -t isidromerayo/spring-backend-tfg:VERSION-X.Y.Z .
+docker build -t isidromerayo/spring-backend-tfg:X.Y.Z .
 ```
 
 https://spring.io/guides/topicals/spring-boot-docker/
@@ -555,10 +554,10 @@ Con docker compose se montará un contenedor con PostgreSQL (datos precargados) 
 3. **Imagen del backend actualizada**: Si modificas el código, necesitas:
    ```bash
    # Compilar (requiere Java 21)
-   ./mvnw clean package -DskipTests
+   ./mvnw clean package -Dmaven.test.skip=true
    
    # Reconstruir imagen
-   docker build -t isidromerayo/spring-backend-tfg:VERSION .
+   docker build -t isidromerayo/spring-backend-tfg:X.Y.Z .
    
    # Actualizar versión en docker-compose.yml
    ```
@@ -575,14 +574,14 @@ docker compose up
 docker compose up -d
 ```
 
-MariaDB correra en el puerto por defecto *3306* y Spring Boot en el *8080*, así no tendremos montado lo necesario para tener el backend y probar la aplicación con los diferentes frameworks.
+PostgreSQL correrá en el puerto por defecto *5432* y Spring Boot en el *8080*, así tendremos montado lo necesario para tener el backend y probar la aplicación con los diferentes frameworks.
 
 Con `docker compose up -d` corre en segundo plano y liberamos la terminal
 
 ```
 [+] Running 2/2
- ✔ Container backend-maria_db-1     Started     0.4s 
- ✔ Container backend-api_service-1  Started     0.6s 
+ ✔ Container postgres_db    Healthy    0.4s 
+ ✔ Container api_service    Started    0.6s 
 
 ```
 
@@ -590,8 +589,8 @@ Para detener las instancias de los contenedores `docker compose stop`.
 
 ```
 [+] Stopping 2/2
- ✔ Container backend-api_service-1    Stopped     0.3s 
- ✔ Container backend-postgres_db-1   Stopped     0.5s 
+ ✔ Container api_service    Stopped    0.3s 
+ ✔ Container postgres_db    Stopped    0.5s 
 ```
 
 #### 📤 Publicar imágenes en Docker Hub
@@ -628,18 +627,6 @@ Seguimos [Semantic Versioning](https://semver.org/):
 ./scripts/publish-images.sh --version 1.0.0
 ```
 
-##### Script de publicación
-
-Usa los scripts incluidos en el proyecto:
-
-```bash
-# Backend
-./scripts/publish-images.sh
-
-# PostgreSQL
-POSTGRES_PASSWORD=mi_password ./scripts/publish-db-image.sh 1.0
-```
-
 ##### Troubleshooting
 
 **Error: "denied: requested access to the resource is denied"**
@@ -662,7 +649,7 @@ docker login
 # Verifica que la imagen existe localmente
 docker images | grep spring-backend-tfg
 # Si no existe, construye la imagen primero
-docker build -t isidromerayo/spring-backend-tfg:VERSION .
+docker build -t isidromerayo/spring-backend-tfg:X.Y.Z .
 ```
 
 ---
@@ -722,7 +709,7 @@ podman run --name postgres-tfg -p 5432:5432 -d postgres:17
 ```bash
 cd backend
 ./mvnw clean install
-podman build -t isidromerayo/spring-backend-tfg:VERSION-X.Y.Z .
+podman build -t isidromerayo/spring-backend-tfg:X.Y.Z .
 ```
 
 ##### Usar Podman Pod (Recomendado)
@@ -798,7 +785,7 @@ podman ps --pod
 
 # Ver logs
 podman logs api_service
-podman logs maria_db
+podman logs postgres_db
 
 # Probar el API
 curl http://localhost:8080/api
@@ -1012,6 +999,6 @@ Este comando:
 | **Security Rating** | A | A | ✅ |
 | **Quality Gate** | Passed | Passed | ✅ |
 
-**Última actualización**: 2026-08-21 (refactor/rest-api)
+**Última actualización**: 2026-09-13 (migración Spring Boot 4.0.8 → 4.1.1)
 
 Ver más detalles en [SonarCloud](https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend)
