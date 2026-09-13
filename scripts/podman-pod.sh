@@ -42,16 +42,66 @@ function check_sql_files() {
     fi
 }
 
-function start_pod() {
-    print_info "Iniciando backend con Podman Pod..."
-    
-    check_sql_files
-    
+function cleanup_containers() {
+    # Eliminar contenedores huérfanos con los mismos nombres (pueden quedar de pods anteriores)
+    for CONTAINER in $POSTGRES_DB_CONTAINER $API_SERVICE_CONTAINER; do
+        if podman container exists $CONTAINER 2>/dev/null; then
+            print_warn "Contenedor huérfano '$CONTAINER' encontrado. Eliminándolo..."
+            podman rm -f $CONTAINER
+        fi
+    done
+
     # Verificar si el pod ya existe
     if podman pod exists $POD_NAME; then
         print_warn "El pod $POD_NAME ya existe. Eliminándolo..."
         podman pod rm -f $POD_NAME
     fi
+}
+
+function start_db() {
+    print_info "Iniciando solo PostgreSQL (modo desarrollo)..."
+
+    check_sql_files
+    cleanup_containers
+
+    # Crear el pod (solo expone 5432, el 8080 lo usará Spring Boot local)
+    print_info "Creando pod $POD_NAME..."
+    podman pod create --name $POD_NAME -p 8080:8080 -p 5432:5432
+
+    # Ejecutar PostgreSQL
+    print_info "Iniciando PostgreSQL..."
+    podman run -d --pod $POD_NAME --name $POSTGRES_DB_CONTAINER \
+        -v $VOLUME_NAME:/var/lib/postgresql \
+        -v $(pwd)/../recursos/db/postgresql/01-create.sql:/docker-entrypoint-initdb.d/01-create.sql \
+        -v $(pwd)/../recursos/db/postgresql/02-create.sql:/docker-entrypoint-initdb.d/02-create.sql \
+        -v $(pwd)/../recursos/db/postgresql/03-create.sql:/docker-entrypoint-initdb.d/03-create.sql \
+        -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-mypass} \
+        -e POSTGRES_DB=${POSTGRES_DB:-tfg_unir} \
+        -e POSTGRES_USER=${POSTGRES_USER:-user_tfg} \
+        $POSTGRES_DB_IMAGE
+
+    # Esperar a que PostgreSQL esté listo
+    print_info "Esperando a que PostgreSQL esté listo..."
+    RETRIES=30
+    until podman exec $POSTGRES_DB_CONTAINER pg_isready -U "${POSTGRES_USER:-user_tfg}" -d "${POSTGRES_DB:-tfg_unir}" &>/dev/null; do
+        RETRIES=$((RETRIES - 1))
+        if [ $RETRIES -eq 0 ]; then
+            print_error "PostgreSQL no respondió tras 30 intentos"
+            exit 1
+        fi
+        sleep 2
+    done
+
+    print_info "✅ PostgreSQL listo en localhost:5432"
+    print_info "Ahora arranca el backend con:"
+    print_info "  ./mvnw spring-boot:run"
+}
+
+function start_pod() {
+    print_info "Iniciando backend con Podman Pod..."
+    
+    check_sql_files
+    cleanup_containers
     
     # Crear el pod
     print_info "Creando pod $POD_NAME..."
@@ -159,16 +209,18 @@ function show_usage() {
     echo "Uso: $0 [comando]"
     echo ""
     echo "Comandos disponibles:"
-    echo "  start    - Iniciar el backend con Podman Pod"
-    echo "  stop     - Detener el backend"
-    echo "  restart  - Reiniciar el backend"
-    echo "  status   - Ver el estado del backend"
-    echo "  logs     - Ver logs del backend API"
-    echo "  logs api - Ver logs del backend API"
-    echo "  logs db  - Ver logs de PostgreSQL"
+    echo "  start      - Iniciar la BD + backend API (imagen Docker)"
+    echo "  start-db   - Iniciar solo PostgreSQL (para arrancar Spring Boot local)"
+    echo "  stop       - Detener el backend"
+    echo "  restart    - Reiniciar el backend"
+    echo "  status     - Ver el estado del backend"
+    echo "  logs       - Ver logs del backend API"
+    echo "  logs api   - Ver logs del backend API"
+    echo "  logs db    - Ver logs de PostgreSQL"
     echo ""
     echo "Ejemplos:"
-    echo "  $0 start"
+    echo "  $0 start-db          # Solo BD → luego: ./mvnw spring-boot:run"
+    echo "  $0 start             # BD + backend imagen Docker"
     echo "  $0 status"
     echo "  $0 logs db"
 }
@@ -177,6 +229,9 @@ function show_usage() {
 case ${1:-} in
     start)
         start_pod
+        ;;
+    start-db)
+        start_db
         ;;
     stop)
         stop_pod
