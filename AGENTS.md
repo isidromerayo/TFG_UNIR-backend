@@ -108,12 +108,10 @@ OWASP scan pendiente de ejecutar con `NVD_API_KEY` (ver Task 6 del plan de migra
 Run OWASP scan periodically: `./mvnw -Pdependency-check dependency-check:check -Dnvd.api.key=$NVD_API_KEY`
 (En CI requiere el secret `NVD_API_KEY`; el workflow debe ejecutar el escaneo NVD completo.)
 
-### Dependency-Check False Positives (Boot 4.0.8 — pendiente re-scan con 4.1.1)
+### Dependency-Check False Positives (Boot 4.1.1 — escaneo 2026-09-13)
 These CVEs are flagged by the CPE matcher but do **not** affect the project:
-- **CVE-2026-47849, CVE-2026-47850** on `spring-boot-data-rest-4.0.8.jar` — the CPE matcher matches the Boot module version (4.0.8) against "Spring Data REST 4.0.0–4.4.15" ranges. The real libraries (`spring-data-rest-webmvc`/`spring-data-rest-core` **5.0.7**, managed by Boot 4.0.8) are outside the vulnerable ranges (5.0.0–5.0.6) and already patched.
-- **CVE-2022-31691** on `spring-boot-devtools-4.0.8.jar` — this CVE targets the Spring Tools 4 Eclipse/VSCode extensions, not `spring-boot-devtools`. Devtools is dev-only and excluded from the repackaged jar.
-- **CVE-2026-34479, CVE-2026-34477** on `log4j-api-2.24.3.jar` — both require `log4j-core` (not present). The project only has `log4j-api` (interfaces) and `log4j-to-slf4j` (routing bridge). These CVEs target the Log4j 1→2 bridge XML layout and SocketAppender SSL — none of which are used. *(Ya no aplican: la migración trae `log4j-api` 2.25.5.)*
-- **All CVEs on `swagger-ui-5.32.2.jar` (DOMPurify@3.3.2)** — Swagger UI is a dev-only client-side tool served via `springdoc-openapi`. DOMPurify runs in the browser, sanitizing user-supplied HTML before rendering. The backend never passes user HTML through DOMPurify, so these CVEs are not exploitable server-side. No remediation required. *(Actual: `swagger-ui` 5.32.14.)*
+- **CVE-2026-47849, CVE-2026-47850** on `spring-boot-data-rest-4.1.1.jar` — el CPE matcher matchea el módulo de Boot (4.1.1) contra "Spring Data REST 4.0.0–4.4.15". Las librerías reales (`spring-data-rest-webmvc/core` **5.0.7**, gestionadas por Boot 4.1.1) están fuera de los rangos vulnerables (5.0.0–5.0.6) y parcheadas.
+- **CVE-2022-31691** on `spring-boot-devtools-4.1.1.jar` — el CVE afecta a las extensiones de IDE (Spring Tools 4 / VSCode), no a devtools. Además es dev-only y se excluye del jar empaquetado.
 
 ## Skills
 Repositorio: `springboot-tdd`, `springboot-security`, `springboot-patterns`, `java-spring-development`, `xp-tdd-practices`, `testing-standards`, `action-tdd`, `task-validate`, `task-testing-review`
