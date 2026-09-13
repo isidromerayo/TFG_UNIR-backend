@@ -14,7 +14,7 @@ Este proyecto proporciona imágenes Docker para el backend y la base de datos Po
 mvn release:prepare
 
 # 2. Compilar desde el tag
-git checkout vX.Y.Z && ./mvnw clean package -DskipTests
+git checkout vX.Y.Z && ./mvnw clean package -Dmaven.test.skip=true
 
 # 3. Publicar backend (valida que NO sea SNAPSHOT)
 ./scripts/publish-images.sh
@@ -101,7 +101,7 @@ docker compose up -d
 
 ```bash
 cd TFG_UNIR-backend
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 ```
 
 Esto genera `target/backend.jar` (~60MB)
@@ -190,7 +190,7 @@ Luego ejecuta:
 
 - Cuenta en [Docker Hub](https://hub.docker.com/)
 - Autenticación configurada (`docker login` o `podman login`)
-- Backend compilado (`./mvnw clean package -DskipTests`)
+- Backend compilado (`./mvnw clean package -Dmaven.test.skip=true`)
 
 ### Publicar imagen del backend
 
@@ -292,7 +292,7 @@ docker run --rm isidromerayo/spring-backend-tfg:0.6.2 | head -20
 
 ```bash
 # Construir localmente
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 docker build -f Dockerfile-db-postgresql -t isidromerayo/postgres-tfg:1.0 .
 docker build --build-arg VERSION=0.6.2 -t isidromerayo/spring-backend-tfg:0.6.2 .
 ```
@@ -360,7 +360,7 @@ docker compose up -d
 docker compose down
 
 # Recompilar backend
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 
 # Reconstruir imágenes
 docker build -f Dockerfile-db -t isidromerayo/mariadb-tfg:0.1.0 .

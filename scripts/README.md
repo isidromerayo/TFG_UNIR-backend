@@ -149,7 +149,7 @@ scripts/
 
 ```bash
 # 1. Compilar
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 
 # 2. Verificar qué se publicaría
 ./scripts/publish-images.sh --dry-run
@@ -192,7 +192,7 @@ mvn release:prepare
 
 Compila el backend primero:
 ```bash
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 ```
 
 ### Usando Podman en lugar de Docker

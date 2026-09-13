@@ -425,7 +425,7 @@ Antes de levantar los servicios, asegúrate de que tienes el JAR de la aplicaci�
 
 ```bash
 # Compilar la aplicación (requiere Java 21)
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 
 # Levantar servicios con docker compose
 docker compose up -d --build
@@ -555,7 +555,7 @@ Con docker compose se montará un contenedor con PostgreSQL (datos precargados) 
 3. **Imagen del backend actualizada**: Si modificas el código, necesitas:
    ```bash
    # Compilar (requiere Java 21)
-   ./mvnw clean package -DskipTests
+   ./mvnw clean package -Dmaven.test.skip=true
    
    # Reconstruir imagen
    docker build -t isidromerayo/spring-backend-tfg:VERSION .

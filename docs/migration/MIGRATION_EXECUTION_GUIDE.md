@@ -324,7 +324,7 @@ El proyecto incluye un [`docker-compose.yml`](../docker-compose.yml) que levanta
 cd TFG_UNIR-backend
 
 # 1. Construir imagen del backend (si has hecho cambios)
-./mvnw clean package -DskipTests
+./mvnw clean package -Dmaven.test.skip=true
 docker compose build api_service
 
 # 2. Levantar todos los servicios (MariaDB + Backend)

@@ -61,7 +61,7 @@
 mvn release:prepare
 
 # 2. Compilar desde el tag
-git checkout vX.Y.Z && ./mvnw clean package -DskipTests
+git checkout vX.Y.Z && ./mvnw clean package -Dmaven.test.skip=true
 
 # 3. Publicar backend (valida que NO sea SNAPSHOT)
 ./scripts/publish-images.sh
