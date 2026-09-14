@@ -43,11 +43,11 @@ git checkout main && git push origin main --tags
 
 ```bash
 # Con Docker
-docker pull isidromerayo/postgres-tfg:1.0
+docker pull isidromerayo/postgres-tfg:1.1
 docker pull isidromerayo/spring-backend-tfg:0.7.1
 
 # Con Podman
-podman pull docker.io/isidromerayo/postgres-tfg:1.0
+podman pull docker.io/isidromerayo/postgres-tfg:1.1
 podman pull docker.io/isidromerayo/spring-backend-tfg:0.7.1
 ```
 
@@ -58,7 +58,7 @@ El archivo `docker-compose.yml` ya está configurado para usar estas imágenes:
 ```yaml
 services:
   postgres_db:
-    image: "isidromerayo/postgres-tfg:1.0"
+    image: "isidromerayo/postgres-tfg:1.1"
     # ...
 
   api_service:
@@ -113,15 +113,15 @@ La imagen no embebe `POSTGRES_PASSWORD` — se pasa en runtime vía `docker-comp
 **Con Docker:**
 ```bash
 docker build -f Dockerfile-db-postgresql \
-    -t isidromerayo/postgres-tfg:1.0 .
-docker tag isidromerayo/postgres-tfg:1.0 isidromerayo/postgres-tfg:latest
+    -t isidromerayo/postgres-tfg:1.1 .
+docker tag isidromerayo/postgres-tfg:1.1 isidromerayo/postgres-tfg:latest
 ```
 
 **Con Podman:**
 ```bash
 podman build -f Dockerfile-db-postgresql \
-    -t localhost/isidromerayo/postgres-tfg:1.0 .
-podman tag localhost/isidromerayo/postgres-tfg:1.0 localhost/isidromerayo/postgres-tfg:latest
+    -t localhost/isidromerayo/postgres-tfg:1.1 .
+podman tag localhost/isidromerayo/postgres-tfg:1.1 localhost/isidromerayo/postgres-tfg:latest
 ```
 
 #### 3. Construir Imagen del Backend
@@ -152,7 +152,7 @@ podman images | grep isidromerayo
 
 Deberías ver:
 ```
-isidromerayo/postgres-tfg          1.0      ...    ...    ...
+isidromerayo/postgres-tfg          1.1      ...    ...    ...
 isidromerayo/postgres-tfg          latest   ...    ...    ...
 isidromerayo/spring-backend-tfg   0.7.1    ...    ...    ...
 isidromerayo/spring-backend-tfg   latest   ...    ...    ...
@@ -227,8 +227,8 @@ docker push isidromerayo/spring-backend-tfg:latest
 
 # PostgreSQL (POSTGRES_PASSWORD se pasa en runtime, no en el build)
 docker build -f Dockerfile-db-postgresql \
-    -t isidromerayo/postgres-tfg:1.0 .
-docker push isidromerayo/postgres-tfg:1.0
+    -t isidromerayo/postgres-tfg:1.1 .
+docker push isidromerayo/postgres-tfg:1.1
 docker push isidromerayo/postgres-tfg:latest
 ```
 
@@ -253,8 +253,9 @@ docker push isidromerayo/postgres-tfg:latest
 
 | Tag | Descripción |
 |-----|-------------|
-| `1.0` | PostgreSQL 17, imagen base para el proyecto |
-| `latest` | Referencia a la última versión |
+| `1.1` | PostgreSQL 17, sin `POSTGRES_PASSWORD` embebida (se pasa en runtime) |
+| `latest` | Referencia a la última versión (`1.1`) |
+| `1.0` | ⚠️ Versión antigua con `POSTGRES_PASSWORD` embebida en el build |
 
 ### Backend
 
@@ -290,7 +291,7 @@ docker run --rm isidromerayo/spring-backend-tfg:0.7.1 | head -20
 ```bash
 # Construir localmente
 ./mvnw clean package -Dmaven.test.skip=true
-docker build -f Dockerfile-db-postgresql -t isidromerayo/postgres-tfg:1.0 .
+docker build -f Dockerfile-db-postgresql -t isidromerayo/postgres-tfg:1.1 .
 docker build --build-arg VERSION=0.7.1 -t isidromerayo/spring-backend-tfg:0.7.1 .
 ```
 

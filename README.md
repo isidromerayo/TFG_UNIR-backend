@@ -485,7 +485,7 @@ cd backend
 # Construir imagen (requiere POSTGRES_PASSWORD)
 POSTGRES_PASSWORD=mi_password docker build -f Dockerfile-db-postgresql \
     --build-arg POSTGRES_PASSWORD=mi_password \
-    -t isidromerayo/postgres-tfg:1.0 .
+    -t isidromerayo/postgres-tfg:1.1 .
 ```
 
 ##### Publicar imágenes en Docker Hub
