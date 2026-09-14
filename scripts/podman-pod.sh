@@ -7,7 +7,7 @@ set -e
 POD_NAME="backend-pod"
 POSTGRES_DB_CONTAINER="postgres_db"
 API_SERVICE_CONTAINER="api_service"
-POSTGRES_DB_IMAGE="docker.io/isidromerayo/postgres-tfg:1.0"
+POSTGRES_DB_IMAGE="docker.io/isidromerayo/postgres-tfg:1.1"
 API_SERVICE_IMAGE="docker.io/isidromerayo/spring-backend-tfg:0.6.2"
 VOLUME_NAME="tfg_unir-backend_pg_data"
 

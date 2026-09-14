@@ -1,5 +1,22 @@
 # Changelog - Imágenes Docker
 
+## [1.1] - PostgreSQL - 2026-09-14
+
+### 🚀 Publicación
+
+#### Added
+- Imagen `isidromerayo/postgres-tfg:1.1` construida con el `Dockerfile-db-postgresql` actual
+
+#### Security
+- ✅ Elimina la `POSTGRES_PASSWORD` embebida que contenía la imagen `1.0` (visible en `docker history`)
+- La contraseña se pasa exclusivamente en runtime (`docker-compose.yml` / `podman-pod.sh`)
+
+#### Notes
+- La imagen no contiene datos: el seed se monta en runtime desde `recursos/db/postgresql/`
+- `docker-compose.yml`, `podman-pod.sh` y `DOCKER_IMAGES_GUIDE.md` actualizados a `1.1`
+
+---
+
 ## [0.4.0] - Backend - 2026-01-17
 
 ### 🚀 Actualización Major (Framework)

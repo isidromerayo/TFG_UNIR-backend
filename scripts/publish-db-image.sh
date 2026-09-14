@@ -4,7 +4,7 @@
 # Uso: ./publish-db-image.sh [<version>] [--dry-run] [--skip-login]
 #
 # Ejemplos:
-#   ./publish-db-image.sh              # usa versión por defecto (1.0)
+#   ./publish-db-image.sh              # usa versión por defecto (1.1)
 #   ./publish-db-image.sh 1.1          # versión específica
 #   ./publish-db-image.sh --dry-run    # solo mostrar qué haría
 #
@@ -20,7 +20,7 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 DOCKER_USER="isidromerayo"
-DB_VERSION="1.0"
+DB_VERSION="1.1"
 DRY_RUN=false
 SKIP_LOGIN=false
 

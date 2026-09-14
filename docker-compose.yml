@@ -21,7 +21,7 @@ services:
   postgres_db:
     container_name: postgres_db
     hostname: postgres_db
-    image: "isidromerayo/postgres-tfg:1.0"
+    image: "isidromerayo/postgres-tfg:1.1"
     ports:
       - "5432:5432"
     volumes:
