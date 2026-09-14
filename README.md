@@ -482,9 +482,8 @@ cd backend
 # Compilar el backend primero
 ./mvnw clean package -Dmaven.test.skip=true
 
-# Construir imagen (requiere POSTGRES_PASSWORD)
-POSTGRES_PASSWORD=mi_password docker build -f Dockerfile-db-postgresql \
-    --build-arg POSTGRES_PASSWORD=mi_password \
+# Construir imagen (la contraseña NO se embebe: se pasa en runtime)
+docker build -f Dockerfile-db-postgresql \
     -t isidromerayo/postgres-tfg:1.1 .
 ```
 
@@ -495,7 +494,7 @@ POSTGRES_PASSWORD=mi_password docker build -f Dockerfile-db-postgresql \
 ./scripts/publish-images.sh
 
 # PostgreSQL (requiere POSTGRES_PASSWORD)
-POSTGRES_PASSWORD=mi_password ./scripts/publish-db-image.sh 1.0
+./scripts/publish-db-image.sh 1.1
 ```
 
 Ver guía completa: [docs/docker/DOCKER_IMAGES_GUIDE.md](docs/docker/DOCKER_IMAGES_GUIDE.md)
@@ -602,7 +601,7 @@ Para detener las instancias de los contenedores `docker compose stop`.
 ./scripts/publish-images.sh
 
 # Publicar PostgreSQL (requiere variable de entorno)
-POSTGRES_PASSWORD=mi_password ./scripts/publish-db-image.sh 1.0
+./scripts/publish-db-image.sh 1.1
 ```
 
 ##### Flujo completo de release

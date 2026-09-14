@@ -23,7 +23,8 @@ git checkout vX.Y.Z && ./mvnw clean package -Dmaven.test.skip=true
 ./scripts/publish-images.sh --dry-run
 
 # 5. (Opcional) Publicar BD si hay cambios estructurales
-POSTGRES_PASSWORD=<password> ./scripts/publish-db-image.sh 1.1
+# La contraseña no se embebe en la imagen; se pasa en runtime
+./scripts/publish-db-image.sh 1.1
 
 # 6. Volver a main y subir tags
 git checkout main && git push origin main --tags
