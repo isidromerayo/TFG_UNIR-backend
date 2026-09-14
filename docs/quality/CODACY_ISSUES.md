@@ -87,7 +87,7 @@ run: |
 - Línea 6: `'Informática y software',''`
 - Línea 9-11: Nombres con tildes (Isidro, Triángulo)
 - Línea 17-19: Títulos de cursos con tildes
-- Línea 28: `'Helena','García Sánchez'`
+- Línea 28: `'Helena','Fabero Sánchez'`
 - Líneas 50-57: Contenidos con texto en español (tildes, ñ, etc.)
 
 **Análisis**:
