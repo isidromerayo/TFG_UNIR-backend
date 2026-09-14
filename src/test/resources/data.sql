@@ -22,13 +22,13 @@ INSERT INTO cursos (titulo,valoracion_media,fecha_creacion,fecha_actualizacion,c
 -- Password original: '1234' -> BCrypt hash
 -- Password original: 'admin' -> BCrypt hash
 INSERT INTO usuarios (nombre,apellidos,email,password) VALUES
-('María','García Sánchez','maria@localhost','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
+('María','Villafranca Sánchez','maria@localhost','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
 ('Juan Antonio','Ponferrada Dominguez','juanantonio@localhost','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
 ('Marta','Toral Alonso','marta@localhost','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
 ('Pedro','Villa Ledesma','pedro@localhost','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S');
 
 INSERT INTO usuarios (nombre,apellidos,email,estado,password) VALUES
-('Helena','García Sánchez','helena@localhost','A','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
+('Helena','Fabero Sánchez','helena@localhost','A','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
 ('Carlos','Toreno Sil','carlos@localhost','A','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
 ('Ines','Boeza Alonso','ines@localhost','A','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S'),
 ('Isabel','Fresnedo Noceda','isable@localhost','A','$2a$10$Mc83dqvzIGHu72RpdtOF.Oo.S7El6kOfV56BDzkhyh.29DL6DSj6S');

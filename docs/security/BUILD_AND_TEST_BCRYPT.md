@@ -95,7 +95,7 @@ Respuesta esperada (éxito):
   "usuario": {
     "id": 1,
     "nombre": "María",
-    "apellidos": "García Sánchez",
+    "apellidos": "Villafranca Sánchez",
     "email": "maria@localhost",
     "estado": "P"
   }
