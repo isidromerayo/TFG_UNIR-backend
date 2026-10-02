@@ -340,5 +340,5 @@ if (passwordEncoder.matches(login.getPassword(), usuario.getPassword())) {
 
 ---
 
-**Última actualización**: 2025-12-09  
-**Estado**: Pendiente de implementación
+**Última actualización**: 2026-10-02  
+**Estado**: ✅ Resuelto — el código ya usa `BCryptPasswordEncoder.matches()` (comparación constant-time) y `jwt.secret` se carga de configuración externa (`TokenService`, `@Value("${jwt.secret}")`). Ver `docs/security/README.md`.

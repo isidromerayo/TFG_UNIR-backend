@@ -40,10 +40,18 @@ Documentación relacionada con seguridad, autenticación y migración a BCrypt.
   - Cambios en el código
   - Testing
 
-- **[SNYK_SECURITY_ISSUE.md](SNYK_SECURITY_ISSUE.md)** - Análisis del issue de Snyk
+- **[SNYK_SECURITY_ISSUE.md](SNYK_SECURITY_ISSUE.md)** - Análisis del issue de Snyk (✅ resuelto: BCrypt + JWT externo)
   - Detalles de la vulnerabilidad
   - Impacto
   - Recomendaciones
+
+### Informes de vulnerabilidades
+
+- **[informe-vulnerabilidades-2026-10-02.md](informe-vulnerabilidades-2026-10-02.md)** - Última revisión de dependencias
+  - 10 CVEs nuevos de Tomcat 11.0.25 remediados (bump a 11.0.26)
+  - Falsos positivos del escáner NVD
+  - Limitación: NVD "Awaiting Enrichment" y triaje manual
+- **[informe-vulnerabilidades-2026-09-08.md](informe-vulnerabilidades-2026-09-08.md)** - Revisión previa (migración a Spring Boot 4)
 
 ## 🚀 Flujo de Trabajo Recomendado
 

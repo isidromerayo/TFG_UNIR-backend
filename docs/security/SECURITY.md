@@ -14,8 +14,8 @@ Las siguientes versiones del proyecto reciben actualizaciones de seguridad:
 
 | Versión | Soportada          | Notas |
 | ------- | ------------------ | ----- |
-| 0.2.x   | :white_check_mark: | Versión actual en desarrollo |
-| < 0.2   | :x:                | Versiones legacy sin soporte |
+| 0.7.x   | :white_check_mark: | Versión actual en desarrollo |
+| < 0.7   | :x:                | Versiones legacy sin soporte |
 
 ## 🔒 Reportar una Vulnerabilidad
 
@@ -93,7 +93,7 @@ Este proyecto implementa múltiples capas de seguridad:
 
 - **Análisis estático**: SpotBugs 4.10.4 con plugins de seguridad (find-sec-bugs, fb-contrib)
 - **Análisis de calidad**: SonarCloud con Quality Gate (85% cobertura)
-- **Análisis de dependencias**: OWASP Dependency Check 12.1.8
+- **Análisis de dependencias**: OWASP Dependency Check 13.0.0
 - **CI/CD**: GitHub Actions con análisis automático en cada PR
 
 ### Áreas de Seguridad Críticas
@@ -110,9 +110,10 @@ Si encuentras vulnerabilidades, presta especial atención a:
 
 ### Documentación del Proyecto
 
-- [README.md](README.md) - Documentación principal
-- [DOCS_INDEX.md](DOCS_INDEX.md) - Índice de toda la documentación
-- [SONARQUBE_ISSUES.md](SONARQUBE_ISSUES.md) - Issues de calidad resueltos
+- [README principal](../../README.md) - Documentación del proyecto
+- [README de seguridad](README.md) - Índice de la documentación de seguridad
+- [SONARQUBE_ISSUES.md](../quality/SONARQUBE_ISSUES.md) - Issues de calidad resueltos
+- [Informe de vulnerabilidades 02/10/2026](informe-vulnerabilidades-2026-10-02.md) - Última revisión de dependencias
 
 ### Referencias de Seguridad
 
@@ -138,5 +139,5 @@ Este proyecto tiene un propósito educativo y de investigación. Si eres estudia
 
 ---
 
-**Última actualización**: 2025-12-09  
-**Proyecto**: TFG UNIR - Backend (Spring Boot 3.4.12 + Java 21)
+**Última actualización**: 2026-10-02  
+**Proyecto**: TFG UNIR - Backend (Spring Boot 4.1.1 + Java 21)
