@@ -22,9 +22,11 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Dependencies Versions -->
-		<!-- Boot 4.1.1 gestiona Tomcat 11.0.24, vulnerable a CVE-2026-73180 (Low), CVE-2026-68763 (Important DoS),
-		     CVE-2026-68569 (Important auth bypass); fix en 11.0.25 -->
-		<tomcat.version>11.0.25</tomcat.version>
+		<!-- Boot 4.1.1 gestiona Tomcat 11.0.24. Fix 11.0.25 (CVE-2026-73180, CVE-2026-68763, CVE-2026-68569)
+		     quedó obsoleto: 11.0.25 es vulnerable a los CVEs del 23/09/2026 (CVE-2026-86248, CVE-2026-76183,
+		     CVE-2026-86350, CVE-2026-78383, CVE-2026-79677, CVE-2026-87022, CVE-2026-78437, CVE-2026-75973,
+		     CVE-2026-73581, CVE-2026-77756); fix en 11.0.26 -->
+		<tomcat.version>11.0.26</tomcat.version>
 		<!-- Boot 4.1.1 gestiona Jackson 3.1.5, vulnerable a CVE-2026-19032/CVE-2026-83557 (Snyk); fix en 3.1.6 -->
 		<jackson-bom.version>3.1.6</jackson-bom.version>
 		<jjwt.version>0.13.0</jjwt.version>
