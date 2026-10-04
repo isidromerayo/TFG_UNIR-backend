@@ -1,5 +1,5 @@
-# VERSIÓN CORREGIDA PARA: .github/workflows/notify-monorepo.yml
-# Reemplazar el archivo existente con este contenido
+# Notifica al monorepo (evento repository_dispatch: submodule-updated)
+# tras cada push a main, para que actualice el puntero de este submódulo.
 
 name: Notify Monorepo on Main Update
 
