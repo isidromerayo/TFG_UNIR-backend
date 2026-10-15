@@ -121,6 +121,11 @@ Estado tras revisión de vulnerabilidades del 02/10/2026: **0 vulnerabilidades r
 La revisión detectó 10 CVEs nuevos de Tomcat 11.0.25 (23/09/2026) que el escáner NVD no veía
 (CPEs pendientes de enriquecimiento); remediados con el override a Tomcat **11.0.26**.
 Informe: `docs/security/informe-vulnerabilidades-2026-10-02.md`.
+Revisión del 15/10/2026: el escaneo detectó **CVE-2026-109344** y **CVE-2026-109345** (XSS en
+**DOMPurify < 3.4.16**) en el webjar `swagger-ui` 5.32.14 que arrastra springdoc 3.1.1, cuyo bundle
+empaqueta DOMPurify 3.4.13. Remedado con el override a `swagger-ui` **5.33.2**, que ya trae
+DOMPurify 3.4.16. `CVE-2026-109344` es el mismo aviso que antes se documentaba como falso positivo
+con el identificador `GHSA-p98j-92pf-mc4p`.
 OWASP scan ejecutado con `NVD_API_KEY` (secret configurado en GitHub, verificado en CI — PR #147).
 Run OWASP scan periodically: `./mvnw -Pdependency-check dependency-check:check -Dnvd.api.key=$NVD_API_KEY`
 (El workflow `owasp-dependency-check-maven.yml` ejecuta el escaneo NVD completo en cada push/PR a main.)
@@ -134,11 +139,10 @@ Run OWASP scan periodically: `./mvnw -Pdependency-check dependency-check:check -
 These entries are flagged by the CPE matcher but do **not** affect the project:
 - **CVE-2026-47849, CVE-2026-47850** on `spring-boot-data-rest-4.1.1.jar` — el CPE matcher matchea el módulo de Boot (4.1.1) contra rangos de "Spring Data REST". La librería real (`spring-data-rest-webmvc/core` **5.1.1**, gestionada por Boot 4.1.1) es la versión corregida (fix OSS en 5.1.1).
 - **CVE-2022-31691** on `spring-boot-devtools-4.1.1.jar` — el CVE afecta a las extensiones de IDE (Spring Tools 4 / VSCode), no a devtools. Además es dev-only y se excluye del jar empaquetado.
-- **GHSA-p98j-92pf-mc4p** (DOMPurify 3.4.13) en `swagger-ui-5.32.14.jar` — Low (CVSS 2.3); requiere `IN_PLACE` + hook `afterSanitize*` que elimine nodos, patrón que Swagger UI no usa. Librería JS de navegador (docs de API), no procesada por el backend.
 
 ## Skills
 Repositorio: `springboot-tdd`, `springboot-security`, `springboot-patterns`, `java-spring-development`, `xp-tdd-practices`, `testing-standards`, `action-tdd`, `task-validate`, `task-testing-review`
 Globales (`~/.agents/skills`): `codely-git-conventional_commit` (commits), `codely-doc-create`, `codely-plan-create-gitlab`, `codely-plan_phase-implement-gitlab`, `find-skills`
 
 ---
-**Updated:** 2026-10-02
+**Updated:** 2026-10-15
