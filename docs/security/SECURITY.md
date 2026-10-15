@@ -91,7 +91,7 @@ Este proyecto implementa múltiples capas de seguridad:
 
 ### Análisis Automatizado
 
-- **Análisis estático**: SpotBugs 4.10.4 con plugins de seguridad (find-sec-bugs, fb-contrib)
+- **Análisis estático**: SpotBugs 4.10.5 con plugins de seguridad (find-sec-bugs 1.14.0, sb-contrib 7.7.4)
 - **Análisis de calidad**: SonarCloud con Quality Gate (85% cobertura)
 - **Análisis de dependencias**: OWASP Dependency Check 13.0.0
 - **CI/CD**: GitHub Actions con análisis automático en cada PR
