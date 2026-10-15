@@ -54,7 +54,7 @@ Apache el 15/09/2026.
 |----------|---------------------|
 | `spring-boot-data-rest` CVE-2026-47849, CVE-2026-47850 | El CPE matcher asocia el módulo `spring-boot-data-rest` 4.1.1 con "Spring Data REST 4.0.0–4.4.15". La librería real (`spring-data-rest-webmvc/core` **5.1.1**, gestionada por Boot 4.1.1) es la **versión corregida** de ambos CVEs (fix OSS en 5.1.1). |
 | `spring-boot-devtools` CVE-2022-31691 | El CVE afecta a las extensiones de IDE (Spring Tools 4 / VSCode), no a devtools. Además es dev-only y se excluye del jar empaquetado. |
-| `swagger-ui` 5.32.14 → `swagger-ui-bundle.js`/`swagger-ui-es-bundle.js` (DOMPurify 3.4.13) GHSA-p98j-92pf-mc4p | Severidad **Low** (CVSS 2.3). Requiere `DOMPurify.sanitize(node, { IN_PLACE: true })` **más** un hook `afterSanitize*` que elimine nodos; Swagger UI no usa `IN_PLACE` ni ese patrón. Librería JS del navegador (documentación de API), nunca procesada por el backend. |
+| `swagger-ui` 5.32.14 → `swagger-ui-bundle.js`/`swagger-ui-es-bundle.js` (DOMPurify 3.4.13) GHSA-p98j-92pf-mc4p | Severidad **Low** (CVSS 2.3). Requiere `DOMPurify.sanitize(node, { IN_PLACE: true })` **más** un hook `afterSanitize*` que elimine nodos; Swagger UI no usa `IN_PLACE` ni ese patrón. Librería JS del navegador (documentación de API), nunca procesada por el backend. **⚠️ Corregido en el [informe del 15/10/2026](informe-vulnerabilidades-2026-10-15.md): el aviso recibió CVE-2026-109344 y se remedió (webjar `swagger-ui` 5.33.2).** |
 
 ## 4. CVEs verificados como no aplicables (versión ya parcheada)
 

@@ -47,7 +47,11 @@ Documentación relacionada con seguridad, autenticación y migración a BCrypt.
 
 ### Informes de vulnerabilidades
 
-- **[informe-vulnerabilidades-2026-10-02.md](informe-vulnerabilidades-2026-10-02.md)** - Última revisión de dependencias
+- **[informe-vulnerabilidades-2026-10-15.md](informe-vulnerabilidades-2026-10-15.md)** - Última revisión de dependencias
+  - CVE-2026-109344 y CVE-2026-109345 (DOMPurify < 3.4.16) en el webjar `swagger-ui` → bump a 5.33.2
+  - springdoc mantiene la versión del webjar *baked-in*: requiere también `springdoc.swagger-ui.version`
+  - Falsos positivos restantes del escáner NVD
+- **[informe-vulnerabilidades-2026-10-02.md](informe-vulnerabilidades-2026-10-02.md)** - Revisión anterior de dependencias
   - 10 CVEs nuevos de Tomcat 11.0.25 remediados (bump a 11.0.26)
   - Falsos positivos del escáner NVD
   - Limitación: NVD "Awaiting Enrichment" y triaje manual
