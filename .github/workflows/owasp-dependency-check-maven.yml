@@ -13,6 +13,13 @@ permissions:
 jobs:
   dependency-check:
     runs-on: ubuntu-latest
+    # Los PRs de Dependabot usan un almacén de secretos propio: si NVD_API_KEY
+    # sólo existe en los secrets de Actions, aquí llega vacía y dependency-check
+    # 13 falla con "Invalid API Key, length of 0". Se expone como env para poder
+    # guardar los pasos con `if: env.NVD_API_KEY != ''` (los secretos no son
+    # válidos dentro de `if:`).
+    env:
+      NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
 
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -23,14 +30,16 @@ jobs:
         distribution: 'temurin'
     - name: Debug NVD_API_KEY
       run: |
-        if [[ -n "${{ secrets.NVD_API_KEY }}" ]]; then
+        if [[ -n "$NVD_API_KEY" ]]; then
           echo "NVD_API_KEY is set"
         else
           echo "NVD_API_KEY is NOT set"
         fi
     - name: Run OWASP Dependency Check
-      run: mvn org.owasp:dependency-check-maven:check -f pom.xml -Dnvd.api.key=${{ secrets.NVD_API_KEY }}
+      if: env.NVD_API_KEY != ''
+      run: mvn org.owasp:dependency-check-maven:check -f pom.xml -Dnvd.api.key=$NVD_API_KEY
     - name: Upload Dependency Check Report
+      if: env.NVD_API_KEY != ''
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: dependency-check-report

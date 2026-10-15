@@ -124,6 +124,9 @@ Informe: `docs/security/informe-vulnerabilidades-2026-10-02.md`.
 OWASP scan ejecutado con `NVD_API_KEY` (secret configurado en GitHub, verificado en CI — PR #147).
 Run OWASP scan periodically: `./mvnw -Pdependency-check dependency-check:check -Dnvd.api.key=$NVD_API_KEY`
 (El workflow `owasp-dependency-check-maven.yml` ejecuta el escaneo NVD completo en cada push/PR a main.)
+> **Requiere `NVD_API_KEY` en AMBOS almacenes de secretos**: el de Actions y el de **Dependabot**
+> (Settings → Secrets and variables → Dependabot). Los PRs de Dependabot leen solo de su propio
+> almacén, así que si la clave falta ahí el scan se omite (skipped) en lugar de fallar el build.
 > **Limitación:** dependency-check solo detecta CVEs con CPEs en NVD; los avisos recientes tardan
 > semanas en aparecer. Cada revisión requiere triaje manual contra los avisos de Apache/Spring.
 
