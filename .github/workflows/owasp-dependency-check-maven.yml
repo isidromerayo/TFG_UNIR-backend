@@ -37,7 +37,13 @@ jobs:
         fi
     - name: Run OWASP Dependency Check
       if: env.NVD_API_KEY != ''
-      run: mvn org.owasp:dependency-check-maven:check -f pom.xml -Dnvd.api.key=$NVD_API_KEY
+      # failOnError=false: las caídas del API de NVD (503 de NIST) o de datos
+      # externos no deben romper el build. El informe se sigue generando/subiendo
+      # y dependency-check avisa en el log de que usó datos cacheados.
+      run: |
+        mvn org.owasp:dependency-check-maven:check -f pom.xml \
+          -Dnvd.api.key=$NVD_API_KEY \
+          -DfailOnError=false
     - name: Upload Dependency Check Report
       if: env.NVD_API_KEY != ''
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

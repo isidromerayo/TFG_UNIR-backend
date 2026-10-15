@@ -127,6 +127,10 @@ Run OWASP scan periodically: `./mvnw -Pdependency-check dependency-check:check -
 > **Requiere `NVD_API_KEY` en AMBOS almacenes de secretos**: el de Actions y el de **Dependabot**
 > (Settings → Secrets and variables → Dependabot). Los PRs de Dependabot leen solo de su propio
 > almacén, así que si la clave falta ahí el scan se omite (skipped) en lugar de fallar el build.
+> **Resiliencia ante caídas de NVD**: el job se ejecuta con `-DfailOnError=false`, así que un `503`
+> de NIST al actualizar los datos NVD no rompe el build; se genera y sube el informe con los datos
+> cacheados y el log avisa (`Unable to update ... using local data instead`). En ese caso el informe
+> puede estar incompleto y requiere revisión manual.
 > **Limitación:** dependency-check solo detecta CVEs con CPEs en NVD; los avisos recientes tardan
 > semanas en aparecer. Cada revisión requiere triaje manual contra los avisos de Apache/Spring.
 
