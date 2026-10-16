@@ -144,6 +144,16 @@ These entries are flagged by the CPE matcher but do **not** affect the project:
 - **CVE-2026-47849, CVE-2026-47850** on `spring-boot-data-rest-4.1.1.jar` — el CPE matcher matchea el módulo de Boot (4.1.1) contra rangos de "Spring Data REST". La librería real (`spring-data-rest-webmvc/core` **5.1.1**, gestionada por Boot 4.1.1) es la versión corregida (fix OSS en 5.1.1).
 - **CVE-2022-31691** on `spring-boot-devtools-4.1.1.jar` — el CVE afecta a las extensiones de IDE (Spring Tools 4 / VSCode), no a devtools. Además es dev-only y se excluye del jar empaquetado.
 
+### Advisories aceptados (sin parche upstream)
+Regla: un CVE sin versión parcheada publicada sólo puede "aceptarse" con una entrada en
+`docs/security/accepted-advisories.md` (motivo, alcance y ruta de dependencia). Se revisa en cada
+iteración con `./scripts/check-accepted-advisories.sh` (paso *Accepted advisories recheck* de
+`owasp-dependency-check-maven.yml`): consulta OSV y **falla** en cuanto aparezca una versión
+parcheada para el paquete Maven afectado; entonces se sube la dependencia (o el override de Boot) y
+se borra la entrada. No confundir con los falsos positivos de CPE de arriba: ahí no hay nada que
+parchear.
+Estado actual: **0 advisories aceptados**.
+
 ## Skills
 Repositorio: `springboot-tdd`, `springboot-security`, `springboot-patterns`, `java-spring-development`, `xp-tdd-practices`, `testing-standards`, `action-tdd`, `task-validate`, `task-testing-review`
 Globales (`~/.agents/skills`): `codely-git-conventional_commit` (commits), `codely-doc-create`, `codely-plan-create-gitlab`, `codely-plan_phase-implement-gitlab`, `find-skills`
