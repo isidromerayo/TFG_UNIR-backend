@@ -50,3 +50,7 @@ jobs:
       with:
         name: dependency-check-report
         path: target/dependency-check-report.html
+    # Advisories aceptados (sin parche upstream): falla si ya hay fix publicado.
+    # Regla y registro: docs/security/accepted-advisories.md
+    - name: Accepted advisories recheck (unpatched only)
+      run: ./scripts/check-accepted-advisories.sh

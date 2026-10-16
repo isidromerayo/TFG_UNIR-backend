@@ -122,6 +122,13 @@ boolean matches = passwordEncoder.matches(password, storedHash);
 | Algoritmos | BCrypt, Argon2 | AES, RSA |
 | Verificación | Comparar hashes | Desencriptar |
 
+## 📌 Advisories aceptados (sin parche upstream)
+
+- **[accepted-advisories.md](accepted-advisories.md)** — registro de CVEs aceptados porque no existe
+  versión parcheada, y su revisión automática
+  (`../../scripts/check-accepted-advisories.sh`, paso del workflow OWASP). Estado actual: sin
+  advisories aceptados.
+
 ## 📊 Estado Actual
 
 ### ✅ Implementado
