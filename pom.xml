@@ -31,7 +31,7 @@
 		<jackson-bom.version>3.1.6</jackson-bom.version>
 		<jjwt.version>0.13.0</jjwt.version>
 		<commons-lang3.version>3.20.0</commons-lang3.version>
-		<springdoc-openapi-starter-webmvc-ui.version>3.1.1</springdoc-openapi-starter-webmvc-ui.version>
+		<springdoc-openapi-starter-webmvc-ui.version>3.2.0</springdoc-openapi-starter-webmvc-ui.version>
 		<springdoc-openapi-starter-common.version>3.1.1</springdoc-openapi-starter-common.version>
 		<!-- springdoc 3.1.1 arrastra swagger-ui 5.32.14 (DOMPurify 3.4.13, vulnerable) -->
 		<swagger-ui.version>5.33.2</swagger-ui.version>
