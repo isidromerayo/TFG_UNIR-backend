@@ -40,5 +40,5 @@ Positives*): ahí no hay nada que parchear porque el CPE matcher se equivoca de 
 }
 ```
 
-Estado a 2026-10-16: **sin advisories aceptados**. El classpath no tiene vulnerabilidades reales
-pendientes (última revisión: 2026-10-15, `docs/security/informe-vulnerabilidades-2026-10-15.md`).
+Estado a 2026-10-30: **sin advisories aceptados**. El classpath no tiene vulnerabilidades reales
+pendientes (última revisión: 2026-10-30, `docs/security/informe-vulnerabilidades-2026-10-30.md`).

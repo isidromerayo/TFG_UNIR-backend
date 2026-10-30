@@ -265,6 +265,9 @@ docker push isidromerayo/postgres-tfg:latest
 | `0.7.1` | Spring Boot 4.1.1 |
 | `latest` | Referencia a la última versión |
 
+> `main` apunta ya a **Spring Boot 4.1.2**; `0.7.1` se publicó con 4.1.1 y la próxima release
+> reflejará 4.1.2 en su tag.
+
 ---
 
 ## Verificación de Imágenes

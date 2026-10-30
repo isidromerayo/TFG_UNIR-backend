@@ -1,11 +1,11 @@
 # AGENTS.md - TFG UNIR Backend
 
 ## Stack
-- Java 21 + Spring Boot 4.1.1 + Maven 3.9.16 (`./mvnw`) — migrado desde 4.0.8 el 2026-09-13
-- Spring Framework 7.0.9, Spring Security 7.1.1, Tomcat 11.0.26 (override: Boot 4.1.1 gestiona 11.0.24; 11.0.25 corregía CVE-2026-73180/68763/68569 pero es vulnerable a los CVEs del 23/09/2026, fix en 11.0.26)
-- Jackson 3 (`tools.jackson.*`) **3.1.6** (override de 3.1.5: CVE-2026-19032/83557, Snyk); Jackson 2 solo transitivo (jjwt)
+- Java 21 + Spring Boot 4.1.2 + Maven 3.10.0 (`./mvnw`) — 4.0.8 → 4.1.1 el 2026-09-13; 4.1.1 → 4.1.2 el 2026-10-30
+- Spring Framework 7.0.10, Spring Security 7.1.2, Tomcat 11.0.27 y Jackson 3.1.7: gestionados por Boot 4.1.2, **sin overrides** (los de Tomcat 11.0.26 y Jackson 3.1.6 se retiraron al quedar por debajo del BOM)
+- Jackson 3 (`tools.jackson.*`) **3.1.7** (gestionado por Boot 4.1.2); Jackson 2 solo transitivo (jjwt)
 - Test slices modulares: `spring-boot-data-jpa-test`, `spring-boot-jdbc-test`, `spring-boot-resttestclient` + `spring-boot-restclient`
-- rest-assured 6.0.1 vía `rest-assured-bom` (Boot 4 ya no lo gestiona), springdoc-openapi 3.1.1
+- rest-assured 6.3.0 vía `rest-assured-bom` (Boot 4 ya no lo gestiona), springdoc-openapi 3.2.0 + swagger-ui 5.34.1 (override: DOMPurify 3.4.17)
 - H2 (tests), PostgreSQL (prod)
 - JWT auth, CSRF disabled, stateless API
 - Logging: `java.util.logging.Logger` (not SLF4J)
@@ -29,8 +29,8 @@
 # Full verification with coverage
 ./mvnw clean verify -Pintegration-tests
 
-# Vulnerability scan (requires NVD_API_KEY) - skips tests, only runs OWASP check
-./mvnw -Pdependency-check dependency-check:check -Dnvd.api.key=$NVD_API_KEY
+# Vulnerability scan (requires NVD_API_KEY; el pom la lee de ${env.NVD_API_KEY})
+NVD_API_KEY=$NVD_API_KEY ./mvnw -Pdependency-check dependency-check:check
 ```
 
 ## Non-Negotiable Rules
@@ -126,8 +126,14 @@ Revisión del 15/10/2026: el escaneo detectó **CVE-2026-109344** y **CVE-2026-1
 empaqueta DOMPurify 3.4.13. Remedado con el override a `swagger-ui` **5.33.2**, que ya trae
 DOMPurify 3.4.16. `CVE-2026-109344` es el mismo aviso que antes se documentaba como falso positivo
 con el identificador `GHSA-p98j-92pf-mc4p`.
+Revisión del 30/10/2026: el escaneo detectó **CVE-2026-116802** (LOW), **CVE-2026-116803** (HIGH) y
+**CVE-2026-116804** (CRITICAL) en **DOMPurify 3.4.16**, que empaqueta el webjar `swagger-ui` 5.34.0
+gestionado por springdoc 3.2.0. Remedado con el override a `swagger-ui` **5.34.1**, que trae
+DOMPurify 3.4.17. En la misma revisión se retiraron los overrides de Tomcat 11.0.26 y Jackson 3.1.6:
+Boot 4.1.2 ya gestiona **11.0.27** y **3.1.7**. Informe:
+`docs/security/informe-vulnerabilidades-2026-10-30.md`.
 OWASP scan ejecutado con `NVD_API_KEY` (secret configurado en GitHub, verificado en CI — PR #147).
-Run OWASP scan periodically: `./mvnw -Pdependency-check dependency-check:check -Dnvd.api.key=$NVD_API_KEY`
+Run OWASP scan periodically: `NVD_API_KEY=$NVD_API_KEY ./mvnw -Pdependency-check dependency-check:check`
 (El workflow `owasp-dependency-check-maven.yml` ejecuta el escaneo NVD completo en cada push/PR a main.)
 > **Requiere `NVD_API_KEY` en AMBOS almacenes de secretos**: el de Actions y el de **Dependabot**
 > (Settings → Secrets and variables → Dependabot). Los PRs de Dependabot leen solo de su propio
@@ -139,10 +145,10 @@ Run OWASP scan periodically: `./mvnw -Pdependency-check dependency-check:check -
 > **Limitación:** dependency-check solo detecta CVEs con CPEs en NVD; los avisos recientes tardan
 > semanas en aparecer. Cada revisión requiere triaje manual contra los avisos de Apache/Spring.
 
-### Dependency-Check False Positives (Boot 4.1.1 — escaneo 2026-10-02)
+### Dependency-Check False Positives (Boot 4.1.2 — escaneo 2026-10-30)
 These entries are flagged by the CPE matcher but do **not** affect the project:
-- **CVE-2026-47849, CVE-2026-47850** on `spring-boot-data-rest-4.1.1.jar` — el CPE matcher matchea el módulo de Boot (4.1.1) contra rangos de "Spring Data REST". La librería real (`spring-data-rest-webmvc/core` **5.1.1**, gestionada por Boot 4.1.1) es la versión corregida (fix OSS en 5.1.1).
-- **CVE-2022-31691** on `spring-boot-devtools-4.1.1.jar` — el CVE afecta a las extensiones de IDE (Spring Tools 4 / VSCode), no a devtools. Además es dev-only y se excluye del jar empaquetado.
+- **CVE-2026-47849, CVE-2026-47850** on `spring-boot-data-rest-4.1.2.jar` — el CPE matcher matchea el módulo de Boot (4.1.2) contra rangos de "Spring Data REST". La librería real (`spring-data-rest-webmvc/core` **5.1.2**, gestionada por Boot 4.1.2) es la versión corregida (fix OSS en 5.1.1).
+- **CVE-2022-31691** on `spring-boot-devtools-4.1.2.jar` — el CVE afecta a las extensiones de IDE (Spring Tools 4 / VSCode), no a devtools. Además es dev-only y se excluye del jar empaquetado.
 
 ### Advisories aceptados (sin parche upstream)
 Regla: un CVE sin versión parcheada publicada sólo puede "aceptarse" con una entrada en
@@ -159,4 +165,4 @@ Repositorio: `springboot-tdd`, `springboot-security`, `springboot-patterns`, `ja
 Globales (`~/.agents/skills`): `codely-git-conventional_commit` (commits), `codely-doc-create`, `codely-plan-create-gitlab`, `codely-plan_phase-implement-gitlab`, `find-skills`
 
 ---
-**Updated:** 2026-10-15
+**Updated:** 2026-10-30

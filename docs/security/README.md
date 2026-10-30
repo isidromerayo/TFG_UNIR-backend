@@ -47,7 +47,12 @@ Documentación relacionada con seguridad, autenticación y migración a BCrypt.
 
 ### Informes de vulnerabilidades
 
-- **[informe-vulnerabilidades-2026-10-15.md](informe-vulnerabilidades-2026-10-15.md)** - Última revisión de dependencias
+- **[informe-vulnerabilidades-2026-10-30.md](informe-vulnerabilidades-2026-10-30.md)** - Última revisión de dependencias
+  - CVE-2026-116802/116803/116804 (DOMPurify 3.4.16) → `swagger-ui` 5.34.1 con DOMPurify 3.4.17
+  - springdoc 3.2.0: retirados los pins de `springdoc-openapi-starter-common` y alineado el webjar
+  - Retirados los overrides de Tomcat 11.0.26 y Jackson 3.1.6 (Boot 4.1.2 gestiona 11.0.27 y 3.1.7)
+  - Falsos positivos restantes del escáner NVD sobre Boot 4.1.2
+- **[informe-vulnerabilidades-2026-10-15.md](informe-vulnerabilidades-2026-10-15.md)** - Revisión anterior de dependencias
   - CVE-2026-109344 y CVE-2026-109345 (DOMPurify < 3.4.16) en el webjar `swagger-ui` → bump a 5.33.2
   - springdoc mantiene la versión del webjar *baked-in*: requiere también `springdoc.swagger-ui.version`
   - Falsos positivos restantes del escáner NVD

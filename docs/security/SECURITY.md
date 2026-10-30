@@ -84,7 +84,7 @@ Este proyecto implementa múltiples capas de seguridad:
 
 ### Stack de Seguridad
 
-- **Framework**: Spring Boot 4.1.1 con Spring Security 7.1.1
+- **Framework**: Spring Boot 4.1.2 con Spring Security 7.1.2
 - **Autenticación**: JWT (JSON Web Tokens) v0.13.0
 - **Java**: OpenJDK 21 (LTS)
 - **Base de datos**: PostgreSQL con credenciales configurables
@@ -139,5 +139,5 @@ Este proyecto tiene un propósito educativo y de investigación. Si eres estudia
 
 ---
 
-**Última actualización**: 2026-10-02  
-**Proyecto**: TFG UNIR - Backend (Spring Boot 4.1.1 + Java 21)
+**Última actualización**: 2026-10-30
+**Proyecto**: TFG UNIR - Backend (Spring Boot 4.1.2 + Java 21)

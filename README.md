@@ -36,9 +36,9 @@ Java 21 es una versión **LTS**: recibe actualizaciones de seguridad y rendimien
 
 ### Implicaciones para este proyecto
 
-- **Spring Boot 4.1.1** sobre **Java 21 LTS** (migrado desde 4.0.8 el 13/09/2026).
+- **Spring Boot 4.1.2** sobre **Java 21 LTS** (4.0.8 → 4.1.1 el 13/09/2026; 4.1.1 → 4.1.2 el 30/10/2026).
 - El soporte OSS de la línea 3.5 finalizó el **30 de junio de 2026**; la migración a 4.0 remedió ~70 CVEs de librerías (ver [informe de vulnerabilidades](docs/security/informe-vulnerabilidades-2026-09-08.md)).
-- La línea 4.0 finaliza soporte OSS el **31 de diciembre de 2026** — migración a 4.1.1 completada el 13/09/2026.
+- La línea 4.0 finaliza soporte OSS el **31 de diciembre de 2026** — migración a 4.1 completada y parcheada hasta 4.1.2.
 
 ## 🚀 Desarrollo y Contribución
 
@@ -76,15 +76,15 @@ Este repositorio versiona *skills* (guías y patrones en Markdown) para que los 
 ### 🛠️ Stack tecnológico
 
 - **Java 21**
-- **Spring Boot 4.1.1**
-- **Spring Framework 7.0.9**
-- **Hibernate 7.4.5.Final**
+- **Spring Boot 4.1.2**
+- **Spring Framework 7.0.10**
+- **Hibernate 7.4.13.Final**
 - **Spring Data JPA** - Persistencia
-- **Spring Security 7.1.1** - Autenticación y autorización
+- **Spring Security 7.1.2** - Autenticación y autorización
 - **PostgreSQL 15+** - Base de datos producción
 - **H2** - Base de datos testing
 - **JWT** - Tokens de autenticación
-- **Swagger/OpenAPI 3.1.1** - Documentación API
+- **Swagger/OpenAPI 3.2.0** - Documentación API
 - **Lombok** - Reducción de boilerplate
 - **JaCoCo** - Cobertura de código
 - **SpotBugs** - Análisis estático
@@ -998,6 +998,6 @@ Este comando:
 | **Security Rating** | A | A | ✅ |
 | **Quality Gate** | Passed | Passed | ✅ |
 
-**Última actualización**: 2026-09-13 (migración Spring Boot 4.0.8 → 4.1.1)
+**Última actualización**: 2026-10-30 (Spring Boot 4.1.2, springdoc 3.2.0 y revisión de dependencias)
 
 Ver más detalles en [SonarCloud](https://sonarcloud.io/project/overview?id=isidromerayo_TFG_UNIR-backend)

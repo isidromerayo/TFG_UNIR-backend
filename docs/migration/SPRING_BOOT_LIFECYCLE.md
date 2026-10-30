@@ -40,16 +40,16 @@ Esta fue la versión utilizada en el proyecto hasta septiembre de 2026 (`4.0.8`)
 
 ### Spring Boot 4.1 (Versión Actual) ✅
 
-Esta es la versión actualmente utilizada en el proyecto (`4.1.1`).
+Esta es la versión actualmente utilizada en el proyecto (`4.1.2`).
 
 *   **Fecha de Lanzamiento:** 30 de Junio de 2026.
 *   **Fin de Soporte Open Source (OSS):** 31 de Julio de 2027.
 *   **Soporte Extendido (Comercial):** Hasta el 31 de Julio de 2028.
 *   **Ventajas de la Actualización:**
     *   ✅ Soporte OSS activo durante todo 2027 (4.0 EOL 31/12/2026).
-    *   ✅ Spring Security 7.1.1 y Hibernate 7.4.5.Final.
-    *   ✅ 0 vulnerabilidades reales en el classpath (overrides Tomcat 11.0.25, Jackson 3.1.6 mantenidos).
-*   **Estado en el Proyecto:** ✅ Migrado el 13/09/2026. Registrado en `docs/migration/plan/SPRING_BOOT_4.1_MIGRATION_PLAN.md`.
+    *   ✅ Spring Framework 7.0.10, Spring Security 7.1.2 y Hibernate 7.4.13.Final.
+    *   ✅ 0 vulnerabilidades reales en el classpath; sin overrides de Tomcat ni Jackson (Boot 4.1.2 gestiona 11.0.27 y 3.1.7).
+*   **Estado en el Proyecto:** ✅ 4.1.1 el 13/09/2026; 4.1.2 el 30/10/2026. Registrado en `docs/migration/plan/SPRING_BOOT_4.1_MIGRATION_PLAN.md`.
 
 ## Resumen de Fechas Clave
 
@@ -92,9 +92,9 @@ Registro completo en `docs/migration/SPRING_BOOT_4_MIGRATION.md` (septiembre 202
 
 ## Recomendación
 
-El proyecto ha sido **exitosamente migrado a Spring Boot 4.1.1** (Septiembre 2026), asegurando:
+El proyecto ha sido **exitosamente migrado a Spring Boot 4.1.2** (Septiembre–Octubre 2026), asegurando:
 - ✅ Recepción de parches de seguridad hasta Julio 2027 (OSS)
 - ✅ Soporte extendido hasta Julio 2028 (comercial)
-- ✅ Compatibilidad con el ecosistema Spring actual (Framework 7.0.9, Security 7.1.1, Hibernate 7.4.5)
+- ✅ Compatibilidad con el ecosistema Spring actual (Framework 7.0.10, Security 7.1.2, Hibernate 7.4.13)
 - ✅ ~70 CVEs de librerías remediados en la migración 4.0 (ver informe de vulnerabilidades)
-- ✅ 0 vulnerabilidades reales en el classpath (overrides Tomcat 11.0.25, Jackson 3.1.6)
+- ✅ 0 vulnerabilidades reales en el classpath (sin overrides de Tomcat ni Jackson; Boot gestiona 11.0.27 y 3.1.7)
