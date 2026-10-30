@@ -22,19 +22,15 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Dependencies Versions -->
-		<!-- Boot 4.1.1 gestiona Tomcat 11.0.24. Fix 11.0.25 (CVE-2026-73180, CVE-2026-68763, CVE-2026-68569)
-		     quedó obsoleto: 11.0.25 es vulnerable a los CVEs del 23/09/2026 (CVE-2026-86248, CVE-2026-76183,
-		     CVE-2026-86350, CVE-2026-78383, CVE-2026-79677, CVE-2026-87022, CVE-2026-78437, CVE-2026-75973,
-		     CVE-2026-73581, CVE-2026-77756); fix en 11.0.26 -->
-		<tomcat.version>11.0.26</tomcat.version>
-		<!-- Boot 4.1.1 gestiona Jackson 3.1.5, vulnerable a CVE-2026-19032/CVE-2026-83557 (Snyk); fix en 3.1.6 -->
-		<jackson-bom.version>3.1.6</jackson-bom.version>
+		<!-- Boot 4.1.2 gestiona Tomcat 11.0.27 y Jackson 3.1.7, por encima de los overrides
+		     que se mantenían con Boot 4.1.1 (Tomcat 11.0.26 y Jackson 3.1.6): se retiran. -->
 		<jjwt.version>0.13.0</jjwt.version>
 		<commons-lang3.version>3.20.0</commons-lang3.version>
-		<springdoc-openapi-starter-webmvc-ui.version>3.1.1</springdoc-openapi-starter-webmvc-ui.version>
-		<springdoc-openapi-starter-common.version>3.1.1</springdoc-openapi-starter-common.version>
-		<!-- springdoc 3.1.1 arrastra swagger-ui 5.32.14 (DOMPurify 3.4.13, vulnerable) -->
-		<swagger-ui.version>5.33.2</swagger-ui.version>
+		<springdoc-openapi-starter-webmvc-ui.version>3.2.0</springdoc-openapi-starter-webmvc-ui.version>
+		<!-- springdoc 3.2.0 gestiona swagger-ui 5.34.0 (DOMPurify 3.4.16), afectado por
+		     CVE-2026-116802/116803/116804 (fix en DOMPurify 3.4.17). El webjar 5.34.1
+		     ya lo incluye. Debe coincidir con springdoc.swagger-ui.version (properties). -->
+		<swagger-ui.version>5.34.1</swagger-ui.version>
 
 		<!-- Plugins Versions -->
 		<maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
@@ -171,20 +167,16 @@
 			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
 		</dependency>
 
-		<!-- Override del webjar que springdoc 3.1.1 arrastra (5.32.14). Su bundle
-		     incluye DOMPurify 3.4.13, vulnerable a CVE-2026-109344 y CVE-2026-109345
-		     (XSS, corregidos en DOMPurify 3.4.16). El webjar 5.33.2 ya trae 3.4.16. -->
+		<!-- Override del webjar que springdoc 3.2.0 arrastra (5.34.0). Su bundle incluye
+		     DOMPurify 3.4.16, afectado por CVE-2026-116802/116803/116804 (XSS; fix en
+		     DOMPurify 3.4.17). El webjar 5.34.1 ya lo incluye. Debe coincidir con
+		     springdoc.swagger-ui.version, o /swagger-ui/* devuelve 404. -->
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>swagger-ui</artifactId>
 			<version>${swagger-ui.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-starter-common</artifactId>
-			<version>${springdoc-openapi-starter-common.version}</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
