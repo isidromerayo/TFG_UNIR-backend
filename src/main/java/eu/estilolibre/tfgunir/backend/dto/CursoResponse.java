@@ -1,13 +1,16 @@
 package eu.estilolibre.tfgunir.backend.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import eu.estilolibre.tfgunir.backend.model.Curso;
 
 /**
  * Respuesta de un curso para las operaciones de usuario.
  * Evita la serialización directa de la entidad (asociaciones LAZY).
+ *
+ * <p>Las fechas se exponen como {@link LocalDateTime} (java.time, inmutable),
+ * por lo que no requieren copias defensivas (java:S2143).</p>
  *
  * @param id                 identificador del curso
  * @param titulo             título del curso
@@ -24,28 +27,9 @@ public record CursoResponse(
         String descripcion,
         BigDecimal precio,
         double valoracionMedia,
-        Date fechaCreacion,
-        Date fechaActualizacion,
+        LocalDateTime fechaCreacion,
+        LocalDateTime fechaActualizacion,
         InstructorResponse instructor) {
-
-    /**
-     * Compact constructor: defensively copies mutable Date instances
-     * to prevent SpotBugs EI_EXPOSE_REP2.
-     */
-    public CursoResponse {
-        fechaCreacion = fechaCreacion == null ? null : new Date(fechaCreacion.getTime());
-        fechaActualizacion = fechaActualizacion == null ? null : new Date(fechaActualizacion.getTime());
-    }
-
-    @Override
-    public Date fechaCreacion() {
-        return fechaCreacion == null ? null : new Date(fechaCreacion.getTime());
-    }
-
-    @Override
-    public Date fechaActualizacion() {
-        return fechaActualizacion == null ? null : new Date(fechaActualizacion.getTime());
-    }
 
     public static CursoResponse from(Curso curso) {
         InstructorResponse instructorResponse = curso.getInstructor() == null
