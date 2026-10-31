@@ -1,0 +1,137 @@
+name: Release
+
+# Flujo de release automatizado: prepara la version (maven-release-plugin), publica
+# el tag, construye y publica la imagen Docker y crea la GitHub Release.
+#
+# Requiere el secret RELEASE_TOKEN: un PAT con Contents: Read and write sobre este
+# repo. main tiene branch protection, asi que el GITHUB_TOKEN del workflow no puede
+# hacer push directo; el PAT de un admin si (enforce_admins=false).
+#
+# Secretos usados:
+#   RELEASE_TOKEN        PAT para push de commits/tags y para crear la release
+#   DOCKER_HUB_USERNAME  usuario de Docker Hub
+#   DOCKER_HUB_TOKEN     token de Docker Hub
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Version a publicar (X.Y.Z, sin SNAPSHOT)'
+        required: true
+        type: string
+      next_version:
+        description: 'Siguiente version de desarrollo (X.Y.Z, se le anade -SNAPSHOT)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run: prepara el release sin push, sin Docker y sin GitHub Release'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release v${{ inputs.release_version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Validate inputs
+        run: |
+          for v in "${{ inputs.release_version }}" "${{ inputs.next_version }}"; do
+            if ! echo "$v" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+              echo "::error::Version invalida: '$v' (formato esperado X.Y.Z, sin SNAPSHOT)"
+              exit 1
+            fi
+          done
+          if [ "${{ inputs.release_version }}" = "${{ inputs.next_version }}" ]; then
+            echo "::error::release_version y next_version deben ser distintas"
+            exit 1
+          fi
+
+      - name: Check RELEASE_TOKEN
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          if [ -z "$RELEASE_TOKEN" ]; then
+            echo "::error::Falta el secret RELEASE_TOKEN (PAT con Contents: Read and write; main tiene branch protection)."
+            exit 1
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Prepare release
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          ARGS=""
+          if [ "$DRY_RUN" = "true" ]; then
+            ARGS="-DdryRun=true"
+          fi
+          ./mvnw -B release:prepare $ARGS \
+            -DreleaseVersion=${{ inputs.release_version }} \
+            -DdevelopmentVersion=${{ inputs.next_version }}-SNAPSHOT \
+            -DpushChanges=false \
+            -Darguments=-DskipTests
+
+      - name: Push release commit and tag
+        if: inputs.dry_run == false
+        run: |
+          git push origin main
+          git push origin "v${{ inputs.release_version }}"
+
+      - name: Log in to Docker Hub
+        if: inputs.dry_run == false
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Checkout release tag
+        if: inputs.dry_run == false
+        run: git checkout "v${{ inputs.release_version }}"
+
+      - name: Build release jar
+        if: inputs.dry_run == false
+        run: ./mvnw -B clean package -DskipTests
+
+      - name: Publish Docker image
+        if: inputs.dry_run == false
+        run: ./scripts/publish-images.sh --skip-login
+
+      - name: Create GitHub release
+        if: inputs.dry_run == false
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          gh release create "v${{ inputs.release_version }}" \
+            --title "v${{ inputs.release_version }}" \
+            --generate-notes
+
+      - name: Clean release working files
+        if: always()
+        run: ./mvnw -B release:clean || true

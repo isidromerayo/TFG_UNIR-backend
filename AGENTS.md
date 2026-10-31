@@ -56,6 +56,21 @@ NVD_API_KEY=$NVD_API_KEY ./mvnw -Pdependency-check dependency-check:check
 
 ## Release Flow (Docker images)
 
+### Automatizado (recomendado)
+
+Workflow **`.github/workflows/release.yml`** (`workflow_dispatch`):
+
+1. Actions → *Release* → *Run workflow* con `release_version` (p. ej. `0.8.0`) y
+   `next_version` (p. ej. `0.8.1`). `dry_run` prepara el release sin push, sin Docker y sin GitHub Release.
+2. Hace `mvn release:prepare`, sube `main` + tag `vX.Y.Z`, construye el jar desde el tag, publica
+   `spring-backend-tfg:X.Y.Z` + `latest` en Docker Hub y crea la GitHub Release con notas generadas.
+
+**Requisito**: secret `RELEASE_TOKEN` (PAT con *Contents: Read and write*). `main` tiene branch
+protection y el `GITHUB_TOKEN` del workflow no puede hacer push directo; un PAT de admin sí
+(`enforce_admins=false`). Se usan además `DOCKER_HUB_USERNAME` / `DOCKER_HUB_TOKEN`.
+
+### Manual (fallback)
+
 ```bash
 # 1. Preparar release (elimina -SNAPSHOT, crea tag vX.Y.Z, sube a next SNAPSHOT)
 mvn release:prepare
