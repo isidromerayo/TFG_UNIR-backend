@@ -31,10 +31,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Poblar ~/.m2 para que la resolución de transitivas no dependa de la red.
-      - name: Resolve Maven dependencies (populate cache)
-        run: mvn -q -o dependency:go-offline || mvn -q dependency:go-offline
-
       # Gate duro: cualquier vulnerabilidad no aceptada hace fallar el job.
       - name: OSV Scanner
         id: osv
@@ -45,8 +41,28 @@ jobs:
             --format=json
             --output=osv-report.json
 
+      # Mostrar los hallazgos en el log y en el step summary (el JSON va al artifact).
+      - name: Print OSV findings
+        if: always()
+        run: |
+          {
+            echo "## OSV Scanner findings"
+            if [ -s osv-report.json ]; then
+              FINDINGS=$(jq -r '
+                [.results[]?.packages[]? | select(.vulnerabilities != null)
+                 | .package as $pkg | .vulnerabilities[]
+                 | "- `\($pkg.name)@\($pkg.version // "?")` — \(.id): \(.summary // "sin resumen")"]
+                | if length == 0 then "Sin vulnerabilidades detectadas." else .[] end
+              ' osv-report.json 2>/dev/null || echo "No se pudo parsear osv-report.json")
+            else
+              FINDINGS="No se generó osv-report.json."
+            fi
+            echo "$FINDINGS"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
       # Advisories aceptados (sin parche upstream): falla si ya hay fix publicado.
       - name: Accepted advisories recheck (unpatched only)
+        if: always()
         run: ./scripts/check-accepted-advisories.sh
 
       - name: Upload OSV report

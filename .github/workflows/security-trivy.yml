@@ -32,8 +32,10 @@ jobs:
           cache: maven
 
       # Poblar ~/.m2 antes de Trivy para evitar la resolución remota (429 de Maven Central).
+      # Sin `-o`: en un runner limpio el plugin `dependency` aún no está en ~/.m2 y el
+      # prefix offline falla con "No plugin found for prefix 'dependency'".
       - name: Resolve Maven dependencies (populate cache)
-        run: mvn -q -o dependency:go-offline || mvn -q dependency:go-offline
+        run: mvn -q -B dependency:go-offline
 
       # Gate duro: CRITICAL/HIGH fijables hacen fallar el job.
       - name: Trivy filesystem scan
@@ -50,8 +52,27 @@ jobs:
           ignore-unfixed: true
           exit-code: '1'
 
+      # Mostrar los hallazgos en el log y en el step summary (el JSON va al artifact).
+      - name: Print Trivy findings
+        if: always()
+        run: |
+          {
+            echo "## Trivy findings (CRITICAL/HIGH, unfixed excluidos)"
+            if [ -s trivy-report.json ]; then
+              FINDINGS=$(jq -r '
+                [.Results[]? | .Target as $target | .Vulnerabilities[]?
+                 | "- `\(.VulnerabilityID)` \(.PkgName) \(.InstalledVersion) -> \(.FixedVersion // "sin fix") (\(.Severity)): \(.Title) [\($target)]"]
+                | if length == 0 then "Sin vulnerabilidades detectadas." else .[] end
+              ' trivy-report.json 2>/dev/null || echo "No se pudo parsear trivy-report.json")
+            else
+              FINDINGS="No se generó trivy-report.json."
+            fi
+            echo "$FINDINGS"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
       # Advisories aceptados (sin parche upstream): falla si ya hay fix publicado.
       - name: Accepted advisories recheck (unpatched only)
+        if: always()
         run: ./scripts/check-accepted-advisories.sh
 
       - name: Upload Trivy report
