@@ -6,6 +6,7 @@
 - Jackson 3 (`tools.jackson.*`) **3.1.7** (gestionado por Boot 4.1.2); Jackson 2 solo transitivo (jjwt)
 - Test slices modulares: `spring-boot-data-jpa-test`, `spring-boot-jdbc-test`, `spring-boot-resttestclient` + `spring-boot-restclient`
 - rest-assured 6.3.0 vía `rest-assured-bom` (Boot 4 ya no lo gestiona), springdoc-openapi 3.2.0 + swagger-ui 5.34.1 (override: DOMPurify 3.4.17)
+- Gotcha: `springdoc.swagger-ui.version` en `src/main/resources/application.properties` debe coincidir con `<swagger-ui.version>` del pom.xml, o `/swagger-ui/*` devuelve 404 (lo detecta `OpenApiDocumentationIT`)
 - H2 (tests), PostgreSQL (prod)
 - JWT auth, CSRF disabled, stateless API
 - Logging: `java.util.logging.Logger` (not SLF4J)
@@ -212,4 +213,4 @@ Repositorio: `springboot-tdd`, `springboot-security`, `springboot-patterns`, `ja
 Globales (`~/.agents/skills`): `codely-git-conventional_commit` (commits), `codely-doc-create`, `codely-plan-create-gitlab`, `codely-plan_phase-implement-gitlab`, `find-skills`
 
 ---
-**Updated:** 2026-10-30
+**Updated:** 2026-10-31
