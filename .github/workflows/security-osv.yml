@@ -45,8 +45,28 @@ jobs:
             --format=json
             --output=osv-report.json
 
+      # Mostrar los hallazgos en el log y en el step summary (el JSON va al artifact).
+      - name: Print OSV findings
+        if: always()
+        run: |
+          {
+            echo "## OSV Scanner findings"
+            if [ -s osv-report.json ]; then
+              FINDINGS=$(jq -r '
+                [.results[]?.packages[]? | select(.vulnerabilities != null)
+                 | .package as $pkg | .vulnerabilities[]
+                 | "- `\($pkg.name)@\($pkg.version // "?")` — \(.id): \(.summary // "sin resumen")"]
+                | if length == 0 then "Sin vulnerabilidades detectadas." else .[] end
+              ' osv-report.json 2>/dev/null || echo "No se pudo parsear osv-report.json")
+            else
+              FINDINGS="No se generó osv-report.json."
+            fi
+            echo "$FINDINGS"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
       # Advisories aceptados (sin parche upstream): falla si ya hay fix publicado.
       - name: Accepted advisories recheck (unpatched only)
+        if: always()
         run: ./scripts/check-accepted-advisories.sh
 
       - name: Upload OSV report
