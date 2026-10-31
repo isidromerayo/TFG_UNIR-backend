@@ -3,8 +3,6 @@ package eu.estilolibre.tfgunir.backend.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +38,6 @@ import eu.estilolibre.tfgunir.backend.service.UsuarioService;
 @RequestMapping("/api/usuarios")
 @Validated
 public class UsuarioController {
-
-    private static final Pattern ID_AL_FINAL = Pattern.compile("(\\d++)\\s*$");
 
     private final UsuarioService usuarioService;
 
@@ -93,6 +89,9 @@ public class UsuarioController {
      * Extrae los identificadores numéricos de las URIs de cursos contenidas
      * en el cuerpo (separadas por comas o saltos de línea).
      *
+     * <p>Implementado sin regex (java:S8786): un barrido lineal por los
+     * caracteres finales de cada token es suficiente y evita el backtracking.</p>
+     *
      * @param body contenido text/uri-list
      * @return lista de ids de curso extraídos
      */
@@ -110,10 +109,11 @@ public class UsuarioController {
     }
 
     private static Long extractId(String uri) {
-        Matcher matcher = ID_AL_FINAL.matcher(uri);
-        if (matcher.find()) {
-            return Long.valueOf(matcher.group(1));
+        String end = uri.stripTrailing();
+        int i = end.length();
+        while (i > 0 && Character.isDigit(end.charAt(i - 1))) {
+            i--;
         }
-        return null;
+        return i < end.length() ? Long.valueOf(end.substring(i)) : null;
     }
 }

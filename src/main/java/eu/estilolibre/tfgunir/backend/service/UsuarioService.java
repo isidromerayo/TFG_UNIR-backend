@@ -2,7 +2,6 @@ package eu.estilolibre.tfgunir.backend.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -83,7 +82,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + id));
         return usuario.getMisCursosComprados().stream()
                 .map(CursoResponse::from)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
