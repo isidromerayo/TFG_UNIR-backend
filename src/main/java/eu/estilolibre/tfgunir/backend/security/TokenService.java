@@ -12,7 +12,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.Date;
 
 @Service
 public class TokenService {
@@ -29,7 +28,9 @@ public class TokenService {
 
         return Jwts.builder()
                 .claim("sub", usuario)
-                .expiration(Date.from(expiracion))
+                // Jwts.builder().expiration() exige java.util.Date en su API (frontera de
+                // interop con JJWT); se usa el nombre cualificado para no importar la clase.
+                .expiration(java.util.Date.from(expiracion))
                 .signWith(clave)
                 .compact();
     }
