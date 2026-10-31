@@ -31,10 +31,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Poblar ~/.m2 para que la resolución de transitivas no dependa de la red.
-      - name: Resolve Maven dependencies (populate cache)
-        run: mvn -q -o dependency:go-offline || mvn -q dependency:go-offline
-
       # Gate duro: cualquier vulnerabilidad no aceptada hace fallar el job.
       - name: OSV Scanner
         id: osv
