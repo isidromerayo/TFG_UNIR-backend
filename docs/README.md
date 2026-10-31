@@ -74,6 +74,7 @@ Documentación sobre migraciones de versión y reorganizaciones.
 Documentación de versiones y changelogs.
 
 - **[CHANGELOG_IMAGES.md](releases/CHANGELOG_IMAGES.md)** - Changelog de imágenes Docker
+- **[RELEASE_WORKFLOW.md](releases/RELEASE_WORKFLOW.md)** - Release automatizado (workflow, `RELEASE_TOKEN`, dry run, fallback manual)
 
 ### `/skills/`
 Documentación sobre skills para agentes AI.

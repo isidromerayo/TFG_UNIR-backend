@@ -68,6 +68,22 @@ Workflow **`.github/workflows/release.yml`** (`workflow_dispatch`):
 **Requisito**: secret `RELEASE_TOKEN` (PAT con *Contents: Read and write*). `main` tiene branch
 protection y el `GITHUB_TOKEN` del workflow no puede hacer push directo; un PAT de admin sí
 (`enforce_admins=false`). Se usan además `DOCKER_HUB_USERNAME` / `DOCKER_HUB_TOKEN`.
+Pasos de configuración, cómo lanzarlo (UI/CLI), `dry_run`, fallback manual y troubleshooting:
+**`docs/releases/RELEASE_WORKFLOW.md`**.
+
+```bash
+# Conceder el PAT al repo (una vez). Alternativa sin PAT: añadir la app GitHub Actions
+# a la lista de bypass de la branch protection de main.
+gh secret set RELEASE_TOKEN --repo isidromerayo/TFG_UNIR-backend
+
+# Simular (no requiere RELEASE_TOKEN)
+gh workflow run "Release" --repo isidromerayo/TFG_UNIR-backend \
+  -f release_version=0.8.0 -f next_version=0.8.1 -f dry_run=true
+
+# Release real
+gh workflow run "Release" --repo isidromerayo/TFG_UNIR-backend \
+  -f release_version=0.8.0 -f next_version=0.8.1
+```
 
 ### Manual (fallback)
 
