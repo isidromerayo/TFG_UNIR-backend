@@ -21,6 +21,7 @@ public class LoginRequest {
 
     /** Constructor vacío requerido por Jackson para la deserialización del JSON del body. */
     public LoginRequest() {
+        // Vacío intencionalmente: los campos se rellenan vía setters generados por Lombok (@Data).
     }
 
     @Override
