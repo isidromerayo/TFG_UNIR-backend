@@ -2,7 +2,6 @@ package eu.estilolibre.tfgunir.backend.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -59,7 +58,8 @@ public class UsuarioService {
      */
     @Transactional
     public UsuarioResponse registrar(UsuarioRegistroRequest request) {
-        if (existsByEmail(request.getEmail())) {
+        // en línea para evitar self-invocation de un método @Transactional vía 'this' (java:S6809)
+        if (!repository.findByEmail(request.getEmail()).isEmpty()) {
             throw new EmailAlreadyExistsException(request.getEmail());
         }
 
@@ -82,7 +82,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + id));
         return usuario.getMisCursosComprados().stream()
                 .map(CursoResponse::from)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**

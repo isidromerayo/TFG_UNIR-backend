@@ -16,6 +16,9 @@ import eu.estilolibre.tfgunir.backend.dto.ApiError;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final String NOT_FOUND = "NOT_FOUND";
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -30,13 +33,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ApiError> handleNoResourceFound(NoResourceFoundException ex) {
-        ApiError response = ApiError.of(HttpStatus.NOT_FOUND, "NOT_FOUND", "Recurso no encontrado");
+        ApiError response = ApiError.of(HttpStatus.NOT_FOUND, NOT_FOUND, "Recurso no encontrado");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ApiError> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
-        ApiError response = ApiError.of(HttpStatus.NOT_FOUND, "NOT_FOUND", "Recurso no encontrado");
+        ApiError response = ApiError.of(HttpStatus.NOT_FOUND, NOT_FOUND, "Recurso no encontrado");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
@@ -48,7 +51,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiError> handleResourceNotFound(ResourceNotFoundException ex) {
-        ApiError response = ApiError.of(HttpStatus.NOT_FOUND, "NOT_FOUND", ex.getMessage());
+        ApiError response = ApiError.of(HttpStatus.NOT_FOUND, NOT_FOUND, ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 

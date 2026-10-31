@@ -19,6 +19,7 @@ public class LoginRequest {
     @Size(min = 4, message = "La contraseña debe tener al menos 4 caracteres")
     private String password;
 
+    /** Constructor vacío requerido por Jackson para la deserialización del JSON del body. */
     public LoginRequest() {
     }
 

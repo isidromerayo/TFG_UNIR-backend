@@ -217,7 +217,7 @@ class UsuarioServiceTest {
     void agregarCursosComprados_lanzaResourceNotFound_cuandoUsuarioNoExiste() {
         when(repository.findById(999L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.agregarCursosComprados(999L, List.of(4L)))
+        assertThatThrownBy(this::agregarCursoAUsuarioInexistente)
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
@@ -228,8 +228,16 @@ class UsuarioServiceTest {
         when(repository.findById(1L)).thenReturn(Optional.of(usuario));
         when(cursoRepository.findById(404L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.agregarCursosComprados(1L, List.of(404L)))
+        assertThatThrownBy(this::agregarCursoInexistenteAUsuarioExistente)
                 .isInstanceOf(ResourceNotFoundException.class);
         verify(repository, never()).save(any(Usuario.class));
+    }
+
+    private void agregarCursoAUsuarioInexistente() {
+        service.agregarCursosComprados(999L, List.of(4L));
+    }
+
+    private void agregarCursoInexistenteAUsuarioExistente() {
+        service.agregarCursosComprados(1L, List.of(404L));
     }
 }
