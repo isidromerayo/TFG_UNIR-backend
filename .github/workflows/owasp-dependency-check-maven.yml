@@ -1,10 +1,11 @@
 name: OWASP Dependency Check
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  # Escaneo profundo programado (OWASP Dependency-Check es lento y depende de NVD).
+  schedule:
+    - cron: '0 3 * * 0'
+  # Ejecución manual bajo demanda.
+  workflow_dispatch:
 
 permissions:
   contents: read

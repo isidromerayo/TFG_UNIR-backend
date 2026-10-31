@@ -134,7 +134,8 @@ Boot 4.1.2 ya gestiona **11.0.27** y **3.1.7**. Informe:
 `docs/security/informe-vulnerabilidades-2026-10-30.md`.
 OWASP scan ejecutado con `NVD_API_KEY` (secret configurado en GitHub, verificado en CI — PR #147).
 Run OWASP scan periodically: `NVD_API_KEY=$NVD_API_KEY ./mvnw -Pdependency-check dependency-check:check`
-(El workflow `owasp-dependency-check-maven.yml` ejecuta el escaneo NVD completo en cada push/PR a main.)
+(El workflow `owasp-dependency-check-maven.yml` ahora corre el escaneo NVD completo solo en schedule
+semanal + dispatch; el escaneo rápido en PRs lo hace `security.yml`.)
 > **Requiere `NVD_API_KEY` en AMBOS almacenes de secretos**: el de Actions y el de **Dependabot**
 > (Settings → Secrets and variables → Dependabot). Los PRs de Dependabot leen solo de su propio
 > almacén, así que si la clave falta ahí el scan se omite (skipped) en lugar de fallar el build.
@@ -144,6 +145,17 @@ Run OWASP scan periodically: `NVD_API_KEY=$NVD_API_KEY ./mvnw -Pdependency-check
 > puede estar incompleto y requiere revisión manual.
 > **Limitación:** dependency-check solo detecta CVEs con CPEs en NVD; los avisos recientes tardan
 > semanas en aparecer. Cada revisión requiere triaje manual contra los avisos de Apache/Spring.
+
+### Security workflows y comandos
+
+- **`.github/workflows/security.yml`** ("Security Audit"): OSV Scanner + Trivy filesystem scan (rápidos,
+  sin NVD) en `push`/`pull_request`/`schedule` diario/`workflow_dispatch`. **Gate duro** en PRs: cualquier
+  vulnerabilidad no aceptada hace fallar el job.
+- **`.github/workflows/owasp-dependency-check-maven.yml`**: escaneo profundo con OWASP Dependency-Check
+  (NVD). Ahora solo `schedule` semanal (`0 3 * * 0`) + `workflow_dispatch`, para no bloquear PRs ni
+  tardar en cada push.
+- Local: `./scripts/security-check.sh` (OSV Scanner + Trivy si están instalados + accepted recheck);
+  `./scripts/check-accepted-advisories.sh` (revisión de advisories aceptados).
 
 ### Dependency-Check False Positives (Boot 4.1.2 — escaneo 2026-10-30)
 These entries are flagged by the CPE matcher but do **not** affect the project:
