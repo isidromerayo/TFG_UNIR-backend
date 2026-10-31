@@ -33,7 +33,7 @@ class LoginRequestTest {
 
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(user);
 
-        assertThat(violations.size()).isGreaterThan(0);
+        assertThat(violations).hasSizeGreaterThan(0);
     }
 
     @Test
@@ -55,7 +55,7 @@ class LoginRequestTest {
 
         Set<ConstraintViolation<LoginRequest>> violations = validator.validate(user);
 
-        assertThat(violations.size()).isGreaterThan(0);
+        assertThat(violations).hasSizeGreaterThan(0);
     }
 
     @Test
