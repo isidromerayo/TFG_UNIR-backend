@@ -59,7 +59,8 @@ public class UsuarioService {
      */
     @Transactional
     public UsuarioResponse registrar(UsuarioRegistroRequest request) {
-        if (existsByEmail(request.getEmail())) {
+        // en línea para evitar self-invocation de un método @Transactional vía 'this' (java:S6809)
+        if (!repository.findByEmail(request.getEmail()).isEmpty()) {
             throw new EmailAlreadyExistsException(request.getEmail());
         }
 

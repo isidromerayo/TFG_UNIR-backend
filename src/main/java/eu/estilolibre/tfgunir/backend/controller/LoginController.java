@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import eu.estilolibre.tfgunir.backend.dto.ApiError;
@@ -52,16 +51,14 @@ public class LoginController {
         summary = "Login de usuario",
         description = "Autentica un usuario con email y contraseña y devuelve un token JWT junto con sus datos básicos."
     )
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Login correcto, token JWT generado",
-            content = @Content(schema = @Schema(implementation = AuthResponse.class))),
-        @ApiResponse(responseCode = "400", description = "Validación de entrada fallida",
-            content = @Content(schema = @Schema(implementation = ApiError.class))),
-        @ApiResponse(responseCode = "401", description = "Credenciales inválidas o usuario inactivo",
-            content = @Content(schema = @Schema(implementation = ApiError.class)))
-    })
+    @ApiResponse(responseCode = "200", description = "Login correcto, token JWT generado",
+        content = @Content(schema = @Schema(implementation = AuthResponse.class)))
+    @ApiResponse(responseCode = "400", description = "Validación de entrada fallida",
+        content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "401", description = "Credenciales inválidas o usuario inactivo",
+        content = @Content(schema = @Schema(implementation = ApiError.class)))
     @PostMapping("")
-    public ResponseEntity<?> auth(@Valid @RequestBody LoginRequest login) {
+    public ResponseEntity<Object> auth(@Valid @RequestBody LoginRequest login) {
         var usuarioOpt = usuarioService.findByEmail(login.getEmail());
 
         if (usuarioOpt.isEmpty()) {
@@ -88,7 +85,7 @@ public class LoginController {
         return unauthorized();
     }
 
-    private ResponseEntity<?> unauthorized() {
+    private ResponseEntity<Object> unauthorized() {
         ApiError error = ApiError.of(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "no autorizado");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }

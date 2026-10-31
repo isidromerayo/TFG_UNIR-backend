@@ -3,13 +3,9 @@ package eu.estilolibre.tfgunir.backend.repository;
 import java.util.List;
 
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import eu.estilolibre.tfgunir.backend.model.Categoria;
 
@@ -21,13 +17,4 @@ public interface CategoriaRepository
     @SuppressWarnings("null")
     @Cacheable("categorias")
     List<Categoria> findAll();
-
-    @Configuration
-    static class RepositoryConfig implements RepositoryRestConfigurer {
-        @Override
-        public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config,
-                CorsRegistry corsRegistry) {
-            config.exposeIdsFor(Categoria.class);
-        }
-    }
 }
