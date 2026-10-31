@@ -3,13 +3,11 @@ package eu.estilolibre.tfgunir.backend.util;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import tools.jackson.databind.ObjectMapper;
 
@@ -17,7 +15,6 @@ import eu.estilolibre.tfgunir.backend.model.Curso;
 import eu.estilolibre.tfgunir.backend.model.Instructor;
 import eu.estilolibre.tfgunir.backend.model.Usuario;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 class JacksonSerializationTest {
 
@@ -99,12 +96,13 @@ class JacksonSerializationTest {
         Curso curso = new Curso();
         curso.setId(1L);
         curso.setTitulo("Test");
-        Date fecha = new Date();
+        LocalDateTime fecha = LocalDateTime.now();
         curso.setFechaCreacion(fecha);
 
         String json = objectMapper.writeValueAsString(curso);
 
-        assertThat(json).contains("fechaCreacion");
-        assertThat(json).contains("2026");
+        assertThat(json)
+                .contains("fechaCreacion")
+                .contains("2026");
     }
 }

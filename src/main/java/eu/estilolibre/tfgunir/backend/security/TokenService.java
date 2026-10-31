@@ -11,6 +11,7 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Date;
 
 @Service
@@ -20,15 +21,15 @@ public class TokenService {
     private String secretKey;
 
     @Value("${jwt.expiration:3600000}")
-    private long expiration;
+    private long expirationMillis;
 
     public String crearToken(String usuario) {
         SecretKey clave = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        Date expiracion = new Date(System.currentTimeMillis() + this.expiration);
+        Instant expiracion = Instant.now().plusMillis(this.expirationMillis);
 
         return Jwts.builder()
                 .claim("sub", usuario)
-                .expiration(expiracion)
+                .expiration(Date.from(expiracion))
                 .signWith(clave)
                 .compact();
     }

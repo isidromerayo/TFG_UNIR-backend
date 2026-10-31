@@ -1,6 +1,7 @@
 package eu.estilolibre.tfgunir.backend.model;
 
-import java.util.Date;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,12 +30,12 @@ public class Instructor {
     private String apellidos;
     private String descripcion;
     @Column(name="fecha_alta")
-    private Date fechaAlta;
+    private LocalDateTime fechaAlta;
     @OneToMany(mappedBy = "instructor")
     private Set<Curso> misCursos = new HashSet<>();
     
     @PrePersist
     protected void onCreate() {
-        fechaAlta = new Date();
+        fechaAlta = LocalDateTime.now(Clock.systemDefaultZone());
     }
 }
