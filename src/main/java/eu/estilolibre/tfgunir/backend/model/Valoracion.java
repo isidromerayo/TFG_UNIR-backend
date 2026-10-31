@@ -1,5 +1,6 @@
 package eu.estilolibre.tfgunir.backend.model;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -35,7 +36,7 @@ public class Valoracion {
     @PrePersist
     protected void onCreate() {
         if (fecha == null) {
-            fecha = LocalDateTime.now();
+            fecha = LocalDateTime.now(Clock.systemDefaultZone());
         }
     }
 

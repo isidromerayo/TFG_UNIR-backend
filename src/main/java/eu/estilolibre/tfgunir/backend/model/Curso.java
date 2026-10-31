@@ -1,6 +1,7 @@
 package eu.estilolibre.tfgunir.backend.model;
 
 import java.math.BigDecimal;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -67,11 +68,11 @@ public class Curso {
 
     @PrePersist
     protected void onCreate() {
-        fechaActualizacion = fechaCreacion = LocalDateTime.now();
+        fechaActualizacion = fechaCreacion = LocalDateTime.now(Clock.systemDefaultZone());
     }
 
     @PreUpdate
     protected void onUpdate() {
-        fechaActualizacion = LocalDateTime.now();
+        fechaActualizacion = LocalDateTime.now(Clock.systemDefaultZone());
     }
 }

@@ -1,5 +1,6 @@
 package eu.estilolibre.tfgunir.backend.model;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,6 +36,6 @@ public class Instructor {
     
     @PrePersist
     protected void onCreate() {
-        fechaAlta = LocalDateTime.now();
+        fechaAlta = LocalDateTime.now(Clock.systemDefaultZone());
     }
 }
