@@ -75,6 +75,14 @@
 	</distributionManagement>
 	<dependencyManagement>
 		<dependencies>
+			<!-- CVE fix: AIKIDO-2026-829966 (CRITICAL) — jackson-databind 3.1.7 is vulnerable;
+			     Spring Boot 4.1.2 manages jackson-bom 3.1.7 and no newer Boot 4.x release
+			     bumps it to 3.1.8 yet, so we pin it here directly. -->
+			<dependency>
+				<groupId>tools.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>3.1.8</version>
+			</dependency>
 			<!-- Spring Boot 4 ya no gestiona rest-assured; importamos su BOM -->
 			<dependency>
 				<groupId>io.rest-assured</groupId>
