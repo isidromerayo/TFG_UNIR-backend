@@ -107,7 +107,7 @@ print_step "Esperando a que MariaDB esté lista..."
 MAX_ATTEMPTS=30
 ATTEMPT=0
 while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
-    if $CONTAINER_CMD exec maria_db mariadb -h maria_db -u user_tfg -ptfg_un1r_PWD -e "SELECT 1" tfg_unir &>/dev/null; then
+    if $CONTAINER_CMD exec maria_db mariadb -h maria_db -u user_tfg -p"${MARIADB_PASSWORD:?define MARIADB_PASSWORD}" -e "SELECT 1" tfg_unir &>/dev/null; then
         print_success "MariaDB está lista"
         break
     fi
@@ -124,7 +124,7 @@ fi
 
 # Paso 7: Verificar contraseñas en la base de datos
 print_step "Verificando contraseñas hasheadas en la base de datos..."
-RESULT=$($CONTAINER_CMD exec maria_db mariadb -h maria_db -u user_tfg -ptfg_un1r_PWD tfg_unir -e \
+RESULT=$($CONTAINER_CMD exec maria_db mariadb -h maria_db -u user_tfg -p"${MARIADB_PASSWORD:?define MARIADB_PASSWORD}" tfg_unir -e \
     "SELECT COUNT(*) as count FROM usuarios WHERE password LIKE '\$2b\$10\$%'" -s -N)
 
 if [ "$RESULT" -eq 14 ]; then
