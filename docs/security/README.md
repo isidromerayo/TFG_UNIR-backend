@@ -184,6 +184,9 @@ boolean matches = passwordEncoder.matches(password, storedHash);
 ### Configuración
 - `../../docker-compose.yml` - Configuración Docker
 - `../../Dockerfile-db-postgresql` - Imagen PostgreSQL
+- **Secretos obligatorios**: `POSTGRES_PASSWORD` y `JWT_SECRET` vienen del entorno (`.env`, ver
+  `../../.env.example`); no hay valores por defecto en `application.properties`,
+  `docker-compose.yml` ni `scripts/`. `JWT_SECRET` se genera con `openssl rand -base64 64`.
 
 ## 🆘 Soporte
 

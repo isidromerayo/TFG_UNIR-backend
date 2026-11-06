@@ -101,6 +101,10 @@ Script para gestionar contenedores con Podman Pod (alternativa a docker-compose)
 
 ⚠️ **IMPORTANTE**: Si usas Podman, usa este script en lugar de `podman-compose` debido a problemas de DNS.
 
+⚠️ **Variables obligatorias**: `POSTGRES_PASSWORD` y `JWT_SECRET` deben estar definidas en `.env`
+(el script lo carga solo); si faltan, aborta con un mensaje. No hay valores por defecto.
+`JWT_SECRET` se genera con `openssl rand -base64 64`.
+
 **Uso:**
 ```bash
 # Iniciar pod

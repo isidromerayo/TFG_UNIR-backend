@@ -48,6 +48,9 @@ NVD_API_KEY=$NVD_API_KEY ./mvnw -Pdependency-check dependency-check:check
 4. **Never log secrets** (passwords, tokens)
 5. **Validate inputs** with Jakarta annotations (`@Valid`, `@NotBlank`, `@Email`)
 6. **Update docs before PR** - review and update affected documentation (see Documentation Workflow)
+7. **No secret defaults** - `JWT_SECRET` y `SPRING_DATASOURCE_PASSWORD` son obligatorios y vienen del
+   entorno (`.env`); no añadas valores por defecto en `application.properties`, `docker-compose.yml`,
+   `scripts/` ni `.env.example` (lo verifica `SecretsConfigurationTest`)
 
 ## Code Conventions
 - Constructor injection with `final` fields

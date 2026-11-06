@@ -70,13 +70,19 @@ services:
 Simplemente ejecuta:
 
 ```bash
+cp .env.example .env   # y sustituye los CHANGE_ME_*
 docker compose up -d
 ```
+
+> ⚠️ **Variables obligatorias**: `docker-compose.yml` no define valores por defecto para los
+> secretos. `POSTGRES_PASSWORD` y `JWT_SECRET` deben existir (en `.env` o en el entorno) o compose
+> aborta con un mensaje claro. Genera el JWT con `openssl rand -base64 64`.
 
 ### Usar con Podman Pod
 
 ```bash
 # El script ya está configurado para usar imágenes de Docker Hub
+# Exige POSTGRES_PASSWORD y JWT_SECRET en .env (aborta si faltan)
 ./scripts/podman-pod.sh start
 ```
 
