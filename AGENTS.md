@@ -9,6 +9,9 @@
 - Gotcha: `springdoc.swagger-ui.version` en `src/main/resources/application.properties` debe coincidir con `<swagger-ui.version>` del pom.xml, o `/swagger-ui/*` devuelve 404 (lo detecta `OpenApiDocumentationIT`)
 - H2 (tests), PostgreSQL (prod)
 - JWT auth, CSRF disabled, stateless API
+  - Token validado por `security/JwtAuthenticationFilter`; `WebSecurityConfig` aplica
+    **deny-by-default** (catálogo y login/registro públicos; escrituras y datos de usuario con token)
+  - `GET/POST /api/usuarios/{id}/cursos|misCursosComprados` exigen ser el propietario (anti-IDOR, 403)
 - Logging: `java.util.logging.Logger` (not SLF4J)
 - Security plugins: SpotBugs 4.10.5 + FindSecBugs 1.14.0 + sb-contrib 7.7.4
 

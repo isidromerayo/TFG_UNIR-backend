@@ -247,14 +247,15 @@ Gestión de registro y cursos comprados. El listado global `GET /api/usuarios` s
   - `400` → validación de entrada fallida
   - `409` → ya existe un usuario con ese email
 
-- **`GET /api/usuarios/{id}/cursos`** — Cursos comprados por un usuario.
+- **`GET /api/usuarios/{id}/cursos`** — Cursos comprados por un usuario. **Requiere token JWT y ser el propio usuario.**
 
   Respuestas:
 
   - `200` → lista de `CursoResponse`
-  - `404` → usuario no encontrado
+  - `401` → sin token o token inválido
+  - `403` → el `id` pertenece a otro usuario
 
-- **`POST /api/usuarios/{id}/misCursosComprados`** — Añade cursos comprados al usuario a partir de una lista de URIs (`text/uri-list`).
+- **`POST /api/usuarios/{id}/misCursosComprados`** — Añade cursos comprados al usuario a partir de una lista de URIs (`text/uri-list`). **Requiere token JWT y ser el propio usuario.**
 
   Ejemplo de cuerpo:
 
@@ -266,7 +267,8 @@ Gestión de registro y cursos comprados. El listado global `GET /api/usuarios` s
   Respuestas:
 
   - `201` → cursos añadidos correctamente
-  - `404` → usuario o curso no encontrado
+  - `401` → sin token o token inválido
+  - `403` → el `id` pertenece a otro usuario
 
 #### Catálogo (Spring Data REST)
 
@@ -283,7 +285,36 @@ Los recursos de catálogo se exponen automáticamente mediante Spring Data REST 
 - `GET /api/categorias` — categorías
 - `GET /api/valoraciones` — valoraciones
 
-> ⚠️ **`GET /api/usuarios` NO está expuesto** (devuelve `404`). Solo se publican las operaciones de registro y gestión de cursos comprados.
+> 🔒 **La escritura está cerrada**: `POST`, `PUT`, `PATCH` y `DELETE` sobre `/api/cursos`,
+> `/api/categorias` y `/api/valoraciones` exigen un token JWT válido (`401` sin él). La lectura
+> del catálogo sigue siendo pública.
+
+> ⚠️ **`GET /api/usuarios` NO está expuesto** (devuelve `404` con token; `401` sin token). Solo se publican las operaciones de registro y gestión de cursos comprados.
+
+#### Política de acceso
+
+`WebSecurityConfig` aplica **deny-by-default**: solo lo declarado aquí es público.
+
+| Ruta | Acceso |
+|---|---|
+| `POST /api/auth`, `POST /api/usuarios` | Público (login y registro) |
+| `GET /api/cursos/**`, `/api/categorias/**`, `/api/valoraciones/**` | Público (catálogo) |
+| `GET /actuator/health`, `/swagger-ui/**`, `/v3/api-docs/**`, `/`, `/index.html`, `/error` | Público |
+| `GET /actuator/metrics`, `/actuator/info` | Token JWT |
+| `POST/PUT/PATCH/DELETE /api/**` | Token JWT |
+| `GET /api/usuarios/{id}/cursos`, `POST /api/usuarios/{id}/misCursosComprados` | Token JWT **y** ser el usuario `{id}` |
+
+El token se envía en la cabecera `Authorization: Bearer <jwt>`; lo valida
+`JwtAuthenticationFilter`, que además exige que el usuario exista y esté activo (`estado = "A"`).
+Un token inválido, expirado, firmado con otro secreto o de un usuario pendiente no autentica.
+
+```bash
+TOKEN=$(curl -s -X POST http://localhost:8080/api/auth \
+  -H "Content-Type: application/json" \
+  -d '{"email":"c@example.com","password":"1234"}' | jq -r .token)
+
+curl http://localhost:8080/api/usuarios/1/cursos -H "Authorization: Bearer $TOKEN"
+```
 
 #### Cambios de contrato (refactor API)
 
@@ -294,8 +325,18 @@ Los recursos de catálogo se exponen automáticamente mediante Spring Data REST 
 
 #### Gaps conocidos
 
-- **JWT emitido pero no validado por el servidor**: la API permite `anyRequest()` sin exigir token (`WebSecurityConfig`). Los tokens se emiten en login para que los frontends los usen, pero no hay filtro que los valide en las peticiones.
-- **CRUD completo abierto en recursos de catálogo**: `cursos`, `categorias` y `valoraciones` permiten `POST`, `PUT`, `PATCH` y `DELETE` además de lectura. No se ha restringido a solo lectura.
+Resueltos el 2026-11-06 (ver `docs/security/informe-security-review-2026-11-06.md`):
+
+- ~~**JWT emitido pero no validado**~~: ahora `JwtAuthenticationFilter` valida la firma y
+  `WebSecurityConfig` aplica deny-by-default (401 sin token).
+- ~~**CRUD completo abierto en catálogo**~~: las escrituras exigen token JWT.
+- ~~**IDOR en `/api/usuarios/{id}/...`**~~: solo el propietario accede (`403` para el resto).
+
+Pendientes:
+
+- **Sin rate limiting en `POST /api/auth`** ni política de contraseñas robusta (mínimo actual: 4 caracteres).
+- **Secreto JWT con valor por defecto** en `application.properties` y `.env.example`; `docker-compose.yml` no propaga `JWT_SECRET`.
+- **Actuator `metrics`/`info`** ahora exigen token, pero conviene plantear su desactivación en producción.
 
 ### 🔐 Autenticación
 

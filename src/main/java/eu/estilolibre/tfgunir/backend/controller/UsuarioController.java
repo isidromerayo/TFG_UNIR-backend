@@ -6,6 +6,8 @@ import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,10 +67,16 @@ public class UsuarioController {
         description = "Devuelve la lista de cursos que el usuario ha comprado."
     )
     @ApiResponse(responseCode = "200", description = "Lista de cursos comprados")
+    @ApiResponse(responseCode = "401", description = "No autenticado",
+        content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "403", description = "El recurso pertenece a otro usuario",
+        content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "Usuario no encontrado",
         content = @Content(schema = @Schema(implementation = ApiError.class)))
     @GetMapping("/{id}/cursos")
-    public ResponseEntity<List<CursoResponse>> obtenerCursosComprados(@PathVariable long id) {
+    public ResponseEntity<List<CursoResponse>> obtenerCursosComprados(@PathVariable long id,
+            Authentication authentication) {
+        verificarPropietario(id, authentication);
         return ResponseEntity.ok(usuarioService.obtenerCursosComprados(id));
     }
 
@@ -77,12 +85,43 @@ public class UsuarioController {
         description = "Asocia los cursos indicados (text/uri-list) a los cursos comprados del usuario."
     )
     @ApiResponse(responseCode = "201", description = "Cursos añadidos correctamente")
+    @ApiResponse(responseCode = "401", description = "No autenticado",
+        content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "403", description = "El recurso pertenece a otro usuario",
+        content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "Usuario o curso no encontrado",
         content = @Content(schema = @Schema(implementation = ApiError.class)))
     @PostMapping("/{id}/misCursosComprados")
-    public ResponseEntity<Void> agregarMisCursos(@PathVariable long id, @RequestBody String body) {
+    public ResponseEntity<Void> agregarMisCursos(@PathVariable long id, @RequestBody String body,
+            Authentication authentication) {
+        verificarPropietario(id, authentication);
         usuarioService.agregarCursosComprados(id, parseCursoIds(body));
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * Comprueba que el usuario autenticado es el dueño del recurso solicitado.
+     *
+     * <p>El identificador del path no se usa para resolver al usuario: siempre se
+     * compara con el que viaja en el token, para impedir IDOR/BOLA. Se responde 403
+     * (no 404) también cuando el id no existe, para no permitir enumeración.</p>
+     *
+     * @param id           identificador recibido en la ruta
+     * @param authentication autenticación establecida por el filtro JWT
+     * @throws AccessDeniedException si no hay autenticación o el id no coincide
+     */
+    private void verificarPropietario(long id, Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AccessDeniedException("No autenticado");
+        }
+
+        long idAutenticado = usuarioService.findByEmail(authentication.getName())
+                .orElseThrow(() -> new AccessDeniedException("No autenticado"))
+                .getId();
+
+        if (idAutenticado != id) {
+            throw new AccessDeniedException("No puedes acceder a los datos de otro usuario");
+        }
     }
 
     /**

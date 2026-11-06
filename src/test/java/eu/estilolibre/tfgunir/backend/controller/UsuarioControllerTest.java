@@ -1,10 +1,13 @@
 package eu.estilolibre.tfgunir.backend.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +15,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 
 import eu.estilolibre.tfgunir.backend.dto.CursoResponse;
 import eu.estilolibre.tfgunir.backend.dto.UsuarioRegistroRequest;
 import eu.estilolibre.tfgunir.backend.dto.UsuarioResponse;
+import eu.estilolibre.tfgunir.backend.model.Usuario;
 import eu.estilolibre.tfgunir.backend.service.UsuarioService;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,10 +56,11 @@ class UsuarioControllerTest {
 
     @Test
     void obtenerCursosComprados_devuelve200_conListaDeCursos() {
+        Authentication authentication = autenticacionDe(1L);
         CursoResponse curso = new CursoResponse(4L, "Angular", "Descripción", null, 4.6, null, null, null);
         when(usuarioService.obtenerCursosComprados(1L)).thenReturn(List.of(curso));
 
-        var response = controller.obtenerCursosComprados(1L);
+        var response = controller.obtenerCursosComprados(1L, authentication);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).hasSize(1);
@@ -62,13 +69,56 @@ class UsuarioControllerTest {
     }
 
     @Test
+    void obtenerCursosComprados_deOtroUsuario_lanzaAccessDenied() {
+        Authentication authentication = autenticacionDe(1L);
+
+        assertThatThrownBy(() -> controller.obtenerCursosComprados(2L, authentication))
+                .isInstanceOf(AccessDeniedException.class);
+
+        verify(usuarioService, org.mockito.Mockito.never()).obtenerCursosComprados(2L);
+    }
+
+    @Test
+    void obtenerCursosComprados_sinAutenticacion_lanzaAccessDenied() {
+        assertThatThrownBy(() -> controller.obtenerCursosComprados(1L, null))
+                .isInstanceOf(AccessDeniedException.class);
+    }
+
+    @Test
     void agregarMisCursos_devuelve201_yDelegaIdsParseados() {
+        Authentication authentication = autenticacionDe(1L);
         String body = "http://localhost:8080/api/cursos/4,http://localhost:8080/api/cursos/5";
 
-        var response = controller.agregarMisCursos(1L, body);
+        var response = controller.agregarMisCursos(1L, body, authentication);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         verify(usuarioService).agregarCursosComprados(1L, List.of(4L, 5L));
+    }
+
+    @Test
+    void agregarMisCursos_deOtroUsuario_lanzaAccessDenied() {
+        Authentication authentication = autenticacionDe(1L);
+        String body = "http://localhost:8080/api/cursos/4";
+
+        assertThatThrownBy(() -> controller.agregarMisCursos(2L, body, authentication))
+                .isInstanceOf(AccessDeniedException.class);
+
+        verify(usuarioService, org.mockito.Mockito.never())
+                .agregarCursosComprados(org.mockito.ArgumentMatchers.anyLong(),
+                        org.mockito.ArgumentMatchers.anyList());
+    }
+
+    private Authentication autenticacionDe(long id) {
+        Usuario usuario = new Usuario();
+        usuario.setId(id);
+        usuario.setEmail("usuario" + id + "@localhost");
+
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn(usuario.getEmail());
+        when(usuarioService.findByEmail(usuario.getEmail())).thenReturn(Optional.of(usuario));
+
+        return authentication;
     }
 
     @Test
