@@ -47,6 +47,10 @@ Documentación relacionada con seguridad, autenticación y migración a BCrypt.
 
 ### Informes de vulnerabilidades
 
+- **[informe-security-review-2026-11-06.md](informe-security-review-2026-11-06.md)** - Revisión de código con la skill `security-review`
+  - 3 CRITICAL, 3 HIGH, 4 MEDIUM, 4 LOW, 4 INFO
+  - Remediados C-1/C-2/C-3 en `security/enable-jwt-authorization` (filtro JWT + deny-by-default + anti-IDOR)
+  - Pendientes: rate limiting, secretos por defecto, perfiles de producción
 - **[informe-vulnerabilidades-2026-10-30.md](informe-vulnerabilidades-2026-10-30.md)** - Última revisión de dependencias
   - CVE-2026-116802/116803/116804 (DOMPurify 3.4.16) → `swagger-ui` 5.34.1 con DOMPurify 3.4.17
   - springdoc 3.2.0: retirados los pins de `springdoc-openapi-starter-common` y alineado el webjar
@@ -144,17 +148,24 @@ boolean matches = passwordEncoder.matches(password, storedHash);
 - [x] Scripts de testing automatizados
 - [x] Documentación completa
 - [x] `/api/usuarios` oculto (Spring Data REST `exported = false`)
+- [x] Autorización por JWT validado (`JwtAuthenticationFilter`, 2026-11-06)
+- [x] Deny-by-default en `WebSecurityConfig` (2026-11-06)
+- [x] Anti-IDOR en `/api/usuarios/{id}/cursos` y `.../misCursosComprados` (2026-11-06)
 
 ### ⏳ Pendiente
 
+- [ ] Rate limiting en `POST /api/auth` y política de contraseñas (mínimo actual: 4)
+- [ ] Retirar los secretos por defecto (`JWT_SECRET`, password de BD) y propagar `JWT_SECRET` en compose
+- [ ] Perfiles de producción (`show-sql=false`, `ddl-auto=validate`)
+- [ ] CORS unificado (hoy duplicado en `WebConfig` y `WebSecurityConfig`)
 - [ ] Probar desde los 3 frontends
 - [ ] Publicar imagen Docker nueva
-- [ ] Actualizar README principal
-- [ ] Crear PR con cambios
 
 ### ⚠️ Gaps conocidos
 
-- **JWT emitido pero no validado**: `TokenService` emite tokens en `POST /api/auth`, pero `WebSecurityConfig` permite `anyRequest()` sin filtro que valide el `Authorization` header. Los tokens no se exigen en ninguna petición. Ver README principal (sección API REST).
+- **Sin rate limiting**: `POST /api/auth` acepta intentos ilimitados.
+- **Secreto JWT por defecto** en `application.properties` / `.env.example`; `docker-compose.yml` no pasa `JWT_SECRET`.
+- Informe completo: [informe-security-review-2026-11-06.md](informe-security-review-2026-11-06.md).
 
 ## 🔗 Referencias Externas
 
