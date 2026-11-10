@@ -380,7 +380,7 @@ psql (PostgreSQL) 15.x
 CREATE DATABASE tfg_unir;
 
 -- Crear usuario
-CREATE USER user_tfg WITH PASSWORD 'tfg_un1r_PWD';
+CREATE USER user_tfg WITH PASSWORD '<tu-password>';
 
 -- Dar privilegios
 GRANT ALL PRIVILEGES ON DATABASE tfg_unir TO user_tfg;
@@ -430,7 +430,7 @@ cp .env.example .env
 ./scripts/podman-pod.sh stop
 ```
 
-El script cargará las variables de entorno desde el archivo `.env` y las pasará a los contenedores, con valores por defecto si no están definidas.
+El script carga las variables de entorno desde el archivo `.env` y exige `POSTGRES_PASSWORD` y `JWT_SECRET`. Si falta alguna, **aborta** con un mensaje indicando cómo generarla: ya no hay valores por defecto versionados.
 
 #### � Mejoras de Configuración Docker
 
@@ -449,12 +449,14 @@ Recientemente se han implementado las siguientes optimizaciones:
    cp .env.example .env
    ```
 
-2. **Editar configuración**:
-   Abre `.env` y personaliza las credenciales si es necesario. La configuración por defecto es:
+2. **Editar configuración (obligatorio)**:
+   Abre `.env` y sustituye cada `CHANGE_ME_*` por un valor propio. `docker compose` **no
+   arranca** si faltan (la interpolación `${VAR:?}` aborta con un mensaje claro):
    ```
-   POSTGRES_PASSWORD=mypass
+   POSTGRES_PASSWORD=<tu-password>
    POSTGRES_DB=tfg_unir
    POSTGRES_USER=user_tfg
+   JWT_SECRET=<salida de: openssl rand -base64 64>
    ```
 
 #### 🚀 Levantar Servicios
@@ -512,7 +514,7 @@ deploy:
 Para usar una instancia limpia de PostgreSQL:
 
 ```bash
-docker run --name postgres-tfg -e POSTGRES_PASSWORD=mypass -e POSTGRES_DB=tfg_unir -e POSTGRES_USER=user_tfg -p 5432:5432 -d postgres:17
+docker run --name postgres-tfg -e POSTGRES_PASSWORD="<tu-password>" -e POSTGRES_DB=tfg_unir -e POSTGRES_USER=user_tfg -p 5432:5432 -d postgres:17
 ```
 
 ##### Construir imagen personalizada de PostgreSQL
@@ -586,9 +588,13 @@ Con docker compose se montará un contenedor con PostgreSQL (datos precargados) 
    - `02-create.sql` - Tablas
    - `03-create.sql` - Datos iniciales
 
-2. **Configuración del backend**: El `application.properties` debe soportar variables de entorno:
+2. **Configuración del backend**: El `application.properties` lee las variables de entorno y
+   **exige** `SPRING_DATASOURCE_PASSWORD` y `JWT_SECRET` (sin fallback: si no están, la
+   aplicación no arranca):
    ```properties
    spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/tfg_unir}
+   spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+   jwt.secret=${JWT_SECRET}
    ```
 
 3. **Imagen del backend actualizada**: Si modificas el código, necesitas:
@@ -803,7 +809,7 @@ podman run -d --pod backend-pod --name postgres_db \
   -v $(pwd)/../recursos/db/postgresql/01-create.sql:/docker-entrypoint-initdb.d/01-create.sql \
   -v $(pwd)/../recursos/db/postgresql/02-create.sql:/docker-entrypoint-initdb.d/02-create.sql \
   -v $(pwd)/../recursos/db/postgresql/03-create.sql:/docker-entrypoint-initdb.d/03-create.sql \
-  -e POSTGRES_PASSWORD=mypass \
+  -e POSTGRES_PASSWORD="${POSTGRES_PASSWORD:?define POSTGRES_PASSWORD}" \
   -e POSTGRES_DB=tfg_unir \
   -e POSTGRES_USER=user_tfg \
   postgres:17
@@ -812,8 +818,12 @@ podman run -d --pod backend-pod --name postgres_db \
 **3. Ejecutar el backend en el pod**
 ```bash
 # Nota: Usamos localhost porque están en el mismo pod
+# SPRING_DATASOURCE_PASSWORD y JWT_SECRET son obligatorios (sin fallback)
 podman run -d --pod backend-pod --name api_service \
   -e SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/tfg_unir \
+  -e SPRING_DATASOURCE_USERNAME=user_tfg \
+  -e SPRING_DATASOURCE_PASSWORD="${POSTGRES_PASSWORD:?define POSTGRES_PASSWORD}" \
+  -e JWT_SECRET="${JWT_SECRET:?define JWT_SECRET}" \
   isidromerayo/spring-backend-tfg:latest
 ```
 

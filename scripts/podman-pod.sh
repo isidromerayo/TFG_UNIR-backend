@@ -75,7 +75,7 @@ function start_db() {
         -v $(pwd)/../recursos/db/postgresql/01-create.sql:/docker-entrypoint-initdb.d/01-create.sql \
         -v $(pwd)/../recursos/db/postgresql/02-create.sql:/docker-entrypoint-initdb.d/02-create.sql \
         -v $(pwd)/../recursos/db/postgresql/03-create.sql:/docker-entrypoint-initdb.d/03-create.sql \
-        -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-mypass} \
+        -e POSTGRES_PASSWORD="${POSTGRES_PASSWORD:?define POSTGRES_PASSWORD en .env (cp .env.example .env)}" \
         -e POSTGRES_DB=${POSTGRES_DB:-tfg_unir} \
         -e POSTGRES_USER=${POSTGRES_USER:-user_tfg} \
         $POSTGRES_DB_IMAGE
@@ -114,7 +114,7 @@ function start_pod() {
         -v $(pwd)/../recursos/db/postgresql/01-create.sql:/docker-entrypoint-initdb.d/01-create.sql \
         -v $(pwd)/../recursos/db/postgresql/02-create.sql:/docker-entrypoint-initdb.d/02-create.sql \
         -v $(pwd)/../recursos/db/postgresql/03-create.sql:/docker-entrypoint-initdb.d/03-create.sql \
-        -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-mypass} \
+        -e POSTGRES_PASSWORD="${POSTGRES_PASSWORD:?define POSTGRES_PASSWORD en .env (cp .env.example .env)}" \
         -e POSTGRES_DB=${POSTGRES_DB:-tfg_unir} \
         -e POSTGRES_USER=${POSTGRES_USER:-user_tfg} \
         $POSTGRES_DB_IMAGE
@@ -137,8 +137,8 @@ function start_pod() {
     podman run -d --pod $POD_NAME --name $API_SERVICE_CONTAINER \
         -e SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/tfg_unir \
         -e SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME:-user_tfg} \
-        -e SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD:-tfg_un1r_PWD} \
-        -e JWT_SECRET=${JWT_SECRET:-813cef5f-3459-4618-87a6-a69e2a1296d4_mySecretKey_mySecretKey_CHANGE_IN_PRODUCTION} \
+        -e SPRING_DATASOURCE_PASSWORD="${POSTGRES_PASSWORD:?define POSTGRES_PASSWORD en .env (cp .env.example .env)}" \
+        -e JWT_SECRET="${JWT_SECRET:?define JWT_SECRET en .env (openssl rand -base64 64)}" \
         $API_SERVICE_IMAGE
     
     print_info "Esperando a que el backend esté listo..."
