@@ -345,7 +345,7 @@ Resueltos el 2026-11-06 (ver `docs/security/informe-security-review-2026-11-06.m
 
 Pendientes:
 
-- **Secreto JWT con valor por defecto** en `application.properties` y `.env.example`; `docker-compose.yml` no propaga `JWT_SECRET` (PR #184).
+- ~~**Secreto JWT con valor por defecto**~~: `JWT_SECRET` y `SPRING_DATASOURCE_PASSWORD` son obligatorios y `docker-compose.yml` los propaga (PR #184).
 - **Actuator `metrics`/`info`** ahora exigen token, pero conviene plantear su desactivación en producción.
 
 ### 🔐 Autenticación

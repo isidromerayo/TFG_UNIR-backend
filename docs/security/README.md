@@ -50,7 +50,7 @@ Documentación relacionada con seguridad, autenticación y migración a BCrypt.
 - **[informe-security-review-2026-11-06.md](informe-security-review-2026-11-06.md)** - Revisión de código con la skill `security-review`
   - 3 CRITICAL, 3 HIGH, 4 MEDIUM, 4 LOW, 4 INFO
   - Remediados C-1/C-2/C-3 en `main` (PR #183: filtro JWT + deny-by-default + anti-IDOR)
-  - H-1/M-3/M-4 en PR #184 (secretos obligatorios, sin valores por defecto)
+  - H-1/M-3/M-4 en `main` (PR #184: secretos obligatorios, sin valores por defecto)
   - H-2 (rate limiting + contraseñas 8-72) y L-1 (timing) remediados el 2026-11-10
 - **[informe-vulnerabilidades-2026-10-30.md](informe-vulnerabilidades-2026-10-30.md)** - Última revisión de dependencias
   - CVE-2026-116802/116803/116804 (DOMPurify 3.4.16) → `swagger-ui` 5.34.1 con DOMPurify 3.4.17
@@ -152,12 +152,12 @@ boolean matches = passwordEncoder.matches(password, storedHash);
 - [x] Autorización por JWT validado (`JwtAuthenticationFilter`, 2026-11-06)
 - [x] Deny-by-default en `WebSecurityConfig` (2026-11-06)
 - [x] Anti-IDOR en `/api/usuarios/{id}/cursos` y `.../misCursosComprados` (2026-11-06)
+- [x] Rate limiting en `POST /api/auth` (429 + `Retry-After`) y política de contraseñas 8-72 (2026-11-10)
+- [x] Sin enumeración de cuentas por latencia (hash BCrypt señuelo, 2026-11-10)
+- [x] Sin secretos por defecto: `JWT_SECRET` y `SPRING_DATASOURCE_PASSWORD` obligatorios, `JWT_SECRET` en compose (2026-11-10)
 
 ### ⏳ Pendiente
 
-- [x] Rate limiting en `POST /api/auth` (429 + `Retry-After`) y política de contraseñas 8-72 (2026-11-10)
-- [x] Sin enumeración de cuentas por latencia (hash BCrypt señuelo, 2026-11-10)
-- [ ] Retirar los secretos por defecto (`JWT_SECRET`, password de BD) y propagar `JWT_SECRET` en compose
 - [ ] Perfiles de producción (`show-sql=false`, `ddl-auto=validate`)
 - [ ] CORS unificado (hoy duplicado en `WebConfig` y `WebSecurityConfig`)
 - [ ] Probar desde los 3 frontends
@@ -166,7 +166,7 @@ boolean matches = passwordEncoder.matches(password, storedHash);
 ### ⚠️ Gaps conocidos
 
 - ~~**Sin rate limiting**~~: `LoginRateLimiter` bloquea por IP con `429` y `Retry-After`.
-- **Secreto JWT por defecto** en `application.properties` / `.env.example`; `docker-compose.yml` no pasa `JWT_SECRET` (PR #184).
+- ~~**Secreto JWT por defecto**~~: `JWT_SECRET` y `SPRING_DATASOURCE_PASSWORD` son obligatorios (PR #184).
 - Informe completo: [informe-security-review-2026-11-06.md](informe-security-review-2026-11-06.md).
 
 ## 🔗 Referencias Externas
