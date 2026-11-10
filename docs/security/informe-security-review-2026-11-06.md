@@ -7,7 +7,7 @@
 | **Herramienta** | skill `security-review` (revisión estática asistida por IA: data-flow + grep de patrones) |
 | **Alcance** | `src/main`, `src/test`, `pom.xml`, `application.properties`, `Dockerfile`, `docker-compose.yml`, `.github/workflows/`, `scripts/`, `.env.example` |
 | **Lenguajes / frameworks** | Java 21 · Spring Boot 4.1.2 · Spring Security 7.1.2 · Spring Data REST · JJWT 0.13.0 · Jackson 3.1.7 · Springdoc 3.2.0 |
-| **Estado** | 🟡 Remediación en curso: C-1/C-2/C-3 y H-2/L-1 en `main` · H-1/M-3/M-4 en PR #184 · perfiles de producción pendientes |
+| **Estado** | 🟢 CRITICAL/HIGH de autenticación y secretos en `main` (PRs #183, #184, #185) · pendientes H-3 y perfiles de producción |
 
 ```
 ┌────────────────────────────────────────────────┐
@@ -133,7 +133,7 @@ autenticado y responder `403`.
 ## 3. Hallazgos HIGH
 
 ### H-1. Secreto JWT hardcodeado con fallback de producción
-**Confianza:** HIGH · **Estado:** 🟡 corregido en PR #184 (pendiente de merge)
+**Confianza:** HIGH · **Estado:** ✅ corregido y en `main` (PR #184)
 **Ubicación:** `src/main/resources/application.properties:55`, `.env.example:12`
 
 ```properties
@@ -175,8 +175,8 @@ JVM, commit, branch y métricas internas de JVM/DB. Reconocimiento gratuito para
 |---|---|---|---|
 | M-1 | Datos sensibles en logs | `application.properties:62-65` | `show-sql=true` + `BasicBinder=TRACE` vuelca parámetros enlazados: emails y hashes BCrypt en cada `INSERT`/`UPDATE`. |
 | M-2 | `ddl-auto=update` en producción | `application.properties:23` | Hibernate altera el esquema en runtime. Usar Flyway/Liquibase + `validate`. |
-| M-3 | Secreto por defecto de BD en compose | `docker-compose.yml:44,62` | `${POSTGRES_PASSWORD:-tfg_un1r_PWD}` arranca con credenciales conocidas si falta `.env`. 🟡 PR #184 |
-| M-4 | Password de BD hardcodeada como default | `application.properties:8` | `tfg_un1r_PWD` versionada; no debería ser el fallback del artefacto. 🟡 PR #184 |
+| M-3 | Secreto por defecto de BD en compose | `docker-compose.yml:44,62` | `${POSTGRES_PASSWORD:-tfg_un1r_PWD}` arranca con credenciales conocidas si falta `.env`. ✅ PR #184 |
+| M-4 | Password de BD hardcodeada como default | `application.properties:8` | `tfg_un1r_PWD` versionada; no debería ser el fallback del artefacto. ✅ PR #184 |
 
 ## 5. Hallazgos LOW
 
@@ -233,8 +233,8 @@ esto con más precisión que un análisis estático manual. Ver
 | Rama | Contenido | Estado |
 |---|---|---|
 | `security/enable-jwt-authorization` | C-1, C-2, C-3 (parches 1-3) + tests de autorización | ✅ mergeado en `main` el 2026-11-06 (PR #183) |
-| `security/remove-hardcoded-secrets` | H-1, M-3, M-4 (parches 4 y 6) | 🟡 PR #184 abierta (2026-11-06), pendiente de merge |
-| `security/login-hardening` | H-2 (rate limiting + política de contraseñas) y L-1 (timing) | ✅ aplicado el 2026-11-10 |
+| `security/remove-hardcoded-secrets` | H-1, M-3, M-4 (parches 4 y 6) | ✅ mergeado en `main` el 2026-11-10 (PR #184) |
+| `security/login-hardening` | H-2 (rate limiting + política de contraseñas) y L-1 (timing) | ✅ mergeado en `main` el 2026-11-10 (PR #185) |
 | — | H-3 (Actuator), M-1, M-2 (perfiles de producción) | ⬜ pendiente |
 | — | L-2…L-4 | ⬜ backlog |
 
@@ -320,6 +320,9 @@ Ejecutado sobre `security/enable-jwt-authorization` (2026-11-06):
 | Tests de integración | `./mvnw -Pintegration-tests verify` | ✅ 41 IT, 0 fallos |
 | Análisis estático | `./mvnw compile spotbugs:check` | ✅ 0 bugs |
 
+Estado final de `main` tras integrar PRs #183, #184 y #185 (2026-11-10): **72 tests unitarios**,
+**44 tests de integración**, **0 bugs** de SpotBugs, y CI en verde (Maven, Sonar, OSV, Trivy).
+
 TDD: `SecurityAuthorizationIT` se escribió **antes** del código y se verificó en rojo
 (13 de 17 casos fallando, p. ej. `anonimoNoPuedeCrearCursos` recibía `201`), y después en verde.
 
@@ -328,13 +331,14 @@ TDD: `SecurityAuthorizationIT` se escribió **antes** del código y se verificó
 | Hallazgo | Estado (2026-11-10) |
 |---|---|
 | C-1, C-2, C-3 | ✅ remediados y en `main` (PR #183) |
-| H-1 (secreto JWT por defecto) | 🟡 PR #184 |
+| H-1 (secreto JWT por defecto) | ✅ remediado y en `main` (PR #184) |
 | H-2 (rate limiting / contraseñas) | ✅ remediado el 2026-11-10 |
 | H-3 (Actuator) | 🟡 mitigado: `metrics`/`info` exigen token |
-| M-3, M-4 (password de BD) | 🟡 PR #184 |
+| M-3, M-4 (password de BD) | ✅ remediados y en `main` (PR #184) |
 | L-1 (timing) | ✅ remediado el 2026-11-10 (hash señuelo) |
 | M-1, M-2, L-2…L-4, INFO | ⬜ backlog |
 
-> La API ya no acepta escrituras ni datos de usuario sin token. Sigue siendo **imprescindible**
-> retirar el secreto JWT por defecto antes de un despliegue real: con un secreto conocido, la
-> validación recién activada se puede burlar firmando tokens propios.
+> La API ya no acepta escrituras ni datos de usuario sin token y los secretos no tienen valores por
+> defecto: sin `JWT_SECRET` la aplicación **no arranca** (PR #184). El riesgo que queda es de
+> despliegue: hay que provisionar `JWT_SECRET` y `SPRING_DATASOURCE_PASSWORD` en el entorno, y en
+> cada release regenerar el JWT si se sospecha que pudo filtrarse.
