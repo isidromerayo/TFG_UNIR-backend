@@ -49,8 +49,9 @@ Documentación relacionada con seguridad, autenticación y migración a BCrypt.
 
 - **[informe-security-review-2026-11-06.md](informe-security-review-2026-11-06.md)** - Revisión de código con la skill `security-review`
   - 3 CRITICAL, 3 HIGH, 4 MEDIUM, 4 LOW, 4 INFO
-  - Remediados C-1/C-2/C-3 en `security/enable-jwt-authorization` (filtro JWT + deny-by-default + anti-IDOR)
-  - Pendientes: rate limiting, secretos por defecto, perfiles de producción
+  - Remediados C-1/C-2/C-3 en `main` (PR #183: filtro JWT + deny-by-default + anti-IDOR)
+  - H-1/M-3/M-4 en PR #184 (secretos obligatorios, sin valores por defecto)
+  - H-2 (rate limiting + contraseñas 8-72) y L-1 (timing) remediados el 2026-11-10
 - **[informe-vulnerabilidades-2026-10-30.md](informe-vulnerabilidades-2026-10-30.md)** - Última revisión de dependencias
   - CVE-2026-116802/116803/116804 (DOMPurify 3.4.16) → `swagger-ui` 5.34.1 con DOMPurify 3.4.17
   - springdoc 3.2.0: retirados los pins de `springdoc-openapi-starter-common` y alineado el webjar
@@ -154,7 +155,8 @@ boolean matches = passwordEncoder.matches(password, storedHash);
 
 ### ⏳ Pendiente
 
-- [ ] Rate limiting en `POST /api/auth` y política de contraseñas (mínimo actual: 4)
+- [x] Rate limiting en `POST /api/auth` (429 + `Retry-After`) y política de contraseñas 8-72 (2026-11-10)
+- [x] Sin enumeración de cuentas por latencia (hash BCrypt señuelo, 2026-11-10)
 - [ ] Retirar los secretos por defecto (`JWT_SECRET`, password de BD) y propagar `JWT_SECRET` en compose
 - [ ] Perfiles de producción (`show-sql=false`, `ddl-auto=validate`)
 - [ ] CORS unificado (hoy duplicado en `WebConfig` y `WebSecurityConfig`)
@@ -163,8 +165,8 @@ boolean matches = passwordEncoder.matches(password, storedHash);
 
 ### ⚠️ Gaps conocidos
 
-- **Sin rate limiting**: `POST /api/auth` acepta intentos ilimitados.
-- **Secreto JWT por defecto** en `application.properties` / `.env.example`; `docker-compose.yml` no pasa `JWT_SECRET`.
+- ~~**Sin rate limiting**~~: `LoginRateLimiter` bloquea por IP con `429` y `Retry-After`.
+- **Secreto JWT por defecto** en `application.properties` / `.env.example`; `docker-compose.yml` no pasa `JWT_SECRET` (PR #184).
 - Informe completo: [informe-security-review-2026-11-06.md](informe-security-review-2026-11-06.md).
 
 ## 🔗 Referencias Externas

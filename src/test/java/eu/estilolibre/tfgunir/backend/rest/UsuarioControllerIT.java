@@ -74,7 +74,7 @@ class UsuarioControllerIT {
                   "nombre": "Nueva",
                   "apellidos": "Usuaria",
                   "email": "nueva@example.com",
-                  "password": "secreto"
+                  "password": "secreto123"
                 }
                 """;
 
@@ -99,7 +99,7 @@ class UsuarioControllerIT {
                   "nombre": "Otra",
                   "apellidos": "Usuaria",
                   "email": "maria@localhost",
-                  "password": "secreto"
+                  "password": "secreto123"
                 }
                 """;
 
@@ -124,6 +124,52 @@ class UsuarioControllerIT {
                   "password": "12"
                 }
                 """;
+
+        given().
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                body(body).
+        when().
+                post("/api/usuarios").
+        then().
+                assertThat().
+                statusCode(400).
+                body("code", org.hamcrest.Matchers.equalTo("VALIDATION_ERROR"));
+    }
+
+    @Test
+    void registrarUsuario_conPasswordDeMenosDe8Caracteres_devuelve400() {
+        String body = """
+                {
+                  "nombre": "Corta",
+                  "apellidos": "Password",
+                  "email": "corta@example.com",
+                  "password": "1234567"
+                }
+                """;
+
+        given().
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                body(body).
+        when().
+                post("/api/usuarios").
+        then().
+                assertThat().
+                statusCode(400).
+                body("code", org.hamcrest.Matchers.equalTo("VALIDATION_ERROR")).
+                body("errors.password", notNullValue());
+    }
+
+    @Test
+    void registrarUsuario_conPasswordDeMasDe72Caracteres_devuelve400() {
+        String passwordLarga = "a".repeat(73);
+        String body = """
+                {
+                  "nombre": "Larga",
+                  "apellidos": "Password",
+                  "email": "larga@example.com",
+                  "password": "%s"
+                }
+                """.formatted(passwordLarga);
 
         given().
                 contentType(MediaType.APPLICATION_JSON_VALUE).

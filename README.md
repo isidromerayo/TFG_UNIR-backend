@@ -217,6 +217,12 @@ Respuestas:
 - `200` → `{ "id": 1, "username": "c@example.com", "token": "<jwt>", "fullname": "..." }`
 - `400` → validación de entrada fallida
 - `401` → credenciales inválidas o usuario inactivo
+- `429` → demasiados intentos fallidos desde el mismo origen (cabecera `Retry-After`)
+
+> 🔒 **Protecciones**: tras `auth.login.max-attempts` fallos (por defecto 5) desde la misma IP en
+> `auth.login.window` (por defecto 15 min) se responde `429` hasta que expire la ventana; un login
+> correcto reinicia el contador. Además, el email inexistente se compara igualmente contra un hash
+> BCrypt señuelo, para no delatar por latencia qué cuentas existen.
 
 ```bash
 curl -X POST http://localhost:8080/api/auth \
@@ -237,13 +243,14 @@ Gestión de registro y cursos comprados. El listado global `GET /api/usuarios` s
     "nombre": "Ana",
     "apellidos": "Pérez",
     "email": "ana@example.com",
-    "password": "secreto"
+    "password": "secreto123"
   }
   ```
 
   Respuestas:
 
   - `201` → `{ "id": 1, "nombre": "Ana", "apellidos": "Pérez", "email": "ana@example.com", "estado": "P" }`
+  - `400` → validación de entrada fallida (la contraseña debe tener entre **8 y 72** caracteres)
   - `400` → validación de entrada fallida
   - `409` → ya existe un usuario con ese email
 
@@ -331,11 +338,14 @@ Resueltos el 2026-11-06 (ver `docs/security/informe-security-review-2026-11-06.m
   `WebSecurityConfig` aplica deny-by-default (401 sin token).
 - ~~**CRUD completo abierto en catálogo**~~: las escrituras exigen token JWT.
 - ~~**IDOR en `/api/usuarios/{id}/...`**~~: solo el propietario accede (`403` para el resto).
+- ~~**Sin rate limiting ni política de contraseñas**~~: `LoginRateLimiter` bloquea con `429` tras
+  varios fallos por IP y el registro exige entre 8 y 72 caracteres (2026-11-10).
+- ~~**Enumeración de cuentas por latencia**~~: se compara siempre contra un hash BCrypt (señuelo
+  aleatorio si el email no existe).
 
 Pendientes:
 
-- **Sin rate limiting en `POST /api/auth`** ni política de contraseñas robusta (mínimo actual: 4 caracteres).
-- **Secreto JWT con valor por defecto** en `application.properties` y `.env.example`; `docker-compose.yml` no propaga `JWT_SECRET`.
+- **Secreto JWT con valor por defecto** en `application.properties` y `.env.example`; `docker-compose.yml` no propaga `JWT_SECRET` (PR #184).
 - **Actuator `metrics`/`info`** ahora exigen token, pero conviene plantear su desactivación en producción.
 
 ### 🔐 Autenticación

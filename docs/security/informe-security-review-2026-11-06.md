@@ -7,7 +7,7 @@
 | **Herramienta** | skill `security-review` (revisión estática asistida por IA: data-flow + grep de patrones) |
 | **Alcance** | `src/main`, `src/test`, `pom.xml`, `application.properties`, `Dockerfile`, `docker-compose.yml`, `.github/workflows/`, `scripts/`, `.env.example` |
 | **Lenguajes / frameworks** | Java 21 · Spring Boot 4.1.2 · Spring Security 7.1.2 · Spring Data REST · JJWT 0.13.0 · Jackson 3.1.7 · Springdoc 3.2.0 |
-| **Estado** | 🔴 No apto para exposición pública (ver *Plan de remediación*) |
+| **Estado** | 🟡 Remediación en curso: C-1/C-2/C-3 y H-2/L-1 en `main` · H-1/M-3/M-4 en PR #184 · perfiles de producción pendientes |
 
 ```
 ┌────────────────────────────────────────────────┐
@@ -133,7 +133,7 @@ autenticado y responder `403`.
 ## 3. Hallazgos HIGH
 
 ### H-1. Secreto JWT hardcodeado con fallback de producción
-**Confianza:** HIGH
+**Confianza:** HIGH · **Estado:** 🟡 corregido en PR #184 (pendiente de merge)
 **Ubicación:** `src/main/resources/application.properties:55`, `.env.example:12`
 
 ```properties
@@ -147,7 +147,7 @@ enmascarado por C-1; al activar la validación se convierte en *account takeover
 (firma de tokens arbitrarios).
 
 ### H-2. Sin rate limiting ni política de contraseñas en el login
-**Confianza:** HIGH
+**Confianza:** HIGH · **Estado:** ✅ corregido el 2026-11-10 (`LoginRateLimiter`, política 8-72, hash señuelo)
 **Ubicación:** `controller/LoginController.java:60-86`, `dto/UsuarioRegistroRequest.java:25`
 
 - `/api/auth` acepta intentos ilimitados: fuerza bruta y *credential stuffing* sin fricción.
@@ -175,14 +175,14 @@ JVM, commit, branch y métricas internas de JVM/DB. Reconocimiento gratuito para
 |---|---|---|---|
 | M-1 | Datos sensibles en logs | `application.properties:62-65` | `show-sql=true` + `BasicBinder=TRACE` vuelca parámetros enlazados: emails y hashes BCrypt en cada `INSERT`/`UPDATE`. |
 | M-2 | `ddl-auto=update` en producción | `application.properties:23` | Hibernate altera el esquema en runtime. Usar Flyway/Liquibase + `validate`. |
-| M-3 | Secreto por defecto de BD en compose | `docker-compose.yml:44,62` | `${POSTGRES_PASSWORD:-tfg_un1r_PWD}` arranca con credenciales conocidas si falta `.env`. |
-| M-4 | Password de BD hardcodeada como default | `application.properties:8` | `tfg_un1r_PWD` versionada; no debería ser el fallback del artefacto. |
+| M-3 | Secreto por defecto de BD en compose | `docker-compose.yml:44,62` | `${POSTGRES_PASSWORD:-tfg_un1r_PWD}` arranca con credenciales conocidas si falta `.env`. 🟡 PR #184 |
+| M-4 | Password de BD hardcodeada como default | `application.properties:8` | `tfg_un1r_PWD` versionada; no debería ser el fallback del artefacto. 🟡 PR #184 |
 
 ## 5. Hallazgos LOW
 
 | # | Hallazgo | Ubicación |
 |---|---|---|
-| L-1 | Enumeración de emails por distinta latencia (BCrypt solo si existe) | `LoginController.java:64-69` |
+| L-1 | Enumeración de emails por distinta latencia (BCrypt solo si existe) | `LoginController.java:64-69` — ✅ corregido el 2026-11-10 (hash señuelo) |
 | L-2 | CORS duplicado y divergente (`PATCH` ausente en `WebConfig`) | `security/WebConfig.java:17` vs `WebSecurityConfig.java:40` |
 | L-3 | Swagger UI / OpenAPI público | `/swagger-ui/**`, `/v3/api-docs` |
 | L-4 | Sin cabeceras de seguridad (HSTS, CSP, `X-Content-Type-Options`) | global |
@@ -232,11 +232,11 @@ esto con más precisión que un análisis estático manual. Ver
 
 | Rama | Contenido | Estado |
 |---|---|---|
-| `security/enable-jwt-authorization` | C-1, C-2, C-3 (parches 1-3) + tests de autorización | ✅ aplicado el 2026-11-06 |
-| `security/remove-hardcoded-secrets` | H-1, H-3, M-3, M-4 (parches 4-6) | ⬜ pendiente |
-| — | H-2 (rate limiting + política de contraseñas) | ⬜ pendiente |
-| — | M-1, M-2 (perfiles de producción) | ⬜ pendiente |
-| — | L-1…L-4 | ⬜ backlog |
+| `security/enable-jwt-authorization` | C-1, C-2, C-3 (parches 1-3) + tests de autorización | ✅ mergeado en `main` el 2026-11-06 (PR #183) |
+| `security/remove-hardcoded-secrets` | H-1, M-3, M-4 (parches 4 y 6) | 🟡 PR #184 abierta (2026-11-06), pendiente de merge |
+| `security/login-hardening` | H-2 (rate limiting + política de contraseñas) y L-1 (timing) | ✅ aplicado el 2026-11-10 |
+| — | H-3 (Actuator), M-1, M-2 (perfiles de producción) | ⬜ pendiente |
+| — | L-2…L-4 | ⬜ backlog |
 
 ### Cambios aplicados en `security/enable-jwt-authorization`
 
@@ -325,13 +325,15 @@ TDD: `SecurityAuthorizationIT` se escribió **antes** del código y se verificó
 
 ### Riesgo residual tras esta rama
 
-| Hallazgo | Estado |
+| Hallazgo | Estado (2026-11-10) |
 |---|---|
-| C-1, C-2, C-3 | ✅ remediados |
-| H-1 (secreto JWT por defecto) | ⬜ pendiente |
-| H-2 (rate limiting / contraseñas) | ⬜ pendiente |
+| C-1, C-2, C-3 | ✅ remediados y en `main` (PR #183) |
+| H-1 (secreto JWT por defecto) | 🟡 PR #184 |
+| H-2 (rate limiting / contraseñas) | ✅ remediado el 2026-11-10 |
 | H-3 (Actuator) | 🟡 mitigado: `metrics`/`info` exigen token |
-| M-1…M-4, L-1…L-4, INFO | ⬜ backlog |
+| M-3, M-4 (password de BD) | 🟡 PR #184 |
+| L-1 (timing) | ✅ remediado el 2026-11-10 (hash señuelo) |
+| M-1, M-2, L-2…L-4, INFO | ⬜ backlog |
 
 > La API ya no acepta escrituras ni datos de usuario sin token. Sigue siendo **imprescindible**
 > retirar el secreto JWT por defecto antes de un despliegue real: con un secreto conocido, la

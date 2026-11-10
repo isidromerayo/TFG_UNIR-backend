@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.Clock;
+
 /**
  * Configuración de seguridad para la aplicación.
  * 
@@ -27,5 +29,16 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * Reloj del sistema en UTC, inyectable para poder fijarlo en los tests
+     * (por ejemplo, el límite de intentos de login).
+     *
+     * @return reloj UTC del sistema
+     */
+    @Bean
+    public Clock clock() {
+        return Clock.systemUTC();
     }
 }

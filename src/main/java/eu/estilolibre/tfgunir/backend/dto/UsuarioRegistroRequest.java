@@ -22,7 +22,7 @@ public class UsuarioRegistroRequest {
     private String email;
 
     @NotBlank(message = "La contraseña no puede estar vacía")
-    @Size(min = 4, message = "La contraseña debe tener al menos 4 caracteres")
+    @Size(min = 8, max = 72, message = "La contraseña debe tener entre 8 y 72 caracteres")
     private String password;
 
     @Override

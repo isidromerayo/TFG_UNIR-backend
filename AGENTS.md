@@ -12,6 +12,8 @@
   - Token validado por `security/JwtAuthenticationFilter`; `WebSecurityConfig` aplica
     **deny-by-default** (catálogo y login/registro públicos; escrituras y datos de usuario con token)
   - `GET/POST /api/usuarios/{id}/cursos|misCursosComprados` exigen ser el propietario (anti-IDOR, 403)
+- Login hardening: `security/LoginRateLimiter` (`auth.login.max-attempts` / `auth.login.window`) y
+  contraseñas de 8-72 caracteres al registrarse; sin enumeración de cuentas por latencia
 - Logging: `java.util.logging.Logger` (not SLF4J)
 - Security plugins: SpotBugs 4.10.5 + FindSecBugs 1.14.0 + sb-contrib 7.7.4
 
