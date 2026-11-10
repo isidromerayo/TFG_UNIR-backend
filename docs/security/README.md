@@ -45,6 +45,11 @@ Documentación relacionada con seguridad, autenticación y migración a BCrypt.
   - Impacto
   - Recomendaciones
 
+### Planes de impacto
+
+- **[plan-impacto-frontends-2026-11-10.md](plan-impacto-frontends-2026-11-10.md)** - Impacto de #183/#184/#185 en
+  Angular, React y Vue3: token `Bearer` sin enviar (P0), contraseña 8-72, `429` y manejo de `401/403`
+
 ### Informes de vulnerabilidades
 
 - **[informe-security-review-2026-11-06.md](informe-security-review-2026-11-06.md)** - Revisión de código con la skill `security-review`
