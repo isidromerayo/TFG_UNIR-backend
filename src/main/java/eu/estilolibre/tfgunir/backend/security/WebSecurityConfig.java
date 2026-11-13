@@ -62,6 +62,9 @@ public class WebSecurityConfig {
                         .requestMatchers(PUBLIC_RESOURCES).permitAll()
                         .requestMatchers(PUBLIC_DOCS).permitAll()
                         .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
+                        // La página de inicio (pública) consume /actuator/info para mostrar
+                        // versión, build time y datos del commit.
+                        .requestMatchers("/actuator/info").permitAll()
                         // Cualquier otra cosa exige token válido: incluye escrituras de
                         // Spring Data REST y los datos de usuario.
                         .anyRequest().authenticated())
