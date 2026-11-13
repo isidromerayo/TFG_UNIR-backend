@@ -66,9 +66,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain docsFilterChain(HttpSecurity http,
             PasswordEncoder passwordEncoder,
             @Value("${swagger.auth.user:}") String swaggerUser,
-            @Value("${swagger.auth.password:}") String swaggerPassword) throws Exception {
+            @Value("${swagger.auth.password:}") String swaggerPassword) {
         http.securityMatcher(DOCS_PATHS)
-                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
