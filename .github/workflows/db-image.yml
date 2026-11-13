@@ -1,0 +1,77 @@
+name: Publish DB Image
+
+# Construye y publica la imagen de PostgreSQL con el seed de datos de ejemplo.
+# Se puede lanzar a mano (con la versión que se quiera) o automáticamente
+# cuando cambian los scripts de seed o el Dockerfile de la base de datos.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versión a publicar (p. ej. 1.2)'
+        required: true
+        default: '1.2'
+        type: string
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'Dockerfile-db-postgresql'
+      - 'db/postgresql/**'
+      - '.github/workflows/db-image.yml'
+
+concurrency:
+  group: db-image
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish postgres-tfg
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Resolve version
+        id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [ -n "$INPUT_VERSION" ]; then
+            VERSION="$INPUT_VERSION"
+          else
+            # Los cambios de seed mantienen la versión 1.x; se incrementa a mano
+            # con workflow_dispatch cuando haga falta una etiqueta nueva.
+            VERSION="1.2"
+          fi
+          if ! echo "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+$'; then
+            echo "::error::Versión inválida: '$VERSION' (formato esperado X.Y)"
+            exit 1
+          fi
+          echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Build and push
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          docker build -f Dockerfile-db-postgresql \
+            -t "isidromerayo/postgres-tfg:${VERSION}" \
+            -t "isidromerayo/postgres-tfg:latest" .
+          docker push "isidromerayo/postgres-tfg:${VERSION}"
+          docker push "isidromerayo/postgres-tfg:latest"
+
+      - name: Summary
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          echo "Publicada isidromerayo/postgres-tfg:${VERSION} y :latest" >> "$GITHUB_STEP_SUMMARY"

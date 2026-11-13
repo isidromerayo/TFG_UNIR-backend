@@ -1,0 +1,143 @@
+name: Deploy to Coolify
+
+# Despliega en Coolify la imagen de una versión ya publicada.
+#
+# Flujo: Release publicada (o ejecución manual con un tag) -> el runner se une
+# a la tailnet -> actualiza el tag de la imagen de la aplicación -> lanza el
+# despliegue y espera a que termine.
+#
+# Secretos requeridos:
+#   TS_OAUTH_CLIENT_ID  OAuth client de Tailscale con tag:ci (efímero)
+#   TS_OAUTH_SECRET     secreto del OAuth client
+#   COOLIFY_HOST        IP tailnet del CT de Coolify (100.108.41.30)
+#   COOLIFY_URL         http://100.108.41.30:8000
+#   COOLIFY_TOKEN       API token de Coolify con permisos read, write y deploy
+#   COOLIFY_APP_UUID    UUID de la aplicación del backend en Coolify
+
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Versión a desplegar (sin la v, p. ej. 0.7.3)'
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-coolify
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy ${{ github.event.release.tag_name || inputs.tag }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check required secrets
+        env:
+          TS_OAUTH_CLIENT_ID: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          TS_OAUTH_SECRET: ${{ secrets.TS_OAUTH_SECRET }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          COOLIFY_APP_UUID: ${{ secrets.COOLIFY_APP_UUID }}
+          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+        run: |
+          missing=""
+          for name in TS_OAUTH_CLIENT_ID TS_OAUTH_SECRET COOLIFY_TOKEN COOLIFY_APP_UUID COOLIFY_URL; do
+            if [ -z "${!name}" ]; then
+              missing="$missing $name"
+            fi
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Faltan secretos:$missing"
+            exit 1
+          fi
+
+      - name: Resolve image tag
+        id: image
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          if [ -n "$RELEASE_TAG" ]; then
+            TAG="${RELEASE_TAG#v}"
+          else
+            TAG="${INPUT_TAG#v}"
+          fi
+          if ! echo "$TAG" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::Tag inválido: '$TAG' (formato esperado X.Y.Z)"
+            exit 1
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+          ping: ${{ secrets.COOLIFY_HOST }}
+
+      - name: Update image tag
+        env:
+          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          APP_UUID: ${{ secrets.COOLIFY_APP_UUID }}
+          IMAGE_TAG: ${{ steps.image.outputs.tag }}
+        run: |
+          curl --fail --silent --show-error \
+            --request PATCH \
+            --header "Authorization: Bearer ${COOLIFY_TOKEN}" \
+            --header "Content-Type: application/json" \
+            --header "Accept: application/json" \
+            --data "{\"docker_registry_image_tag\":\"${IMAGE_TAG}\"}" \
+            "${COOLIFY_URL}/api/v1/applications/${APP_UUID}"
+          echo "Tag actualizado a ${IMAGE_TAG}"
+
+      - name: Trigger deployment and wait
+        env:
+          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          APP_UUID: ${{ secrets.COOLIFY_APP_UUID }}
+        run: |
+          response=$(curl --fail --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer ${COOLIFY_TOKEN}" \
+            --header "Accept: application/json" \
+            "${COOLIFY_URL}/api/v1/deploy?uuid=${APP_UUID}")
+          echo "$response"
+
+          deployment_uuid=$(echo "$response" | jq -r '.deployments[0].deployment_uuid // empty')
+          if [ -z "$deployment_uuid" ]; then
+            echo "::error::Coolify no devolvió un deployment_uuid"
+            exit 1
+          fi
+          echo "Deployment: ${deployment_uuid}"
+
+          for attempt in $(seq 1 90); do
+            body=$(curl --fail --silent --show-error \
+              --header "Authorization: Bearer ${COOLIFY_TOKEN}" \
+              --header "Accept: application/json" \
+              "${COOLIFY_URL}/api/v1/deployments/${deployment_uuid}")
+            status=$(echo "$body" | jq -r '.status // "unknown"')
+            echo "Intento ${attempt}: ${status}"
+            case "$status" in
+              finished)
+                echo "Despliegue completado"
+                exit 0
+                ;;
+              failed|error|cancelled)
+                echo "::error::Despliegue terminado con estado ${status}"
+                echo "$body"
+                exit 1
+                ;;
+            esac
+            sleep 10
+          done
+
+          echo "::error::Timeout esperando el despliegue"
+          exit 1
