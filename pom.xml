@@ -21,6 +21,15 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+		<!--
+			El parent de Spring Boot fija project.build.outputTimestamp a
+			1980-02-01T00:00:00Z para habilitar builds reproducibles. Ese valor se
+			propaga a git.build.time (git-commit-id-maven-plugin) y la pagina de
+			inicio mostraba "1 de febrero de 1980". Se sobreescribe con la fecha
+			real de la build.
+		-->
+		<project.build.outputTimestamp>${maven.build.timestamp}</project.build.outputTimestamp>
+
 		<!-- Dependencies Versions -->
 		<!-- Boot 4.1.2 gestiona Tomcat 11.0.27 y Jackson 3.1.7, por encima de los overrides
 		     que se mantenían con Boot 4.1.1 (Tomcat 11.0.26 y Jackson 3.1.6): se retiran. -->

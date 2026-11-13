@@ -9,6 +9,7 @@ exclude_paths:
   - '**/*.min.js'
   - 'src/test/resources/**'  # Excluir data.sql y otros recursos de test
   - 'docs/workflows/**'       # Excluir workflows de documentación
+  - 'db/postgresql/**'        # Seed de PostgreSQL: TSQLLint (SQL Server) da falsos positivos
 
 # Engines configuration
 engines:
