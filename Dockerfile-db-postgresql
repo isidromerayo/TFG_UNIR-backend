@@ -16,4 +16,10 @@ ENV POSTGRES_USER=${POSTGRES_USER}
 LABEL org.opencontainers.image.title="TFG UNIR PostgreSQL"
 LABEL org.opencontainers.image.description="PostgreSQL database for TFG UNIR"
 
+# Seed de datos de ejemplo. La imagen oficial de PostgreSQL ejecuta los ficheros
+# de /docker-entrypoint-initdb.d en orden alfabético la primera vez que se
+# inicializa un directorio de datos vacío (primer arranque o volumen recreado).
+# No se ejecutan si el volumen ya contiene una base de datos.
+COPY db/postgresql/*.sql /docker-entrypoint-initdb.d/
+
 EXPOSE 5432
