@@ -16,19 +16,42 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 class OpenApiDocumentationIT {
 
+    private static final String DOCS_USER = "swagger";
+    private static final String DOCS_PASSWORD = "swagger-test";
+
     @Autowired
     private TestRestTemplate restTemplate;
 
+    private TestRestTemplate docsRestTemplate() {
+        return restTemplate.withBasicAuth(DOCS_USER, DOCS_PASSWORD);
+    }
+
+    @Test
+    void apiDocsRequiresAuthentication() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/v3/api-docs", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    void apiDocsRejectsWrongCredentials() {
+        ResponseEntity<String> response = restTemplate
+                .withBasicAuth(DOCS_USER, "contraseña-incorrecta")
+                .getForEntity("/v3/api-docs", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
     @Test
     void apiDocsEndpointReturns200() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/v3/api-docs", String.class);
+        ResponseEntity<String> response = docsRestTemplate().getForEntity("/v3/api-docs", String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
     void apiDocsResponseContainsOpenApiStructure() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/v3/api-docs", String.class);
+        ResponseEntity<String> response = docsRestTemplate().getForEntity("/v3/api-docs", String.class);
 
         assertThat(response.getBody())
             .contains("\"openapi\"")
@@ -38,14 +61,14 @@ class OpenApiDocumentationIT {
 
     @Test
     void apiDocsContainsApiInfoTitle() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/v3/api-docs", String.class);
+        ResponseEntity<String> response = docsRestTemplate().getForEntity("/v3/api-docs", String.class);
 
         assertThat(response.getBody()).contains("TFG UNIR Backend API");
     }
 
     @Test
     void swaggerUiReturnsOk() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/swagger-ui.html", String.class);
+        ResponseEntity<String> response = docsRestTemplate().getForEntity("/swagger-ui.html", String.class);
 
         assertThat(response.getStatusCode())
             .as("Body: " + response.getBody())
@@ -54,7 +77,7 @@ class OpenApiDocumentationIT {
 
     @Test
     void swaggerUiResourcesAccessible() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/swagger-ui/index.html", String.class);
+        ResponseEntity<String> response = docsRestTemplate().getForEntity("/swagger-ui/index.html", String.class);
 
         assertThat(response.getStatusCode())
             .as("Body: " + response.getBody())

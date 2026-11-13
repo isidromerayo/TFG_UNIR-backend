@@ -1,13 +1,20 @@
 package eu.estilolibre.tfgunir.backend.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -35,14 +42,51 @@ public class WebSecurityConfig {
     };
 
     /** Rutas de Springdoc / Swagger UI. */
-    private static final String[] PUBLIC_DOCS = {
-            "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**"
+    private static final String[] DOCS_PATHS = {
+            "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**",
+            "/v3/api-docs.yaml"
     };
 
     /** Catálogo de solo lectura: cursos, categorías y valoraciones. */
     private static final String[] PUBLIC_CATALOG = {
             "/api/cursos/**", "/api/categorias/**", "/api/valoraciones/**"
     };
+
+    /**
+     * Protege Swagger/OpenAPI con autenticación básica.
+     *
+     * <p>La UI de Swagger se sirve en el navegador y no puede enviar el JWT de la
+     * API en la navegación inicial, por eso usa HTTP Basic con credenciales
+     * independientes configuradas por entorno. Si {@code SWAGGER_USER} o
+     * {@code SWAGGER_PASSWORD} no están definidos, la documentación queda
+     * cerrada (403) en lugar de pública.</p>
+     */
+    @Bean
+    @Order(1)
+    public SecurityFilterChain docsFilterChain(HttpSecurity http,
+            PasswordEncoder passwordEncoder,
+            @Value("${swagger.auth.user:}") String swaggerUser,
+            @Value("${swagger.auth.password:}") String swaggerPassword) {
+        http.securityMatcher(DOCS_PATHS)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        if (swaggerUser.isBlank() || swaggerPassword.isBlank()) {
+            http.authorizeHttpRequests(auth -> auth.anyRequest().denyAll());
+            return http.build();
+        }
+
+        UserDetails docsUser = User.withUsername(swaggerUser)
+                .password(passwordEncoder.encode(swaggerPassword))
+                .roles("SWAGGER")
+                .build();
+        UserDetailsService docsUserDetailsService = new InMemoryUserDetailsManager(docsUser);
+
+        http.authorizeHttpRequests(auth -> auth.anyRequest().hasRole("SWAGGER"))
+                .httpBasic(withDefaults())
+                .userDetailsService(docsUserDetailsService);
+        return http.build();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, TokenService tokenService,
@@ -60,7 +104,6 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth", "/api/usuarios").permitAll()
                         .requestMatchers(HttpMethod.GET, PUBLIC_CATALOG).permitAll()
                         .requestMatchers(PUBLIC_RESOURCES).permitAll()
-                        .requestMatchers(PUBLIC_DOCS).permitAll()
                         .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                         // La página de inicio (pública) consume /actuator/info para mostrar
                         // versión, build time y datos del commit.
