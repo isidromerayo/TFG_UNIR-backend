@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>eu.estilolibre.tfgunir</groupId>
 	<artifactId>backend</artifactId>
-	<version>0.7.5-SNAPSHOT</version>
+	<version>0.7.5</version>
 	<name>backend</name>
 	<description>Backend para TFG en UNIR usando Spring Boot</description>
 	<properties>
@@ -28,7 +28,7 @@
 			inicio mostraba "1 de febrero de 1980". Se sobreescribe con la fecha
 			real de la build.
 		-->
-		<project.build.outputTimestamp>2026-11-13T17:16:44Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2026-11-13T19:18:33Z</project.build.outputTimestamp>
 
 		<!-- Dependencies Versions -->
 		<!-- Boot 4.1.2 gestiona Tomcat 11.0.27 y Jackson 3.1.7, por encima de los overrides
@@ -69,7 +69,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/isidromerayo/TFG_UNIR-backend.git</connection>
 		<url>https://github.com/isidromerayo/TFG_UNIR-backend</url>
-	  <tag>v0.7.2</tag>
+	  <tag>v0.7.5</tag>
   </scm>
 	<distributionManagement>
 		<repository>
