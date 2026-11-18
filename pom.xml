@@ -39,7 +39,7 @@
 		<!-- springdoc 3.2.0 gestiona swagger-ui 5.34.0 (DOMPurify 3.4.16), afectado por
 		     CVE-2026-116802/116803/116804 (fix en DOMPurify 3.4.17). El webjar 5.34.1
 		     ya lo incluye. Debe coincidir con springdoc.swagger-ui.version (properties). -->
-		<swagger-ui.version>5.34.1</swagger-ui.version>
+		<swagger-ui.version>5.35.0</swagger-ui.version>
 
 		<!-- Plugins Versions -->
 		<maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
