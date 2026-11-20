@@ -56,6 +56,8 @@ NVD_API_KEY=$NVD_API_KEY ./mvnw -Pdependency-check dependency-check:check
 7. **No secret defaults** - `JWT_SECRET` y `SPRING_DATASOURCE_PASSWORD` son obligatorios y vienen del
    entorno (`.env`); no añadas valores por defecto en `application.properties`, `docker-compose.yml`,
    `scripts/` ni `.env.example` (lo verifica `SecretsConfigurationTest`)
+8. **Merge only with green CI** - espera a que los checks del PR (tests, SpotBugs/Sonar, seguridad)
+   estén en verde antes de mergear; la ruleset no los exige.
 
 ## Code Conventions
 - Constructor injection with `final` fields
