@@ -160,6 +160,51 @@ class UsuarioControllerIT {
     }
 
     @Test
+    void registrarUsuario_conPasswordDe8Caracteres_devuelve201() {
+        String body = """
+                {
+                  "nombre": "Minimo",
+                  "apellidos": "Password",
+                  "email": "min-password@example.com",
+                  "password": "12345678"
+                }
+                """;
+
+        given().
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                body(body).
+        when().
+                post("/api/usuarios").
+        then().
+                assertThat().
+                statusCode(201).
+                body("email", org.hamcrest.Matchers.equalTo("min-password@example.com"));
+    }
+
+    @Test
+    void registrarUsuario_conPasswordDe72Caracteres_devuelve201() {
+        String passwordLimite = "a".repeat(72);
+        String body = """
+                {
+                  "nombre": "Maximo",
+                  "apellidos": "Password",
+                  "email": "max-password@example.com",
+                  "password": "%s"
+                }
+                """.formatted(passwordLimite);
+
+        given().
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                body(body).
+        when().
+                post("/api/usuarios").
+        then().
+                assertThat().
+                statusCode(201).
+                body("email", org.hamcrest.Matchers.equalTo("max-password@example.com"));
+    }
+
+    @Test
     void registrarUsuario_conPasswordDeMasDe72Caracteres_devuelve400() {
         String passwordLarga = "a".repeat(73);
         String body = """
