@@ -97,7 +97,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-security</artifactId>
-				<version>4.1.3</version>
+				<version>4.2.0</version>
 			</dependency>
 			<!-- Spring Boot 4 ya no gestiona rest-assured; importamos su BOM -->
 			<dependency>
