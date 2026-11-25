@@ -35,7 +35,7 @@
 		     que se mantenían con Boot 4.1.1 (Tomcat 11.0.26 y Jackson 3.1.6): se retiran. -->
 		<jjwt.version>0.13.0</jjwt.version>
 		<commons-lang3.version>3.20.0</commons-lang3.version>
-		<springdoc-openapi-starter-webmvc-ui.version>3.2.0</springdoc-openapi-starter-webmvc-ui.version>
+		<springdoc-openapi-starter-webmvc-ui.version>3.2.1</springdoc-openapi-starter-webmvc-ui.version>
 		<!-- springdoc 3.2.0 gestiona swagger-ui 5.34.0 (DOMPurify 3.4.16), afectado por
 		     CVE-2026-116802/116803/116804 (fix en DOMPurify 3.4.17). El webjar 5.34.1
 		     ya lo incluye. Debe coincidir con springdoc.swagger-ui.version (properties). -->
