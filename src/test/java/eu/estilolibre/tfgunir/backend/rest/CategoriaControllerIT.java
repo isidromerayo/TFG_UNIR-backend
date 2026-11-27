@@ -35,6 +35,6 @@ class CategoriaControllerIT {
                 log().all().
                 assertThat().
                 statusCode(200).
-                body("_embedded.categorias.size()", greaterThan(0));
+                body("size()", greaterThan(0));
     }
 }

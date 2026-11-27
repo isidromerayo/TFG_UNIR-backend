@@ -10,17 +10,17 @@
 
 ## 1. Categoria Module Migration (Week 1 - Pilot)
 
-- [ ] 1.1 Create domain model `Categoria` in domain/modelo/ and verify unit tests pass
-- [ ] 1.2 Create domain repository port interface in domain/repository/ and verify it compiles
-- [ ] 1.3 Create JPA entity `CategoriaEntity` in infrastructure/persistence/entity/ and verify JPA mapping
-- [ ] 1.4 Create JPA mapper for Categoria and verify mapping works both directions
-- [ ] 1.5 Create JPA adapter implementing domain repository port and verify integration with Spring Data
-- [ ] 1.6 Create application port interfaces for Categoria use cases in application/port/in/ and application/port/out/
+- [x] 1.1 Create domain model `Categoria` in domain/modelo/ and verify unit tests pass
+- [x] 1.2 Create domain repository port interface in domain/repository/ and verify it compiles
+- [x] 1.3 Create JPA entity `CategoriaEntity` in infrastructure/persistence/entity/ and verify JPA mapping
+- [x] 1.4 Create JPA mapper for Categoria and verify mapping works both directions
+- [x] 1.5 Create JPA adapter implementing domain repository port and verify integration with Spring Data
+- [x] 1.6 Create application port interfaces for Categoria use cases in application/port/in/ and application/port/out/
 - [ ] 1.7 Create use case implementation in application/service/ and verify business logic with unit tests (TDD)
-- [ ] 1.8 Update REST controller to use new structure and verify all Categoria endpoints still work
+- [x] 1.8 Update REST controller to use new structure and verify all Categoria endpoints still work
 - [ ] 1.9 Remove old Categoria code from model/ and controller/ and verify build succeeds
-- [ ] 1.10 Run full test suite and verify all tests pass
-- [ ] 1.11 Manual API testing for Categoria endpoints and verify responses match old behavior
+- [x] 1.10 Run full test suite and verify all tests pass
+- [x] 1.11 Manual API testing for Categoria endpoints and verify responses match old behavior
 
 ## 2. Contenido Module Migration (Week 2)
 

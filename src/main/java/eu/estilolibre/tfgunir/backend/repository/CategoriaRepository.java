@@ -5,11 +5,16 @@ import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import eu.estilolibre.tfgunir.backend.model.Categoria;
 
-@RepositoryRestResource(collectionResourceRel = "categorias", path = "categorias")
+/**
+ * Repositorio JPA para Categorías (antiguo).
+ * 
+ * <p>Nota: La anotación @RepositoryRestResource ha sido removida para evitar
+ * conflictos con el nuevo controlador REST en infrastructure/web/controller/CategoriaController.
+ * Una vez que la migración hexagonal esté completa, este repositorio será eliminado.</p>
+ */
 public interface CategoriaRepository
         extends PagingAndSortingRepository<Categoria, Long>, CrudRepository<Categoria, Long> {
 
