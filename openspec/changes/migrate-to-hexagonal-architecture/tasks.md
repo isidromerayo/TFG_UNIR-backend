@@ -2,11 +2,11 @@
 
 ## 0. Preparation and Setup
 
-- [ ] 0.1 Create new package structure (domain/, application/, infrastructure/) and verify all directories exist
-- [ ] 0.2 Create base domain exception class and verify it compiles
-- [ ] 0.3 Create base mapper interface/utility class and verify it compiles
-- [ ] 0.4 Update pom.xml if any new test dependencies needed and verify build succeeds
-- [ ] 0.5 Document migration patterns and conventions in a team guide
+- [x] 0.1 Create new package structure (domain/, application/, infrastructure/) and verify all directories exist
+- [x] 0.2 Create base domain exception class and verify it compiles
+- [x] 0.3 Create base mapper interface/utility class and verify it compiles
+- [x] 0.4 Update pom.xml if any new test dependencies needed and verify build succeeds
+- [x] 0.5 Document migration patterns and conventions in a team guide
 
 ## 1. Categoria Module Migration (Week 1 - Pilot)
 
