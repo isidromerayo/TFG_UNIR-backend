@@ -1,16 +1,23 @@
 {
-  "version": 1,
+  "version": 2,
   "skills": {
+    "hexagonal-architecture": {
+      "source": "affaan-m/ECC",
+      "commit": "4adeee6732a12d1540f49a4d50a38ce8c97f9a53",
+      "sourceType": "github",
+      "skillPath": "skills/hexagonal-architecture/SKILL.md",
+      "computedHash": "365f9ec13315c077889fbed05cdad5efb277c214a46f7ba3150e6738941d6860"
+    },
     "java-spring-development": {
       "source": "mindrally/skills",
       "sourceType": "github",
-      "computedHash": "d2f82b82003dcd350cf6ad9622e787c658a2d161958a75d0e44a8de2c71f9175"
+      "computedHash": "29fdb32e991eadc43cb35b4ddd9bb40eb42c200a9fb57569e82b79a9bd887a09"
     },
     "security-review": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
       "skillPath": "skills/security-review/SKILL.md",
-      "computedHash": "9b1791054c648b84ca424fc1342dede2e04759dc73436bb91d21675d5a4c13ea"
+      "computedHash": "17a664332a57b2f83c08906e5d8eeb07da112b77466e7e7fca782bfd4e713695"
     }
   }
 }
