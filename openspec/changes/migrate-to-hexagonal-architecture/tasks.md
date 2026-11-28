@@ -24,14 +24,14 @@
 
 ## 2. Contenido Module Migration (Week 2)
 
-- [ ] 2.1 Create domain model `Contenido` in domain/modelo/ and verify unit tests pass
-- [ ] 2.2 Create domain repository port interface in domain/repository/ and verify it compiles
-- [ ] 2.3 Create JPA entity `ContenidoEntity` with relationship to CursoEntity and verify JPA mapping
-- [ ] 2.4 Create JPA mapper for Contenido and verify mapping works both directions
-- [ ] 2.5 Create JPA adapter implementing domain repository port and verify integration
-- [ ] 2.6 Create application port interfaces for Contenido use cases and verify they compile
-- [ ] 2.7 Create use case implementation and verify business logic with unit tests (TDD)
-- [ ] 2.8 Update or create REST endpoints for Contenido (if any) and verify they work
+- [x] 2.1 Create domain model `Contenido` in domain/modelo/ and verify unit tests pass
+- [x] 2.2 Create domain repository port interface in domain/repository/ and verify it compiles
+- [x] 2.3 Create JPA entity `ContenidoEntity` with relationship to CursoEntity and verify JPA mapping
+- [x] 2.4 Create JPA mapper for Contenido and verify mapping works both directions
+- [x] 2.5 Create JPA adapter implementing domain repository port and verify integration
+- [x] 2.6 Create application port interfaces for Contenido use cases and verify they compile
+- [x] 2.7 Create use case implementation and verify business logic with unit tests (TDD)
+- [x] 2.8 Update or create REST endpoints for Contenido (if any) and verify they work
 - [ ] 2.9 Update Curso domain model to reference Contenido correctly and verify relationships
 - [ ] 2.10 Remove old Contenido code and verify build succeeds
 - [ ] 2.11 Run full test suite and verify all tests pass
